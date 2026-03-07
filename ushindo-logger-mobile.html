@@ -146,6 +146,18 @@ textarea{resize:none;min-height:72px}
 
 /* ── SEARCH ───────────────────────────────────────────────────────────────── */
 .search-wrap{padding:0 16px 12px;position:sticky;top:0;background:var(--bg);z-index:10;padding-top:12px}
+/* ── TOKEN GATE ───────────────────────────────────────────────────────────── */
+#token-gate{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px;padding-top:calc(24px + var(--safe-top));padding-bottom:calc(24px + var(--safe-bot))}
+#token-gate.hidden{display:none}
+.tg-card{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;padding:28px 20px;width:100%;max-width:420px;position:relative;overflow:hidden}
+.tg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.tg-title{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:6px}
+.tg-sub{font-family:'Rajdhani',sans-serif;font-size:13px;color:#5a5a80;margin-bottom:24px;line-height:1.5}
+.tg-label{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:#3a3a5a;margin-bottom:8px}
+.tg-row{display:flex;gap:8px;margin-bottom:12px}
+.tg-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:6px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:13px;padding:11px 12px;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.tg-input:focus{border-color:rgba(255,45,107,.5)}
+.tg-hint{font-family:'Rajdhani',sans-serif;font-size:11px;color:#3a3a5a;line-height:1.6}
 </style>
 </head>
 <body>
@@ -178,10 +190,27 @@ textarea{resize:none;min-height:72px}
     <button class="nav-btn" id="nav-new" onclick="startNew()">
       <span class="nav-icon" style="font-size:26px;color:var(--accent)">＋</span><span class="nav-lbl" style="color:var(--accent)">RATE</span>
     </button>
-
-  </div>
+    <button class="nav-btn" onclick="forgetToken()" title="Change token">
+      <span class="nav-icon">🔑</span><span class="nav-lbl">TOKEN</span>
+    </button>
 </div>
 <div id="toast"></div>
+<div id="token-gate">
+  <div class="tg-card">
+    <div class="tg-title">BACKLOG<span style="color:var(--accent)">LOGGER</span></div>
+    <div class="tg-sub">Enter your GitHub token to save logs.<br>Stored locally on this device only.</div>
+    <div class="tg-label">GITHUB TOKEN</div>
+    <div class="tg-row">
+      <input class="tg-input" id="token-input" type="password" placeholder="ghp_..."/>
+      <button class="btn btn-primary" style="padding:11px 18px;font-size:10px;white-space:nowrap" onclick="submitToken()">UNLOCK</button>
+    </div>
+    <div class="tg-hint">
+      github.com → Settings → Developer settings →<br>
+      Personal access tokens → Fine-grained tokens<br>
+      Permission: <strong style="color:#5a5a80">Contents: Read &amp; Write</strong>
+    </div>
+  </div>
+</div>
 
 <script>
 // ─── DATA ─────────────────────────────────────────────────────────────────────
@@ -237,21 +266,59 @@ const r2=n=>Math.round(n*100)/100;
 const slbl=s=>SCORE_LABELS[Math.round(s)]||"Average";
 const h=s=>{const d=document.createElement('div');d.innerHTML=s;return d.firstElementChild;};
 
-// ─── STORAGE ──────────────────────────────────────────────────────────────────
-const WORKER='https://bt-logger.ahmedhassibi29.workers.dev';
+// ─── STORAGE (GitHub API) ─────────────────────────────────────────────────────
+const GH_OWNER='ushindo0-0ay';
+const GH_REPO='backlog-therapy';
+const GH_FILE='log.json';
+const GH_API='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
+const RAW='https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/main/'+GH_FILE;
 let LOG=[];
+
+function getToken(){return localStorage.getItem('bt_gh_token')||'';}
+function ghHeaders(){return{'Authorization':'token '+getToken(),'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};}
+
+function submitToken(){
+  const val=document.getElementById('token-input').value.trim();
+  if(!val)return;
+  localStorage.setItem('bt_gh_token',val);
+  document.getElementById('token-gate').classList.add('hidden');
+  loadLogFromWorker();
+}
+document.getElementById('token-input').addEventListener('keydown',e=>{if(e.key==='Enter')submitToken();});
+
+function forgetToken(){localStorage.removeItem('bt_gh_token');location.reload();}
+
+function checkToken(){
+  const t=getToken();
+  if(t){document.getElementById('token-gate').classList.add('hidden');return true;}
+  return false;
+}
 
 async function loadLogFromWorker(){
   try{
-    const res=await fetch(WORKER);
+    const res=await fetch(RAW+'?t='+Date.now());
     const data=await res.json();
     LOG=Array.isArray(data)?data:(data.log||[]);
   }catch(e){LOG=[];}
   renderHome();
 }
+
 async function saveLog(l){
-  try{await fetch(WORKER,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(l)});}
-  catch(e){toast('Save failed.');}
+  try{
+    const meta=await fetch(GH_API,{headers:ghHeaders()}).then(r=>r.json());
+    if(meta.message){throw new Error(meta.message);}
+    const sha=meta.sha;
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(l,null,2))));
+    const res=await fetch(GH_API,{method:'PUT',headers:ghHeaders(),body:JSON.stringify({message:'update log',content,sha})});
+    if(!res.ok){const e=await res.json();throw new Error(e.message);}
+  }catch(e){
+    if(e.message&&(e.message.includes('Bad credentials')||e.message.includes('401'))){
+      toast('Token invalid — resetting');
+      setTimeout(()=>{localStorage.removeItem('bt_gh_token');location.reload();},2000);
+    } else {
+      toast('Save failed: '+e.message);
+    }
+  }
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
@@ -775,7 +842,7 @@ function inp(type,val,placeholder,onChange,large=false){
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 goHome();
-loadLogFromWorker();
+if(checkToken())loadLogFromWorker();
 </script>
 </body>
 </html>

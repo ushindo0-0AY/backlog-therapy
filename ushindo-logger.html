@@ -116,6 +116,19 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.4)
 .g1{display:grid;grid-template-columns:1fr;gap:16px}
 /* toast */
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a0a0e;border:1px solid #ff4d6d;color:#ff4d6d;padding:12px 24px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;z-index:9999;display:none;animation:fadeUp .3s ease}
+/* token gate */
+#token-gate{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px}
+#token-gate.hidden{display:none}
+.tg-card{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;padding:40px;max-width:480px;width:100%;position:relative;overflow:hidden}
+.tg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.tg-title{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:6px}
+.tg-sub{font-family:'Rajdhani',sans-serif;font-size:14px;color:#5a5a80;margin-bottom:28px;line-height:1.5}
+.tg-label{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:#3a3a5a;margin-bottom:8px}
+.tg-input-wrap{display:flex;gap:8px;margin-bottom:12px}
+.tg-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:6px;color:#fff;font-family:'Share Tech Mono',monospace;font-size:13px;padding:11px 14px;outline:none;transition:border-color .2s}
+.tg-input:focus{border-color:rgba(255,45,107,.5)}
+.tg-hint{font-family:'Rajdhani',sans-serif;font-size:12px;color:#3a3a5a;line-height:1.5}
+.tg-hint a{color:#5a5a80;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -124,6 +137,23 @@ input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.4)
 <div class="hdr" id="hdr">
   <div class="logo" onclick="goHome()">BACKLOG<span>THERAPY</span> <span style="font-family:'Share Tech Mono',monospace;font-size:9px;color:#2a2a4a;margin-left:8px">v2.0</span></div>
   <div class="hdr-right" id="hdr-right"></div>
+</div>
+
+<!-- TOKEN GATE -->
+<div id="token-gate">
+  <div class="tg-card">
+    <div class="tg-title">BACKLOG<span style="color:var(--accent)">LOGGER</span></div>
+    <div class="tg-sub">Enter your GitHub personal access token to save logs.<br>It will be stored locally on this device only.</div>
+    <div class="tg-label">GITHUB TOKEN</div>
+    <div class="tg-input-wrap">
+      <input class="tg-input" id="token-input" type="password" placeholder="ghp_..."/>
+      <button class="btn btn-primary" style="padding:11px 20px;font-size:10px" onclick="submitToken()">UNLOCK</button>
+    </div>
+    <div class="tg-hint">
+      Generate at: github.com → Settings → Developer settings → Personal access tokens → Fine-grained tokens<br>
+      Required permission: <strong style="color:#5a5a80">Contents: Read &amp; Write</strong> on the backlog-therapy repo.
+    </div>
+  </div>
 </div>
 
 <!-- PAGES -->
@@ -192,11 +222,33 @@ function scoreLabel(s){return SCORE_LABELS[Math.round(s)]||"Average";}
 const GH_OWNER='ushindo0-0ay';
 const GH_REPO='backlog-therapy';
 const GH_FILE='log.json';
-const GH_TOKEN='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';
-const GH_API='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
 const RAW='https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/main/'+GH_FILE;
+const GH_API='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
 let LOG=[];
 let _synced=false;
+
+function getToken(){return localStorage.getItem('bt_gh_token')||'';}
+function ghHeaders(){return{'Authorization':'token '+getToken(),'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};}
+
+function submitToken(){
+  const val=document.getElementById('token-input').value.trim();
+  if(!val)return;
+  localStorage.setItem('bt_gh_token',val);
+  document.getElementById('token-gate').classList.add('hidden');
+  loadLogFromGH();
+}
+document.getElementById('token-input').addEventListener('keydown',e=>{if(e.key==='Enter')submitToken();});
+
+function forgetToken(){
+  localStorage.removeItem('bt_gh_token');
+  location.reload();
+}
+
+function checkToken(){
+  const t=getToken();
+  if(t){document.getElementById('token-gate').classList.add('hidden');return true;}
+  return false;
+}
 
 async function loadLogFromGH(){
   try{
@@ -210,13 +262,20 @@ async function loadLogFromGH(){
 
 async function saveLog(l){
   try{
-    const headers={'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
-    const meta=await fetch(GH_API,{headers}).then(r=>r.json());
+    const meta=await fetch(GH_API,{headers:ghHeaders()}).then(r=>r.json());
+    if(meta.message){throw new Error(meta.message);}
     const sha=meta.sha;
     const content=btoa(unescape(encodeURIComponent(JSON.stringify(l,null,2))));
-    const res=await fetch(GH_API,{method:'PUT',headers,body:JSON.stringify({message:'update log',content,sha})});
+    const res=await fetch(GH_API,{method:'PUT',headers:ghHeaders(),body:JSON.stringify({message:'update log',content,sha})});
     if(!res.ok){const e=await res.json();throw new Error(e.message);}
-  }catch(e){toast('Save failed: '+e.message);}
+  }catch(e){
+    if(e.message&&(e.message.includes('Bad credentials')||e.message.includes('401'))){
+      toast('Token invalid — tap to re-enter');
+      setTimeout(()=>{localStorage.removeItem('bt_gh_token');location.reload();},2000);
+    } else {
+      toast('Save failed: '+e.message);
+    }
+  }
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
@@ -414,7 +473,8 @@ function renderHeader(){
     const logBtn=document.createElement('button');logBtn.className='btn btn-ghost btn-sm';
     logBtn.textContent=`LOG${LOG.length?' ('+LOG.length+')':''}`;logBtn.onclick=goLog;
     const newBtn=document.createElement('button');newBtn.className='btn btn-primary btn-sm';newBtn.textContent='+ NEW RATING';newBtn.onclick=()=>{resetSession();goRate();};
-    r.append(expBtn,impLbl,logBtn,newBtn);
+    const keyBtn=document.createElement('button');keyBtn.className='btn btn-ghost btn-sm';keyBtn.title='Change GitHub token';keyBtn.textContent='🔑';keyBtn.onclick=forgetToken;
+    r.append(expBtn,impLbl,logBtn,newBtn,keyBtn);
   } else if(currentView==='log'){
     r.innerHTML='';
     const newBtn=document.createElement('button');newBtn.className='btn btn-primary btn-sm';newBtn.textContent='+ NEW';newBtn.onclick=()=>{resetSession();goRate();};
@@ -946,7 +1006,8 @@ function saveEntry(){
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-renderHome();renderHeader();loadLogFromGH();
+renderHome();renderHeader();
+if(checkToken())loadLogFromGH();
 </script>
 </body>
 </html>
