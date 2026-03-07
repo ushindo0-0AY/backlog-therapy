@@ -1,1 +1,188 @@
-[]
+[
+  {
+    "id": 1772856775085,
+    "savedAt": "2026-03-07T04:12:55.085Z",
+    "title": "gta",
+    "platform": "PS3",
+    "date": "2026-03-10",
+    "playTime": "123",
+    "perspective": "Third-Person",
+    "hasMP": false,
+    "genres": [
+      "Sandbox/Open World",
+      "Hack & Slash"
+    ],
+    "gw": {
+      "Sandbox/Open World": 2,
+      "Hack & Slash": 98
+    },
+    "fw": {
+      "gameplay": 33,
+      "graphics": 12,
+      "story": 8,
+      "sound": 10,
+      "performance": 10,
+      "replayability": 8,
+      "innovation": 5,
+      "multiplayer": 0,
+      "progression": 8,
+      "immersion": 6
+    },
+    "subs": {
+      "gameplay": [
+        {
+          "name": "Controls & Movement",
+          "score": 5
+        },
+        {
+          "name": "Combat Mechanics",
+          "score": 5
+        },
+        {
+          "name": "Game Systems",
+          "score": 5
+        },
+        {
+          "name": "Pacing & Feedback",
+          "score": 5
+        }
+      ],
+      "graphics": [
+        {
+          "name": "Art Direction",
+          "score": 5
+        },
+        {
+          "name": "Technical Quality",
+          "score": 5
+        },
+        {
+          "name": "Animation",
+          "score": 5
+        },
+        {
+          "name": "Camera & Composition",
+          "score": 5
+        }
+      ],
+      "story": [
+        {
+          "name": "Plot & Structure",
+          "score": 5
+        },
+        {
+          "name": "Characters & Dialogue",
+          "score": 5
+        },
+        {
+          "name": "Thematic Depth",
+          "score": 5
+        }
+      ],
+      "sound": [
+        {
+          "name": "Score & Themes",
+          "score": 5
+        },
+        {
+          "name": "Sound Effects",
+          "score": 5
+        },
+        {
+          "name": "Voice Acting",
+          "score": 5
+        },
+        {
+          "name": "Ambience",
+          "score": 5
+        }
+      ],
+      "performance": [
+        {
+          "name": "Frame Rate & Stability",
+          "score": 5
+        },
+        {
+          "name": "Load Times",
+          "score": 5
+        },
+        {
+          "name": "Bug Count",
+          "score": 5
+        },
+        {
+          "name": "Platform Optimization",
+          "score": 5
+        }
+      ],
+      "replayability": [
+        {
+          "name": "Post-Game Content",
+          "score": 5
+        },
+        {
+          "name": "Branching Paths",
+          "score": 5
+        },
+        {
+          "name": "Player Incentives",
+          "score": 5
+        }
+      ],
+      "innovation": [
+        {
+          "name": "Originality",
+          "score": 5
+        },
+        {
+          "name": "Execution of Ideas",
+          "score": 5
+        },
+        {
+          "name": "Genre Impact",
+          "score": 5
+        }
+      ],
+      "progression": [
+        {
+          "name": "Structure",
+          "score": 5
+        },
+        {
+          "name": "Pacing",
+          "score": 5
+        },
+        {
+          "name": "Balance",
+          "score": 5
+        },
+        {
+          "name": "Integration with Gameplay",
+          "score": 5
+        }
+      ],
+      "immersion": [
+        {
+          "name": "World Building",
+          "score": 5
+        },
+        {
+          "name": "Tone Consistency",
+          "score": 5
+        },
+        {
+          "name": "Emotional Engagement",
+          "score": 5
+        },
+        {
+          "name": "UI & HUD",
+          "score": 5
+        }
+      ]
+    },
+    "notes": {},
+    "verdict": "",
+    "recommend": false,
+    "finalScore": 5
+  }
+]
