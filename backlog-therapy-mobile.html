@@ -35,9 +35,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 @keyframes glowPulse{0%,100%{text-shadow:0 0 16px currentColor}50%{text-shadow:0 0 32px currentColor,0 0 60px currentColor}}
 .score-glow{animation:glowPulse 3s ease-in-out infinite}
 ::-webkit-scrollbar{display:none}
-.pad{padding:16px}
 .lbl{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;color:var(--muted2);text-transform:uppercase;margin-bottom:8px}
-.card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
 .home-hero{padding:24px 16px 16px;position:relative;overflow:hidden}
 .home-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,45,107,.08),transparent 70%);pointer-events:none}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px}
@@ -45,7 +43,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
 .stat-val{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:#fff;margin-top:4px}
 .stat-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);margin-top:3px}
-.filter-section{padding:0 16px 12px}
+/* filter toggle */
+.filter-toggle-btn{display:flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);padding:7px 12px;border-radius:6px;cursor:pointer;margin:12px 16px 0;transition:all .15s}
+.filter-toggle-btn.has-active{border-color:rgba(255,45,107,.45);color:#ff7a9a}
+.filter-section{padding:0 16px 12px;display:none}
+.filter-section.open{display:block}
 .fchips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
 .fchip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:5px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;user-select:none;transition:all .1s}
 .fchip.on{background:rgba(255,45,107,.12);border-color:rgba(255,45,107,.45);color:#ff7a9a}
@@ -63,6 +65,16 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .log-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .log-meta{font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--muted2)}
 .gtag{font-size:10px;padding:2px 7px;border-radius:3px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid}
+/* score filters */
+.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:6px}
+.sslider-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);width:36px;flex-shrink:0}
+.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
+.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:18px;text-align:right;flex-shrink:0}
+.score-filter-body{display:none}
+.score-filter-body.open{display:block}
+.score-toggle-btn{font-family:'Orbitron',sans-serif;font-size:8px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:6px;cursor:pointer;letter-spacing:1px;margin-top:6px}
+/* sheet */
 .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-end}
 .sheet-overlay.open{display:flex;animation:fi .2s ease}
 @keyframes fi{from{opacity:0}to{opacity:1}}
@@ -76,7 +88,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .results-info{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);letter-spacing:1px;padding:0 16px 8px}
 .empty{text-align:center;padding:60px 0;color:var(--muted2);font-size:14px}
 .loading-txt{text-align:center;padding:60px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:3px}
-/* lang dropdown */
+/* lang */
 .lang-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted2);font-family:'Share Tech Mono',monospace;font-size:10px;padding:5px 9px;cursor:pointer;display:flex;align-items:center;gap:4px}
 .lang-sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:300;display:none;align-items:flex-end}
 .lang-sheet.open{display:flex}
@@ -84,16 +96,24 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .lang-opt{padding:13px 16px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--muted2);cursor:pointer;border-radius:8px}
 .lang-opt:active{background:rgba(255,45,107,.1)}
 .lang-opt.active{color:var(--accent)}
-/* score filters */
-.fchip.purple{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.45);color:#c4b5fd}
-.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:6px}
-.sslider-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);width:36px;flex-shrink:0}
-.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
-.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
-.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:18px;text-align:right;flex-shrink:0}
-.score-filter-body{display:none}
-.score-filter-body.open{display:block}
-.score-toggle-btn{font-family:'Orbitron',sans-serif;font-size:8px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:6px;cursor:pointer;letter-spacing:1px;margin-top:6px}
+/* mine page */
+.mine-actions{display:flex;gap:8px;padding:10px 16px 4px}
+.mine-action-btn{flex:1;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;padding:9px 4px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;text-align:center}
+.mine-action-btn:active{opacity:.7}
+.mine-action-btn.primary{background:linear-gradient(135deg,var(--accent),#c2185b);border:none;color:#fff}
+/* rating form */
+.rate-field{margin-bottom:14px}
+.rate-field label{display:block;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted2);margin-bottom:6px}
+.rate-field input,.rate-field textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;padding:10px 12px;outline:none;-webkit-appearance:none;transition:border-color .2s}
+.rate-field input:focus,.rate-field textarea:focus{border-color:rgba(255,45,107,.5)}
+.rate-field textarea{min-height:72px;resize:vertical}
+.score-btns{display:flex;flex-wrap:wrap;gap:5px}
+.score-btn{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;padding:8px 0;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;width:calc(100%/6 - 5px);text-align:center;transition:all .12s}
+.score-btn.on{background:rgba(255,45,107,.15);border-color:rgba(255,45,107,.5);color:#ff7a9a}
+.rec-row{display:flex;gap:8px}
+.rec-btn{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s}
+.rec-btn.yes.on{background:rgba(74,222,128,.1);border-color:rgba(74,222,128,.5);color:#4ade80}
+.rec-btn.no.on{background:rgba(255,77,109,.1);border-color:rgba(255,77,109,.5);color:#ff4d6d}
 </style>
 </head>
 <body>
@@ -108,12 +128,15 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   <div id="content">
     <div id="page-home" class="page active"><div class="loading-txt">SYNCING...</div></div>
     <div id="page-log"  class="page"></div>
+    <div id="page-mine" class="page"></div>
   </div>
   <div id="navbar">
-    <button class="nav-btn active" id="nav-home" onclick="goHome()"><span class="ni">🏠</span><span class="nl">HOME</span></button>
-    <button class="nav-btn" id="nav-log" onclick="goLog()"><span class="ni">📋</span><span class="nl">LOG</span></button>
+    <button class="nav-btn active" id="nav-home" onclick="goHome()"><span class="ni">🏠</span><span class="nl" id="nl-home">HOME</span></button>
+    <button class="nav-btn" id="nav-log"  onclick="goLog()"><span class="ni">📋</span><span class="nl" id="nl-log">LOG</span></button>
+    <button class="nav-btn" id="nav-mine" onclick="goMine()"><span class="ni">📝</span><span class="nl" id="nl-mine">MINE</span></button>
   </div>
 </div>
+<!-- lang sheet -->
 <div class="lang-sheet" id="lang-sheet" onclick="if(event.target===this)closeLangSheet()">
   <div class="lang-panel">
     <div class="lbl" style="margin-bottom:12px">LANGUAGE</div>
@@ -125,36 +148,171 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="lang-opt" id="lopt-zh" onclick="setLang('zh')">🇨🇳 中文</div>
   </div>
 </div>
+<!-- detail sheet (shared log entries) -->
 <div class="sheet-overlay" id="sheet" onclick="closeSheet(event)">
-  <div class="sheet" id="sheet-inner">
+  <div class="sheet">
     <div class="sheet-handle"></div>
     <button class="sheet-close" onclick="closeSheet()">×</button>
     <div id="sheet-content"></div>
   </div>
 </div>
+<!-- personal rating sheet -->
+<div class="sheet-overlay" id="rate-sheet" onclick="if(event.target===this)closeRateSheet()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="sheet-close" onclick="closeRateSheet()">×</button>
+    <div id="rate-sheet-content" style="padding:20px 16px calc(20px + var(--safe-bot))"></div>
+  </div>
+</div>
+
 <script>
 // ─── I18N ─────────────────────────────────────────────────────────────────────
 const T={
-  en:{noGames:'No games logged yet.',noMatch:'No games match filters.',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',verdict:'VERDICT',breakdown:'BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',of:'of',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',topcat:'TOP CATEGORY',scoremin:'MIN CATEGORY SCORE',scorefilters:'SCORE FILTERS',recent:'RECENT',search:'Search games...',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
-  ar:{noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',rated:'مُقيَّم',avg:'متوسط',top:'أعلى',rec:'موصى به',games:'ألعاب',verdict:'الحكم',breakdown:'تفصيل',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',of:'من',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',topcat:'الفئة الأولى',scoremin:'الحد الأدنى',scorefilters:'فلاتر الدرجات',recent:'الأخيرة',search:'بحث...',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
-  fr:{noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',rated:'NOTÉS',avg:'MOYENNE',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',verdict:'VERDICT',breakdown:'DÉTAIL',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',of:'sur',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'EFFACER',topcat:'TOP CATÉGORIE',scoremin:'SCORE MIN',scorefilters:'FILTRES SCORE',recent:'RÉCENTS',search:'Rechercher...',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
-  es:{noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',rated:'PUNTUADOS',avg:'PROMEDIO',top:'MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',verdict:'VEREDICTO',breakdown:'DESGLOSE',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',of:'de',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR',topcat:'TOP CATEGORÍA',scoremin:'PUNTUACIÓN MIN',scorefilters:'FILTROS SCORE',recent:'RECIENTES',search:'Buscar...',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
-  ja:{noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',rated:'評価済み',avg:'平均',top:'最高',rec:'おすすめ',games:'本',verdict:'総評',breakdown:'内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',of:'/',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',topcat:'トップ',scoremin:'最低スコア',scorefilters:'スコアフィルター',recent:'最近',search:'検索...',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
-  zh:{noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',rated:'已评分',avg:'均分',top:'最高',rec:'推荐',games:'款',verdict:'总评',breakdown:'细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',of:'/',genre:'类型',platform:'平台',perspective:'视角',clear:'清除',topcat:'最高分类',scoremin:'最低分',scorefilters:'分数筛选',recent:'最近',search:'搜索...',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
+  en:{
+    noGames:'No games logged yet.',noMatch:'No games match filters.',
+    rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',
+    verdict:'VERDICT',breakdown:'BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',
+    of:'of',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',
+    clear:'CLEAR ALL',topcat:'TOP CATEGORY',scoremin:'MIN CATEGORY SCORE',
+    scorefilters:'SCORE FILTERS',recent:'RECENT',search:'Search games...',
+    filters:'FILTERS',hide:'HIDE',show:'SHOW',
+    nav_home:'HOME',nav_log:'LOG',nav_mine:'MINE',
+    mine_title:'MY RATINGS',mine_empty:'No personal ratings yet.',mine_add:'+ ADD RATING',
+    mine_export:'EXPORT',mine_import:'IMPORT',mine_delete:'Delete',
+    rate_title:'RATE A GAME',rate_game:'GAME TITLE',rate_platform:'PLATFORM',
+    rate_score:'YOUR SCORE (0–10)',rate_verdict:'FINAL THOUGHT',rate_notes:'NOTES',
+    rate_rec:'RECOMMEND?',rate_yes:'✅ Yes',rate_no:'❌ No',
+    rate_save:'SAVE',rate_cancel:'CANCEL',rate_edit:'EDIT',
+    scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"},
+    cats:{gameplay:"Gameplay",graphics:"Graphics",story:"Story",sound:"Sound",performance:"Performance",replayability:"Replay",innovation:"Innovation",multiplayer:"Multiplayer",progression:"Progression",immersion:"Immersion"},
+    subs:{gameplay:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"],graphics:["Art Direction","Technical Quality","Animation","Camera"],story:["Plot & Structure","Characters & Dialogue","Thematic Depth"],sound:["Score & Themes","Sound Effects","Voice Acting","Ambience"],performance:["Frame Rate","Load Times","Bug Count","Optimization"],replayability:["Post-Game Content","Branching Paths","Player Incentives"],innovation:["Originality","Execution of Ideas","Genre Impact"],multiplayer:["Server Stability","Balance","Matchmaking","Rewards"],progression:["Structure","Pacing","Balance","Integration"],immersion:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]}
+  },
+  ar:{
+    noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',
+    rated:'مُقيَّم',avg:'متوسط',top:'أعلى',rec:'موصى به',games:'ألعاب',
+    verdict:'الحكم',breakdown:'تفصيل',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',
+    of:'من',genre:'النوع',platform:'المنصة',perspective:'المنظور',
+    clear:'مسح الكل',topcat:'الفئة الأولى',scoremin:'الحد الأدنى',
+    scorefilters:'فلاتر الدرجات',recent:'الأخيرة',search:'بحث...',
+    filters:'الفلاتر',hide:'إخفاء',show:'إظهار',
+    nav_home:'الرئيسية',nav_log:'السجل',nav_mine:'ملاحظاتي',
+    mine_title:'تقييماتي',mine_empty:'لا توجد تقييمات شخصية بعد.',mine_add:'+ إضافة تقييم',
+    mine_export:'تصدير',mine_import:'استيراد',mine_delete:'حذف',
+    rate_title:'تقييم لعبة',rate_game:'اسم اللعبة',rate_platform:'المنصة',
+    rate_score:'درجتك (0–10)',rate_verdict:'الحكم النهائي',rate_notes:'ملاحظات',
+    rate_rec:'هل توصي بها؟',rate_yes:'✅ نعم',rate_no:'❌ لا',
+    rate_save:'حفظ',rate_cancel:'إلغاء',rate_edit:'تعديل',
+    scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"},
+    cats:{gameplay:"اللعب",graphics:"الرسومات",story:"القصة",sound:"الصوت",performance:"الأداء",replayability:"إعادة اللعب",innovation:"الابتكار",multiplayer:"متعدد اللاعبين",progression:"التطور",immersion:"الانغماس"},
+    subs:{gameplay:["التحكم والحركة","ميكانيكيات القتال","أنظمة اللعبة","الإيقاع والتغذية الراجعة"],graphics:["التوجيه الفني","الجودة التقنية","الرسوم المتحركة","الكاميرا"],story:["البنية والحبكة","الشخصيات والحوار","العمق الفكري"],sound:["الموسيقى","المؤثرات الصوتية","الأداء الصوتي","الأجواء"],performance:["معدل الإطارات","أوقات التحميل","عدد الأخطاء","التحسين"],replayability:["محتوى ما بعد اللعبة","المسارات المتفرعة","حوافز اللاعب"],innovation:["الأصالة","تنفيذ الأفكار","التأثير على النوع"],multiplayer:["استقرار الخوادم","التوازن","المصارعة","المكافآت"],progression:["البنية","الإيقاع","التوازن","التكامل"],immersion:["بناء العالم","اتساق النبرة","الارتباط العاطفي","الواجهة"]}
+  },
+  fr:{
+    noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',
+    rated:'NOTÉS',avg:'MOYENNE',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',
+    verdict:'VERDICT',breakdown:'DÉTAIL',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',
+    of:'sur',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',
+    clear:'EFFACER',topcat:'TOP CATÉGORIE',scoremin:'SCORE MIN',
+    scorefilters:'FILTRES SCORE',recent:'RÉCENTS',search:'Rechercher...',
+    filters:'FILTRES',hide:'CACHER',show:'AFFICHER',
+    nav_home:'ACCUEIL',nav_log:'JOURNAL',nav_mine:'MES NOTES',
+    mine_title:'MES ÉVALUATIONS',mine_empty:'Aucune évaluation personnelle.',mine_add:'+ AJOUTER',
+    mine_export:'EXPORTER',mine_import:'IMPORTER',mine_delete:'Supprimer',
+    rate_title:'ÉVALUER UN JEU',rate_game:'TITRE DU JEU',rate_platform:'PLATEFORME',
+    rate_score:'VOTRE NOTE (0–10)',rate_verdict:'VERDICT FINAL',rate_notes:'NOTES',
+    rate_rec:'RECOMMANDER?',rate_yes:'✅ Oui',rate_no:'❌ Non',
+    rate_save:'SAUVER',rate_cancel:'ANNULER',rate_edit:'MODIFIER',
+    scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"},
+    cats:{gameplay:"Gameplay",graphics:"Graphismes",story:"Histoire",sound:"Son",performance:"Performance",replayability:"Rejouabilité",innovation:"Innovation",multiplayer:"Multijoueur",progression:"Progression",immersion:"Immersion"},
+    subs:{gameplay:["Contrôles","Mécaniques de combat","Systèmes","Rythme"],graphics:["Direction artistique","Qualité technique","Animation","Caméra"],story:["Structure","Personnages","Profondeur"],sound:["Musique","Effets sonores","Doublage","Ambiance"],performance:["Images/sec","Chargement","Bugs","Optimisation"],replayability:["Contenu post-jeu","Chemins","Incitations"],innovation:["Originalité","Exécution","Impact"],multiplayer:["Serveurs","Équilibre","Matchmaking","Récompenses"],progression:["Structure","Rythme","Équilibre","Intégration"],immersion:["Monde","Cohérence","Engagement","Interface"]}
+  },
+  es:{
+    noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',
+    rated:'PUNTUADOS',avg:'PROMEDIO',top:'MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',
+    verdict:'VEREDICTO',breakdown:'DESGLOSE',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',
+    of:'de',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',
+    clear:'LIMPIAR',topcat:'TOP CATEGORÍA',scoremin:'PUNTUACIÓN MIN',
+    scorefilters:'FILTROS SCORE',recent:'RECIENTES',search:'Buscar...',
+    filters:'FILTROS',hide:'OCULTAR',show:'MOSTRAR',
+    nav_home:'INICIO',nav_log:'REGISTRO',nav_mine:'MIS NOTAS',
+    mine_title:'MIS VALORACIONES',mine_empty:'Sin valoraciones personales.',mine_add:'+ AÑADIR',
+    mine_export:'EXPORTAR',mine_import:'IMPORTAR',mine_delete:'Eliminar',
+    rate_title:'VALORAR JUEGO',rate_game:'TÍTULO',rate_platform:'PLATAFORMA',
+    rate_score:'TU NOTA (0–10)',rate_verdict:'VEREDICTO FINAL',rate_notes:'NOTAS',
+    rate_rec:'¿RECOMIENDAS?',rate_yes:'✅ Sí',rate_no:'❌ No',
+    rate_save:'GUARDAR',rate_cancel:'CANCELAR',rate_edit:'EDITAR',
+    scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"},
+    cats:{gameplay:"Jugabilidad",graphics:"Gráficos",story:"Historia",sound:"Sonido",performance:"Rendimiento",replayability:"Rejugabilidad",innovation:"Innovación",multiplayer:"Multijugador",progression:"Progresión",immersion:"Inmersión"},
+    subs:{gameplay:["Controles","Mecánicas","Sistemas","Ritmo"],graphics:["Dirección artística","Calidad técnica","Animación","Cámara"],story:["Estructura","Personajes","Profundidad"],sound:["Música","Efectos","Doblaje","Ambiente"],performance:["FPS","Carga","Bugs","Optimización"],replayability:["Contenido extra","Ramificaciones","Incentivos"],innovation:["Originalidad","Ejecución","Impacto"],multiplayer:["Servidores","Balance","Matchmaking","Recompensas"],progression:["Estructura","Ritmo","Balance","Integración"],immersion:["Mundo","Coherencia","Engagement","Interfaz"]}
+  },
+  ja:{
+    noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',
+    rated:'評価済み',avg:'平均',top:'最高',rec:'おすすめ',games:'本',
+    verdict:'総評',breakdown:'内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',
+    of:'/',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',
+    clear:'クリア',topcat:'トップカテゴリ',scoremin:'最低スコア',
+    scorefilters:'スコアフィルター',recent:'最近',search:'検索...',
+    filters:'フィルター',hide:'非表示',show:'表示',
+    nav_home:'ホーム',nav_log:'ログ',nav_mine:'マイノート',
+    mine_title:'マイレーティング',mine_empty:'個人評価はまだありません。',mine_add:'＋追加',
+    mine_export:'エクスポート',mine_import:'インポート',mine_delete:'削除',
+    rate_title:'ゲームを評価',rate_game:'タイトル',rate_platform:'プラットフォーム',
+    rate_score:'スコア (0–10)',rate_verdict:'最終評価',rate_notes:'メモ',
+    rate_rec:'おすすめ？',rate_yes:'✅ はい',rate_no:'❌ いいえ',
+    rate_save:'保存',rate_cancel:'キャンセル',rate_edit:'編集',
+    scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"},
+    cats:{gameplay:"ゲームプレイ",graphics:"グラフィック",story:"ストーリー",sound:"サウンド",performance:"パフォーマンス",replayability:"リプレイ性",innovation:"革新性",multiplayer:"マルチプレイヤー",progression:"進行",immersion:"没入感"},
+    subs:{gameplay:["操作性","戦闘システム","ゲームシステム","ペース"],graphics:["アートディレクション","技術品質","アニメーション","カメラ"],story:["プロット","キャラクター","テーマ"],sound:["BGM","効果音","ボイス","雰囲気"],performance:["フレームレート","ロード時間","バグ数","最適化"],replayability:["クリア後","分岐","やり込み要素"],innovation:["独創性","アイデアの実行","ジャンルへの影響"],multiplayer:["サーバー安定性","バランス","マッチング","報酬"],progression:["構造","ペース","バランス","統合"],immersion:["世界観","一貫性","感情的関与","UI"]}
+  },
+  zh:{
+    noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',
+    rated:'已评分',avg:'均分',top:'最高',rec:'推荐',games:'款',
+    verdict:'总评',breakdown:'细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',
+    of:'/',genre:'类型',platform:'平台',perspective:'视角',
+    clear:'清除',topcat:'最高分类',scoremin:'最低分',
+    scorefilters:'分数筛选',recent:'最近',search:'搜索...',
+    filters:'筛选',hide:'隐藏',show:'显示',
+    nav_home:'首页',nav_log:'日志',nav_mine:'我的',
+    mine_title:'我的评分',mine_empty:'暂无个人评分。',mine_add:'＋添加评分',
+    mine_export:'导出',mine_import:'导入',mine_delete:'删除',
+    rate_title:'评价游戏',rate_game:'游戏标题',rate_platform:'平台',
+    rate_score:'你的评分 (0–10)',rate_verdict:'最终评价',rate_notes:'备注',
+    rate_rec:'推荐？',rate_yes:'✅ 是',rate_no:'❌ 否',
+    rate_save:'保存',rate_cancel:'取消',rate_edit:'编辑',
+    scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"},
+    cats:{gameplay:"游戏玩法",graphics:"画面",story:"故事",sound:"音效",performance:"性能",replayability:"重玩性",innovation:"创新性",multiplayer:"多人游戏",progression:"进程",immersion:"沉浸感"},
+    subs:{gameplay:["操控","战斗机制","游戏系统","节奏"],graphics:["美术方向","技术质量","动画","镜头"],story:["情节结构","角色对话","主题深度"],sound:["配乐","音效","配音","环境音"],performance:["帧率","加载时间","Bug数量","优化"],replayability:["后期内容","分支路线","激励机制"],innovation:["原创性","创意执行","类型影响"],multiplayer:["服务器","平衡","匹配","奖励"],progression:["结构","节奏","平衡","整合"],immersion:["世界构建","风格一致性","情感投入","界面"]}
+  }
 };
 const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
 let LANG='en';
 function t(){return T[LANG]||T.en;}
-function slbl(s){return (t().scores||{})[Math.round(s)]||'';}
+function slbl(s){return(t().scores||{})[Math.round(s)]||'';}
+function catLabel(key){return(t().cats||{})[key]||(CAT_META[key]||{}).label||key;}
+function subLabel(cat,idx){const s=(t().subs||{})[cat];return s&&s[idx]!=null?s[idx]:((CAT_META[cat]||{}).subs||[])[idx]||'';}
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
+// ─── CONSTANTS ────────────────────────────────────────────────────────────────
 const RAW='https://raw.githubusercontent.com/ushindo0-0ay/backlog-therapy/main/log.json';
 const sc=s=>s>=9?"#00ffb3":s>=7.5?"#a3ff6e":s>=6?"#ffe566":s>=4?"#ff9f43":"#ff4d6d";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const r2=n=>Math.round(n*100)/100;
-const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b"},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa"},story:{label:"Story",icon:"📖",color:"#34d399"},sound:{label:"Sound",icon:"🎵",color:"#f59e0b"},performance:{label:"Performance",icon:"⚡",color:"#38bdf8"},replayability:{label:"Replay",icon:"🔄",color:"#fb923c"},innovation:{label:"Innovation",icon:"💡",color:"#e879f9"},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80"},progression:{label:"Progression",icon:"📈",color:"#f472b6"},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9"}};
+const CAT_META={
+  gameplay:   {label:"Gameplay",    icon:"⚔️", color:"#ff6b6b", subs:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"]},
+  graphics:   {label:"Graphics",    icon:"🎨", color:"#a78bfa", subs:["Art Direction","Technical Quality","Animation","Camera"]},
+  story:      {label:"Story",       icon:"📖", color:"#34d399", subs:["Plot & Structure","Characters & Dialogue","Thematic Depth"]},
+  sound:      {label:"Sound",       icon:"🎵", color:"#f59e0b", subs:["Score & Themes","Sound Effects","Voice Acting","Ambience"]},
+  performance:{label:"Performance", icon:"⚡", color:"#38bdf8", subs:["Frame Rate","Load Times","Bug Count","Optimization"]},
+  replayability:{label:"Replay",    icon:"🔄", color:"#fb923c", subs:["Post-Game Content","Branching Paths","Player Incentives"]},
+  innovation: {label:"Innovation",  icon:"💡", color:"#e879f9", subs:["Originality","Execution of Ideas","Genre Impact"]},
+  multiplayer:{label:"Multiplayer", icon:"👥", color:"#4ade80", subs:["Server Stability","Balance","Matchmaking","Rewards"]},
+  progression:{label:"Progression", icon:"📈", color:"#f472b6", subs:["Structure","Pacing","Balance","Integration"]},
+  immersion:  {label:"Immersion",   icon:"🌍", color:"#67e8f9", subs:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]}
+};
+
 let LOG=[];
+let MINE=[];
 let F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
+let logFilterOpen=false;
+let mineSearch='';
 
 // ─── LANG ─────────────────────────────────────────────────────────────────────
 function openLangSheet(){document.getElementById('lang-sheet').classList.add('open');}
@@ -170,27 +328,34 @@ function setLang(l){
   document.body.classList.toggle('zh',l==='zh');
   document.documentElement.setAttribute('dir',rtl?'rtl':'ltr');
   localStorage.setItem('bt_lang',l);
+  const tx=t();
+  document.getElementById('nl-home').textContent=tx.nav_home;
+  document.getElementById('nl-log').textContent=tx.nav_log;
+  document.getElementById('nl-mine').textContent=tx.nav_mine;
   if(LOG.length){renderHome();renderLog();}
+  if(document.getElementById('page-mine').classList.contains('active'))renderMine();
 }
 
-// ─── LOAD ─────────────────────────────────────────────────────────────────────
+// ─── DATA LOAD ────────────────────────────────────────────────────────────────
 async function loadLog(){
   try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);}
   catch(e){LOG=[];}
   document.getElementById('tb-count').textContent=LOG.length+' '+(t().games||'GAMES');
   renderHome();renderLog();
 }
+function loadMine(){try{const r=localStorage.getItem('bt_mine');MINE=r?JSON.parse(r):[];}catch(e){MINE=[];}}
+function saveMine(){localStorage.setItem('bt_mine',JSON.stringify(MINE));}
 
 // ─── NAV ──────────────────────────────────────────────────────────────────────
 function setNav(id){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const el=document.getElementById('nav-'+id);if(el)el.classList.add('active');}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const p=document.getElementById('page-'+id);if(p){p.classList.remove('active');void p.offsetWidth;p.classList.add('active');}document.getElementById('content').scrollTop=0;}
 function goHome(){showPage('home');setNav('home');}
-function goLog(){showPage('log');setNav('log');}
+function goLog() {showPage('log'); setNav('log');}
+function goMine(){showPage('mine');setNav('mine');renderMine();}
 
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 function renderHome(){
-  const tx=t();
-  const el=document.getElementById('page-home');el.innerHTML='';
+  const tx=t();const el=document.getElementById('page-home');el.innerHTML='';
   const hero=document.createElement('div');hero.className='home-hero';
   hero.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:10px;opacity:.8">// GAME RATING ARCHIVE</div><div style="font-family:\'Orbitron\',sans-serif;font-size:26px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:6px">EVERY GAME.<br><span style="color:var(--accent)">RATED.</span></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:var(--muted2);line-height:1.5">Genre-weighted scoring across 10 categories.</div>';
   el.appendChild(hero);
@@ -205,8 +370,7 @@ function renderHome(){
   const rs=document.createElement('div');rs.style.padding='0 16px 16px';
   rs.innerHTML='<div class="lbl">'+tx.recent+'</div>';
   LOG.slice(0,3).forEach(e=>{
-    const clr=sc(e.finalScore);
-    const c=document.createElement('div');c.className='log-row';
+    const clr=sc(e.finalScore);const c=document.createElement('div');c.className='log-row';
     c.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div><div class="log-score" style="color:'+clr+'">'+e.finalScore+'</div><div class="log-info"><div class="log-title">'+e.title+'</div><div class="log-meta">'+e.platform+(e.genres&&e.genres.length?' · '+e.genres[0]:'')+'</div></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700;flex-shrink:0">'+slbl(e.finalScore)+'</div>';
     c.onclick=()=>openSheet(e);rs.appendChild(c);
   });
@@ -215,77 +379,93 @@ function renderHome(){
 
 // ─── LOG PAGE ─────────────────────────────────────────────────────────────────
 function renderLog(){
-  const tx=t();
-  const el=document.getElementById('page-log');el.innerHTML='';
+  const tx=t();const el=document.getElementById('page-log');el.innerHTML='';
   const genres=new Set(),platforms=new Set(),perspectives=new Set();
   LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
-  const fs=document.createElement('div');fs.className='filter-section';
+  const hasActive=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
+
+  // filter toggle button
+  const ftBtn=document.createElement('button');
+  ftBtn.className='filter-toggle-btn'+(hasActive?' has-active':'');
+  ftBtn.innerHTML='⚙ '+(logFilterOpen?tx.hide:tx.show)+' '+tx.filters+(hasActive?' ●':'');
+  ftBtn.onclick=()=>{logFilterOpen=!logFilterOpen;renderLog();};
+  el.appendChild(ftBtn);
+
+  // filter section
+  const fs=document.createElement('div');fs.className='filter-section'+(logFilterOpen?' open':'');
   let qInp;
-  function buildFC(label,items,fk,chipClass){
+  function buildFC(label,items,fk){
     if(!items.size)return;
-    const g=document.createElement('div');g.innerHTML='<div class="lbl" style="margin-bottom:6px">'+label+'</div>';
+    const g=document.createElement('div');g.style.marginBottom='10px';
+    g.innerHTML='<div class="lbl" style="margin-bottom:6px">'+label+'</div>';
     const chips=document.createElement('div');chips.className='fchips';
     [...items].sort().forEach(item=>{
-      const ch=document.createElement('span');ch.className='fchip'+(chipClass?' '+chipClass:'');ch.textContent=item;
-      ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');renderLogList(qInp?qInp.value:'');};
+      const ch=document.createElement('span');ch.className='fchip';ch.textContent=item;
+      if(F[fk].has(item))ch.classList.add('on');
+      ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');refreshFilterBtn();renderLogList(qInp?qInp.value:'');};
       chips.appendChild(ch);
     });
     g.appendChild(chips);fs.appendChild(g);
   }
   buildFC(tx.genre,genres,'genres');buildFC(tx.platform,platforms,'platforms');buildFC(tx.perspective,perspectives,'perspectives');
 
-  // top-category chips
-  const tcDiv=document.createElement('div');
+  // top-cat chips
+  const tcDiv=document.createElement('div');tcDiv.style.marginBottom='10px';
   tcDiv.innerHTML='<div class="lbl" style="margin-bottom:6px">'+tx.topcat+'</div>';
   const tcChips=document.createElement('div');tcChips.className='fchips';
   Object.keys(CAT_META).forEach(cat=>{
-    const m=CAT_META[cat];
-    const ch=document.createElement('span');ch.className='fchip';ch.textContent=m.icon+' '+m.label;
-    ch.onclick=()=>{F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);ch.classList.toggle('on');ch.style.background=ch.classList.contains('on')?'rgba(124,58,237,.15)':'';ch.style.borderColor=ch.classList.contains('on')?'rgba(124,58,237,.45)':'';ch.style.color=ch.classList.contains('on')?'#c4b5fd':'';renderLogList(qInp?qInp.value:'');};
+    const m=CAT_META[cat];const ch=document.createElement('span');ch.className='fchip';ch.textContent=m.icon+' '+catLabel(cat);
+    if(F.topCat.has(cat)){ch.classList.add('on');ch.style.cssText='background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.45);color:#c4b5fd';}
+    ch.onclick=()=>{
+      F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);
+      ch.classList.toggle('on');
+      const on=ch.classList.contains('on');
+      ch.style.cssText=on?'background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.45);color:#c4b5fd':'';
+      refreshFilterBtn();renderLogList(qInp?qInp.value:'');
+    };
     tcChips.appendChild(ch);
   });
   tcDiv.appendChild(tcChips);
 
-  // score filter toggle
+  // score sliders (collapsible)
   const scoreToggle=document.createElement('button');scoreToggle.className='score-toggle-btn';scoreToggle.textContent='⚡ '+tx.scorefilters+' ▾';
   const scoreBody=document.createElement('div');scoreBody.className='score-filter-body';
   scoreToggle.onclick=()=>{const open=scoreBody.classList.toggle('open');scoreToggle.textContent='⚡ '+tx.scorefilters+' '+(open?'▴':'▾');};
-
-  // score sliders
   const sliderSec=document.createElement('div');sliderSec.innerHTML='<div class="lbl" style="margin:10px 0 6px">'+tx.scoremin+'</div>';
   Object.keys(CAT_META).forEach(cat=>{
     const m=CAT_META[cat];if(!F.scoreMin[cat])F.scoreMin[cat]=0;
     const row=document.createElement('div');row.className='sslider-row';
-    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=m.label.slice(0,4).toUpperCase();
+    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=catLabel(cat).slice(0,4).toUpperCase();
     const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
     const val=document.createElement('span');val.className='sslider-val';val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';
-    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';renderLogList(qInp?qInp.value:'');};
+    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';refreshFilterBtn();renderLogList(qInp?qInp.value:'');};
     row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);sliderSec.appendChild(row);
   });
   scoreBody.appendChild(tcDiv);scoreBody.appendChild(sliderSec);
 
-  // clear btn
   const clearBtn=document.createElement('button');clearBtn.className='clear-btn';clearBtn.textContent=tx.clear;
-  clearBtn.onclick=()=>{
-    F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
-    el.querySelectorAll('.fchip').forEach(c=>{c.classList.remove('on');c.style.background='';c.style.borderColor='';c.style.color='';});
-    el.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});
-    if(qInp)qInp.value='';renderLogList('');
-  };
-  fs.appendChild(scoreToggle);fs.appendChild(scoreBody);fs.appendChild(clearBtn);el.appendChild(fs);
+  clearBtn.onclick=()=>{F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};renderLog();};
+  fs.appendChild(scoreToggle);fs.appendChild(scoreBody);fs.appendChild(clearBtn);
+  el.appendChild(fs);
 
+  // search
   const sw=document.createElement('div');sw.className='search-wrap';
-  qInp=document.createElement('input');qInp.className='search-inp';qInp.placeholder=tx.search;qInp.addEventListener('input',e=>renderLogList(e.target.value));
+  qInp=document.createElement('input');qInp.className='search-inp';qInp.placeholder=tx.search;
+  qInp.addEventListener('input',e=>renderLogList(e.target.value));
   sw.appendChild(qInp);el.appendChild(sw);
   const ri=document.createElement('div');ri.className='results-info';ri.id='log-ri';el.appendChild(ri);
   const list=document.createElement('div');list.className='log-list';list.id='log-list';el.appendChild(list);
   renderLogList('');
+
+  function refreshFilterBtn(){
+    const ha=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
+    ftBtn.className='filter-toggle-btn'+(ha?' has-active':'');
+    ftBtn.innerHTML='⚙ '+(logFilterOpen?tx.hide:tx.show)+' '+tx.filters+(ha?' ●':'');
+  }
 }
 
-// ─── LOG LIST ─────────────────────────────────────────────────────────────────
 function renderLogList(q){
-  const tx=t();
-  const list=document.getElementById('log-list');const ri=document.getElementById('log-ri');if(!list)return;
+  const tx=t();const list=document.getElementById('log-list');const ri=document.getElementById('log-ri');if(!list)return;
   const filtered=LOG.filter(e=>{
     if(q&&!e.title.toLowerCase().includes(q.toLowerCase()))return false;
     if(F.genres.size&&!(e.genres||[]).some(g=>F.genres.has(g)))return false;
@@ -294,13 +474,12 @@ function renderLogList(q){
     if(F.topCat.size){
       const subs=e.subs||{};const cats=Object.keys(subs).filter(c=>c!=='multiplayer'||e.hasMP);
       if(!cats.length)return false;
-      const topCat=cats.reduce((best,c)=>{const s=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return s>(subs[best]&&subs[best].length?r2(avg(subs[best].map(x=>x.score))):0)?c:best;},cats[0]);
-      if(!F.topCat.has(topCat))return false;
+      const top=cats.reduce((b,c)=>{const s=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return s>(subs[b]&&subs[b].length?r2(avg(subs[b].map(x=>x.score))):0)?c:b;},cats[0]);
+      if(!F.topCat.has(top))return false;
     }
-    for(const [cat,minS] of Object.entries(F.scoreMin)){
+    for(const[cat,minS]of Object.entries(F.scoreMin)){
       if(!minS)continue;
-      const subs=(e.subs||{})[cat]||[];
-      const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;
+      const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;
       if(cs<minS)return false;
     }
     return true;
@@ -310,23 +489,187 @@ function renderLogList(q){
   list.innerHTML='';
   if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?tx.noMatch:tx.noGames)+'</div>';return;}
   filtered.forEach(e=>{
-    const clr=sc(e.finalScore);
-    const row=document.createElement('div');row.className='log-row';
+    const clr=sc(e.finalScore);const row=document.createElement('div');row.className='log-row';
     row.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div><div class="log-score" style="color:'+clr+'">'+e.finalScore+'</div><div class="log-info"><div class="log-title">'+e.title+'</div><div class="log-meta">'+e.platform+(e.date?' · '+e.date:'')+'</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.07)">'+g+'</span>').join('')+(e.recommend!=null?'<span style="font-size:12px">'+(e.recommend?'✅':'❌')+'</span>':'')+'</div></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700;flex-shrink:0">'+slbl(e.finalScore)+'</div>';
     row.onclick=()=>openSheet(e);list.appendChild(row);
   });
 }
 
-// ─── SHEET ────────────────────────────────────────────────────────────────────
+// ─── SHARED LOG DETAIL SHEET ──────────────────────────────────────────────────
 function openSheet(e){
   const tx=t();const clr=sc(e.finalScore);
   const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
-  document.getElementById('sheet-content').innerHTML='<div class="sheet-hero"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div><div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+e.finalScore+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(e.finalScore)+'</div></div><div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.08)">'+g+'</span>').join('')+'</div>'+(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?tx.yes_rec:tx.no_rec)+'</div>':'')+'</div></div></div>'+(ac.length?'<div class="cat-grid-m">'+ac.map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};return'<div class="cat-card-m"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+m.label.toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted2)">w:'+w+'%</div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>'+subs.map(s=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+s.name+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')+'</div>';}).join('')+'</div>':'')+(e.verdict?'<div style="margin:0 16px 16px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">'+tx.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'');
+  document.getElementById('sheet-content').innerHTML=
+    '<div class="sheet-hero">'
+    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div>'
+    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div>'
+    +'<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div>'
+    +'<div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px">'
+      +'<div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+e.finalScore+'</div>'
+      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(e.finalScore)+'</div></div>'
+      +'<div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.08)">'+g+'</span>').join('')+'</div>'
+      +(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?tx.yes_rec:tx.no_rec)+'</div>':'')
+      +'</div></div></div>'
+    +(ac.length?'<div class="cat-grid-m">'+ac.map(cat=>{
+        const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};
+        return '<div class="cat-card-m"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div>'
+          +'<div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+catLabel(cat).toUpperCase()+'</div>'
+          +'<div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted2)">w:'+w+'%</div></div>'
+          +'<div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>'
+          +subs.map((s,i)=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+subLabel(cat,i)+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')
+        +'</div>';
+      }).join('')+'</div>':'')
+    +(e.verdict?'<div style="margin:0 16px 16px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">'+tx.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'');
   document.getElementById('sheet').classList.add('open');
 }
 function closeSheet(ev){if(!ev||ev.target===document.getElementById('sheet'))document.getElementById('sheet').classList.remove('open');}
 
+// ─── MINE PAGE ────────────────────────────────────────────────────────────────
+function renderMine(){
+  const tx=t();const el=document.getElementById('page-mine');el.innerHTML='';
+  // header
+  const hd=document.createElement('div');hd.style.cssText='padding:20px 16px 6px';
+  hd.innerHTML='<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">'+tx.mine_title+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--muted2)">'+MINE.length+' '+tx.games+'</div>';
+  el.appendChild(hd);
+  // action buttons
+  const acts=document.createElement('div');acts.className='mine-actions';
+  const addBtn=document.createElement('button');addBtn.className='mine-action-btn primary';addBtn.textContent=tx.mine_add;addBtn.onclick=()=>openRateSheet(null);
+  const expBtn=document.createElement('button');expBtn.className='mine-action-btn';expBtn.textContent='⬇ '+tx.mine_export;expBtn.onclick=exportMine;
+  const impLbl=document.createElement('label');impLbl.className='mine-action-btn';impLbl.style.cursor='pointer';impLbl.textContent='⬆ '+tx.mine_import;
+  const impInp=document.createElement('input');impInp.type='file';impInp.accept='.json';impInp.style.display='none';
+  impInp.onchange=ev=>{if(ev.target.files[0])importMine(ev.target.files[0]);};
+  impLbl.appendChild(impInp);acts.appendChild(addBtn);acts.appendChild(expBtn);acts.appendChild(impLbl);el.appendChild(acts);
+
+  if(!MINE.length){el.innerHTML+='<div class="empty">'+tx.mine_empty+'</div>';return;}
+  // search
+  const sw=document.createElement('div');sw.className='search-wrap';
+  const si=document.createElement('input');si.className='search-inp';si.placeholder=tx.search;si.value=mineSearch;
+  si.addEventListener('input',ev=>{mineSearch=ev.target.value;renderMineList();});
+  sw.appendChild(si);el.appendChild(sw);
+  const ri=document.createElement('div');ri.className='results-info';ri.id='mine-ri';el.appendChild(ri);
+  const list=document.createElement('div');list.className='log-list';list.id='mine-list';el.appendChild(list);
+  renderMineList();
+}
+function renderMineList(){
+  const tx=t();const list=document.getElementById('mine-list');const ri=document.getElementById('mine-ri');if(!list)return;
+  const q=mineSearch.toLowerCase();
+  const filtered=q?MINE.filter(e=>e.title.toLowerCase().includes(q)):MINE;
+  if(ri)ri.textContent=q?filtered.length+' '+tx.of+' '+MINE.length+' '+tx.games:MINE.length+' '+tx.games;
+  list.innerHTML='';
+  if(!filtered.length){list.innerHTML='<div class="empty">'+tx.noMatch+'</div>';return;}
+  filtered.forEach(e=>{
+    const clr=sc(e.score);const row=document.createElement('div');row.className='log-row';
+    row.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div>'
+      +'<div class="log-score" style="color:'+clr+'">'+e.score+'</div>'
+      +'<div class="log-info"><div class="log-title">'+e.title+'</div>'
+      +'<div class="log-meta">'+(e.platform||'')+(e.date?' · '+e.date:'')+'</div>'
+      +(e.notes?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:var(--muted2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px">'+e.notes+'</div>':'')
+      +'</div>'
+      +'<div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">'
+      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700">'+slbl(e.score)+'</div>'
+      +(e.recommend!=null?'<div style="font-size:12px">'+(e.recommend?'✅':'❌')+'</div>':'')
+      +'</div>';
+    row.onclick=()=>openMineSheet(e);list.appendChild(row);
+  });
+}
+
+// ─── MINE DETAIL SHEET ───────────────────────────────────────────────────────
+function openMineSheet(e){
+  const tx=t();const clr=sc(e.score);
+  document.getElementById('sheet-content').innerHTML=
+    '<div class="sheet-hero">'
+    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div>'
+    +(e.platform?'<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div>':'')
+    +'<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div>'
+    +'<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px">'
+      +'<div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+e.score+'</div>'
+      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(e.score)+'</div></div>'
+      +(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?tx.yes_rec:tx.no_rec)+'</div>':'')
+    +'</div></div>'
+    +(e.notes?'<div style="margin:12px 16px 0;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(124,58,237,.5);border-radius:8px;padding:14px 16px"><div class="lbl">'+tx.rate_notes+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.notes+'</div></div>':'')
+    +(e.verdict?'<div style="margin:12px 16px 0;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">'+tx.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'')
+    +'<div style="display:flex;gap:8px;padding:16px 16px 8px">'
+      +'<button onclick="editMineEntry(\''+e.id+'\')" style="flex:1;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:11px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer">✏ '+tx.rate_edit+'</button>'
+      +'<button onclick="deleteMineEntry(\''+e.id+'\')" style="flex:1;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:11px;border-radius:6px;border:1px solid rgba(255,77,109,.3);background:transparent;color:#ff4d6d;cursor:pointer">✕ '+tx.mine_delete+'</button>'
+    +'</div>';
+  document.getElementById('sheet').classList.add('open');
+}
+
+// ─── PERSONAL RATING SHEET ────────────────────────────────────────────────────
+let _rateEditId=null;
+let _rateScore=null;
+let _rateRec=null;
+function openRateSheet(prefill){
+  _rateEditId=prefill?prefill.id:null;
+  _rateScore=prefill?prefill.score:null;
+  _rateRec=prefill!=null?prefill.recommend:null;
+  const tx=t();const v=prefill||{};const el=document.getElementById('rate-sheet-content');
+  el.innerHTML=
+    '<div style="font-family:\'Orbitron\',sans-serif;font-size:16px;font-weight:900;color:#fff;margin-bottom:20px">'+tx.rate_title+'</div>'
+    +'<div class="rate-field"><label>'+tx.rate_game+'</label><input id="rf-title" type="text" value="'+(v.title||'')+'" placeholder="..."/></div>'
+    +'<div class="rate-field"><label>'+tx.rate_platform+'</label><input id="rf-platform" type="text" value="'+(v.platform||'')+'" placeholder="PC, PS5..."/></div>'
+    +'<div class="rate-field"><label>'+tx.rate_score+'</label><div class="score-btns" id="rf-score-btns"></div></div>'
+    +'<div class="rate-field"><label>'+tx.rate_notes+'</label><textarea id="rf-notes" placeholder="...">'+(v.notes||'')+'</textarea></div>'
+    +'<div class="rate-field"><label>'+tx.rate_verdict+'</label><textarea id="rf-verdict" placeholder="...">'+(v.verdict||'')+'</textarea></div>'
+    +'<div class="rate-field"><label>'+tx.rate_rec+'</label><div class="rec-row"><button id="rf-rec-yes" class="rec-btn yes'+((_rateRec===true)?' on':'')+'" onclick="_setRec(true)">'+tx.rate_yes+'</button><button id="rf-rec-no" class="rec-btn no'+((_rateRec===false)?' on':'')+'" onclick="_setRec(false)">'+tx.rate_no+'</button></div></div>'
+    +'<div style="display:flex;gap:8px;margin-top:8px">'
+      +'<button onclick="closeRateSheet()" style="flex:1;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:12px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer">'+tx.rate_cancel+'</button>'
+      +'<button onclick="saveRateEntry()" style="flex:2;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:12px;border-radius:6px;border:none;background:linear-gradient(135deg,var(--accent),#c2185b);color:#fff;cursor:pointer">💾 '+tx.rate_save+'</button>'
+    +'</div>';
+  // score buttons
+  const scoreRow=el.querySelector('#rf-score-btns');
+  [0,1,2,3,4,5,6,7,8,9,10].forEach(n=>{
+    const b=document.createElement('button');b.className='score-btn'+(_rateScore===n?' on':'');b.textContent=n;
+    b.onclick=()=>{_rateScore=n;scoreRow.querySelectorAll('.score-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');};
+    scoreRow.appendChild(b);
+  });
+  document.getElementById('rate-sheet').classList.add('open');
+}
+window._setRec=function(val){
+  _rateRec=val;
+  document.getElementById('rf-rec-yes').classList.toggle('on',val===true);
+  document.getElementById('rf-rec-no').classList.toggle('on',val===false);
+};
+function closeRateSheet(){document.getElementById('rate-sheet').classList.remove('open');}
+function saveRateEntry(){
+  const title=document.getElementById('rf-title').value.trim();
+  if(!title){document.getElementById('rf-title').style.borderColor='rgba(255,45,107,.7)';return;}
+  if(_rateScore===null){return;}
+  const entry={
+    id:_rateEditId||Date.now().toString(),
+    savedAt:new Date().toISOString(),
+    title,
+    platform:document.getElementById('rf-platform').value.trim(),
+    notes:document.getElementById('rf-notes').value.trim(),
+    verdict:document.getElementById('rf-verdict').value.trim(),
+    recommend:_rateRec,
+    score:_rateScore
+  };
+  if(_rateEditId){MINE=MINE.map(e=>e.id===_rateEditId?entry:e);}
+  else{MINE.unshift(entry);}
+  saveMine();closeRateSheet();closeSheet();renderMine();
+}
+function editMineEntry(id){const e=MINE.find(x=>x.id===id);if(!e)return;closeSheet();openRateSheet(e);}
+function deleteMineEntry(id){if(!confirm(t().mine_delete+'?'))return;MINE=MINE.filter(e=>e.id!==id);saveMine();closeSheet();renderMine();}
+
+// ─── EXPORT / IMPORT MINE ─────────────────────────────────────────────────────
+function exportMine(){
+  const blob=new Blob([JSON.stringify(MINE,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-backlog-ratings.json';a.click();
+}
+function importMine(file){
+  const r=new FileReader();r.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);const arr=Array.isArray(data)?data:[];
+      const existing=new Set(MINE.map(x=>x.id));
+      MINE=[...arr.filter(x=>x.id&&!existing.has(x.id)),...MINE];
+      saveMine();renderMine();
+    }catch(err){alert('Invalid JSON file');}
+  };r.readAsText(file);
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+loadMine();
 const savedLang=localStorage.getItem('bt_lang')||'en';
 setLang(savedLang);
 loadLog();

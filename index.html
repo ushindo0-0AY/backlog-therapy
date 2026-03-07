@@ -106,6 +106,11 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .filter-expand-row{width:100%;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
 .filter-expand-btn{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .15s}
 .filter-expand-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
+.filter-visibility-btn{display:flex;align-items:center;gap:7px;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);padding:8px 14px;border-radius:6px;cursor:pointer;margin-bottom:14px;transition:all .15s}
+.filter-visibility-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
+.filter-visibility-btn.has-active{border-color:rgba(255,45,107,.45);color:#ff7a9a}
+.filter-bar{display:none}
+.filter-bar.open{display:flex}
 </style>
 </head>
 <body>
@@ -138,7 +143,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 <div class="main">
-  <div class="filter-bar" id="filter-bar" style="display:none">
+  <div class="filter-bar" id="filter-bar">
     <div class="filter-group"><div class="filter-lbl" id="t-genre"></div><div class="chips" id="chips-genre"></div></div>
     <div class="filter-sep"></div>
     <div class="filter-group"><div class="filter-lbl" id="t-platform"></div><div class="chips" id="chips-platform"></div></div>
@@ -160,6 +165,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       </div>
     </div>
   </div>
+  <div id="filter-toggle-wrap" style="display:none"><button class="filter-visibility-btn" id="filter-vis-btn" onclick="toggleFilterBar()">⚙ <span id="filter-vis-lbl">SHOW FILTERS</span></button></div>
   <div class="search-row"><input class="search-inp" id="search" oninput="render()"/></div>
   <div class="results-info" id="results-info"></div>
   <div id="list"><div class="loading">...</div></div>
@@ -169,12 +175,12 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 </div>
 <script>
 const T={
-  en:{tag:'// GAME RATING ARCHIVE',l1:'EVERY GAME.',l2:'RATED.',sub:'Genre-weighted scoring across 10 categories. Sub-category breakdowns. The full picture.',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',search:'Search games...',noGames:'No games logged yet.',noMatch:'No games match filters.',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',verdict:'VERDICT',breakdown:'CATEGORY BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',of:'of',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
-  ar:{tag:'// أرشيف تقييم الألعاب',l1:'كل لعبة.',l2:'مُقيَّمة.',sub:'تقييم مرجّح حسب النوع عبر 10 فئات. الصورة الكاملة.',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',search:'ابحث عن ألعاب...',noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',rated:'مُقيَّم',avg:'متوسط الدرجة',top:'أعلى درجة',rec:'موصى به',games:'ألعاب',verdict:'الحكم',breakdown:'تفصيل الفئات',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',of:'من',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
-  fr:{tag:'// ARCHIVE DE NOTATION',l1:'CHAQUE JEU.',l2:'NOTÉ.',sub:'Notation pondérée par genre sur 10 catégories. La vision complète.',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'TOUT EFFACER',search:'Rechercher...',noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',rated:'NOTÉS',avg:'SCORE MOY.',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',verdict:'VERDICT',breakdown:'DÉTAIL DES CATÉGORIES',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',of:'sur',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
-  es:{tag:'// ARCHIVO DE PUNTUACIÓN',l1:'CADA JUEGO.',l2:'PUNTUADO.',sub:'Puntuación ponderada por género en 10 categorías. La imagen completa.',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR TODO',search:'Buscar juegos...',noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',rated:'PUNTUADOS',avg:'PUNT. MEDIA',top:'PUNT. MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',verdict:'VEREDICTO',breakdown:'DESGLOSE DE CATEGORÍAS',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',of:'de',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
-  ja:{tag:'// ゲーム評価アーカイブ',l1:'すべてのゲーム、',l2:'評価済み。',sub:'10カテゴリーのジャンル加重スコア。全体像を把握。',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',search:'ゲームを検索...',noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',rated:'評価済み',avg:'平均スコア',top:'最高スコア',rec:'おすすめ',games:'本',verdict:'総評',breakdown:'カテゴリー別内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',of:'/',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
-  zh:{tag:'// 游戏评分档案',l1:'每款游戏，',l2:'都有评分。',sub:'基于流派加权的10项类别评分，全面呈现。',genre:'类型',platform:'平台',perspective:'视角',clear:'清除全部',search:'搜索游戏...',noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',rated:'已评分',avg:'平均分',top:'最高分',rec:'推荐',games:'款',verdict:'总评',breakdown:'类别细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',of:'/',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
+  en:{tag:'// GAME RATING ARCHIVE',l1:'EVERY GAME.',l2:'RATED.',sub:'Genre-weighted scoring across 10 categories. Sub-category breakdowns. The full picture.',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',search:'Search games...',noGames:'No games logged yet.',noMatch:'No games match filters.',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',verdict:'VERDICT',breakdown:'CATEGORY BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',of:'of',hide:'HIDE',show:'SHOW',filters:'FILTERS',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
+  ar:{tag:'// أرشيف تقييم الألعاب',l1:'كل لعبة.',l2:'مُقيَّمة.',sub:'تقييم مرجّح حسب النوع عبر 10 فئات. الصورة الكاملة.',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',search:'ابحث عن ألعاب...',noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',rated:'مُقيَّم',avg:'متوسط الدرجة',top:'أعلى درجة',rec:'موصى به',games:'ألعاب',verdict:'الحكم',breakdown:'تفصيل الفئات',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',of:'من',hide:'إخفاء',show:'إظهار',filters:'الفلاتر',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
+  fr:{tag:'// ARCHIVE DE NOTATION',l1:'CHAQUE JEU.',l2:'NOTÉ.',sub:'Notation pondérée par genre sur 10 catégories. La vision complète.',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'TOUT EFFACER',search:'Rechercher...',noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',rated:'NOTÉS',avg:'SCORE MOY.',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',verdict:'VERDICT',breakdown:'DÉTAIL DES CATÉGORIES',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',of:'sur',hide:'CACHER',show:'AFFICHER',filters:'FILTRES',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
+  es:{tag:'// ARCHIVO DE PUNTUACIÓN',l1:'CADA JUEGO.',l2:'PUNTUADO.',sub:'Puntuación ponderada por género en 10 categorías. La imagen completa.',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR TODO',search:'Buscar juegos...',noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',rated:'PUNTUADOS',avg:'PUNT. MEDIA',top:'PUNT. MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',verdict:'VEREDICTO',breakdown:'DESGLOSE DE CATEGORÍAS',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',of:'de',hide:'OCULTAR',show:'MOSTRAR',filters:'FILTROS',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
+  ja:{tag:'// ゲーム評価アーカイブ',l1:'すべてのゲーム、',l2:'評価済み。',sub:'10カテゴリーのジャンル加重スコア。全体像を把握。',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',search:'ゲームを検索...',noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',rated:'評価済み',avg:'平均スコア',top:'最高スコア',rec:'おすすめ',games:'本',verdict:'総評',breakdown:'カテゴリー別内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',of:'/',hide:'非表示',show:'表示',filters:'フィルター',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
+  zh:{tag:'// 游戏评分档案',l1:'每款游戏，',l2:'都有评分。',sub:'基于流派加权的10项类别评分，全面呈现。',genre:'类型',platform:'平台',perspective:'视角',clear:'清除全部',search:'搜索游戏...',noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',rated:'已评分',avg:'平均分',top:'最高分',rec:'推荐',games:'款',verdict:'总评',breakdown:'类别细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',of:'/',hide:'隐藏',show:'显示',filters:'筛选',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
 };
 const LANGS=['en','ar','fr','es','ja','zh'];
 const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
@@ -204,6 +210,22 @@ function setLang(l){
   if(LOG.length){buildStats();render();}
   localStorage.setItem('bt_lang',l);
 }
+let filterBarOpen=false;
+function toggleFilterBar(){
+  filterBarOpen=!filterBarOpen;
+  document.getElementById('filter-bar').classList.toggle('open',filterBarOpen);
+  updateFilterVisBtn();
+}
+function updateFilterVisBtn(){
+  const t=T[LANG]||T.en;
+  const hasActive=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
+  const btn=document.getElementById('filter-vis-btn');
+  if(btn){
+    btn.className='filter-visibility-btn'+(hasActive?' has-active':'');
+    const lbl=filterBarOpen?(t.hide||'HIDE')+' '+(t.filters||'FILTERS'):(t.show||'SHOW')+' '+(t.filters||'FILTERS');
+    document.getElementById('filter-vis-lbl').textContent=lbl+(hasActive?' ●':'');
+  }
+}
 function applyT(){
   const t=T[LANG]||T.en;
   document.getElementById('t-tag').textContent=t.tag;
@@ -215,9 +237,10 @@ function applyT(){
   document.getElementById('t-perspective').textContent=t.perspective;
   document.getElementById('t-clear').textContent=t.clear;
   document.getElementById('search').placeholder=t.search;
+  updateFilterVisBtn();
 }
 async function loadLog(){
-  try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);buildStats();buildChips();document.getElementById('filter-bar').style.display='flex';render();}
+  try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);buildStats();buildChips();document.getElementById('filter-toggle-wrap').style.display='block';render();}
   catch(e){document.getElementById('list').innerHTML='<div class="empty">Could not load log.</div>';document.getElementById('hero-stats').innerHTML='';}
 }
 function buildStats(){
@@ -268,7 +291,7 @@ function mkChips(id,items,fk){
   const c=document.getElementById(id);c.innerHTML='';
   items.forEach(item=>{const ch=document.createElement('span');ch.className='chip';ch.textContent=item;ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');render();};c.appendChild(ch);});
 }
-function clearFilters(){F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};document.querySelectorAll('.chip,.top-cat-chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});document.getElementById('search').value='';render();}
+function clearFilters(){F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};document.querySelectorAll('.chip,.top-cat-chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});document.getElementById('search').value='';updateFilterVisBtn();render();}
 function render(){
   const t=T[LANG]||T.en;
   const q=document.getElementById('search').value.toLowerCase();
@@ -295,6 +318,7 @@ function render(){
     return true;
   });
   const hasF=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0)||q;
+  updateFilterVisBtn();
   document.getElementById('results-info').textContent=hasF?filtered.length+' '+t.of+' '+LOG.length+' '+t.games:LOG.length+' '+t.games;
   const list=document.getElementById('list');list.innerHTML='';
   if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?t.noMatch:t.noGames)+'</div>';return;}
