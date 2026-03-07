@@ -188,14 +188,19 @@ function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
 function round2(n){return Math.round(n*100)/100;}
 function scoreLabel(s){return SCORE_LABELS[Math.round(s)]||"Average";}
 
-// ─── STORAGE (Cloudflare Worker) ──────────────────────────────────────────────
-const WORKER='https://bt-logger.ahmedhassibi29.workers.dev';
+// ─── STORAGE (GitHub API) ─────────────────────────────────────────────────────
+const GH_OWNER='ushindo0-0ay';
+const GH_REPO='backlog-therapy';
+const GH_FILE='log.json';
+const GH_TOKEN='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';
+const GH_API='https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE;
+const RAW='https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/main/'+GH_FILE;
 let LOG=[];
 let _synced=false;
 
 async function loadLogFromGH(){
   try{
-    const res=await fetch(WORKER+'?t='+Date.now());
+    const res=await fetch(RAW+'?t='+Date.now());
     const data=await res.json();
     LOG=Array.isArray(data)?data:(data.log||[]);
     _synced=true;
@@ -205,9 +210,13 @@ async function loadLogFromGH(){
 
 async function saveLog(l){
   try{
-    const res=await fetch(WORKER,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(l)});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-  }catch(e){toast('Save failed. Check connection.');}
+    const headers={'Authorization':'token '+GH_TOKEN,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};
+    const meta=await fetch(GH_API,{headers}).then(r=>r.json());
+    const sha=meta.sha;
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(l,null,2))));
+    const res=await fetch(GH_API,{method:'PUT',headers,body:JSON.stringify({message:'update log',content,sha})});
+    if(!res.ok){const e=await res.json();throw new Error(e.message);}
+  }catch(e){toast('Save failed: '+e.message);}
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
