@@ -1,7 +1,7 @@
 [
   {
     "id": 1772827623462,
-    "savedAt": "2026-03-06T20:07:03.462Z",
+    "savedAt": "2026-03-07T05:26:59.875Z",
     "title": "resident evil 4",
     "platform": "PS2",
     "date": "2026-03-06",
@@ -14,15 +14,15 @@
       "Puzzle"
     ],
     "gw": {
-      "Action-Adventure": 55,
-      "Horror": 40,
+      "Action-Adventure": 68,
+      "Horror": 27,
       "Puzzle": 5
     },
     "fw": {
-      "gameplay": 16,
+      "gameplay": 17,
       "graphics": 15,
       "story": 16,
-      "sound": 13,
+      "sound": 12,
       "performance": 10,
       "replayability": 6,
       "innovation": 5,
@@ -52,19 +52,19 @@
       "graphics": [
         {
           "name": "Art Direction",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Technical Quality",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Animation",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Camera & Composition",
-          "score": 5
+          "score": 10
         }
       ],
       "story": [
@@ -182,10 +182,12 @@
         }
       ]
     },
-    "notes": {},
-    "verdict": "",
+    "notes": {
+      "graphics": "wiiiiiiiiiiiiiiiiii"
+    },
+    "verdict": "gret",
     "recommend": true,
-    "finalScore": 5
+    "finalScore": 5.75
   },
   {
     "id": 1772857734132,
