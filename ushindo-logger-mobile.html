@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#04040a"/>
-<title>Backlog Therapy — Logger</title>
+<title>BT Logger</title>
 <link rel="icon" type="image/png" href="icon-512.png"/>
 <link rel="icon" type="image/png" href="icon-512.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
@@ -346,7 +346,7 @@ function showPage(id,title,showBack=false,rightEl=null){
   const tbR=document.getElementById('tb-right');
   if(showBack){
     tbL.innerHTML='';
-    const bk=document.createElement('button');bk.className='tb-back';bk.innerHTML='&#8592;';bk.onclick=()=>{if(id==='detail')goLog();else if(id==='rate'){resetSess();goHome();loadLogFromWorker();loadLogFromWorker();}else goHome();};
+    const bk=document.createElement('button');bk.className='tb-back';bk.innerHTML='&#8592;';bk.onclick=()=>{if(id==='detail')goLog();else if(id==='rate'){resetSess();goHome();loadLogFromGH();loadLogFromGH();loadLogFromWorker();}else goHome();};
     tbL.appendChild(bk);
     tbC.innerHTML=`<div class="tb-title">${title}</div>`;
   } else {

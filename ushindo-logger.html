@@ -188,24 +188,36 @@ function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
 function round2(n){return Math.round(n*100)/100;}
 function scoreLabel(s){return SCORE_LABELS[Math.round(s)]||"Average";}
 
-// ─── STORAGE (Cloudflare Worker) ──────────────────────────────────────────────
-const WORKER='https://bt-logger.ahmedhassibi29.workers.dev';
+// ─── STORAGE (GitHub API) ─────────────────────────────────────────────────────
+const GH_TOKEN='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';
+const GH_OWNER='ushindo0-0ay';
+const GH_REPO='backlog-therapy';
+const GH_FILE='log.json';
+const GH_HEADERS={'Authorization':'Bearer '+GH_TOKEN,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json','User-Agent':'bt-logger'};
 let LOG=[];
 let _synced=false;
 
-async function loadLogFromWorker(){
+async function loadLogFromGH(){
   try{
-    const res=await fetch(WORKER+'?t='+Date.now());
-    const data=await res.json();
-    LOG=Array.isArray(data)?data:(data.log||[]);
+    const res=await fetch('https://raw.githubusercontent.com/'+GH_OWNER+'/'+GH_REPO+'/main/'+GH_FILE+'?t='+Date.now());
+    LOG=await res.json();
+    if(LOG.log)LOG=LOG.log;
     _synced=true;
   }catch(e){LOG=[];_synced=true;}
   renderHome();renderHeader();
 }
+
 async function saveLog(l){
   try{
-    await fetch(WORKER,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(l)});
-  }catch(e){toast('⚠ Save failed. Check connection.');}
+    const metaRes=await fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE,{headers:GH_HEADERS});
+    const meta=await metaRes.json();
+    const sha=meta.sha;
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(l,null,2))));
+    await fetch('https://api.github.com/repos/'+GH_OWNER+'/'+GH_REPO+'/contents/'+GH_FILE,{
+      method:'PUT',headers:GH_HEADERS,
+      body:JSON.stringify({message:'update log',content,sha,branch:'main'})
+    });
+  }catch(e){toast('Save failed. Check connection.');}
 }
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
@@ -431,7 +443,7 @@ function renderHeader(){
 // ─── HOME ─────────────────────────────────────────────────────────────────────
 function renderHome(){
   if(!_synced){
-    const el=document.getElementById('page-home');if(el)el.innerHTML='<div style="text-align:center;padding:120px 40px;font-family:'Share Tech Mono',monospace;font-size:11px;color:#3a3a5a;letter-spacing:3px">SYNCING WITH SERVER...</div>';
+    const el=document.getElementById('page-home');if(el)el.innerHTML='<div style="text-align:center;padding:120px 40px;font-family:monospace;font-size:11px;color:#3a3a5a;letter-spacing:3px">SYNCING...</div>';
     return;
   }
   const el=document.getElementById('page-home');
@@ -935,7 +947,7 @@ function saveEntry(){
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-renderHome();renderHeader();loadLogFromWorker();
+renderHome();renderHeader();loadLogFromGH();
 </script>
 </body>
 </html>
