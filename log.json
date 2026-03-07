@@ -191,7 +191,7 @@
   },
   {
     "id": 1772857734132,
-    "savedAt": "2026-03-07T04:28:54.132Z",
+    "savedAt": "2026-03-07T08:44:32.685Z",
     "title": "gta",
     "platform": "PC",
     "date": "2026-04-09",
@@ -200,41 +200,29 @@
     "hasMP": false,
     "genres": [
       "Action-Adventure",
-      "Platformer"
+      "Sandbox/Open World"
     ],
     "gw": {
-      "Action-Adventure": 100,
-      "Platformer": 0
+      "Action-Adventure": 15,
+      "Sandbox/Open World": 85
     },
     "fw": {
-      "gameplay": 20,
+      "gameplay": 24,
       "graphics": 15,
-      "story": 15,
+      "story": 11,
       "sound": 10,
       "performance": 10,
       "replayability": 5,
       "innovation": 5,
       "multiplayer": 0,
-      "progression": 5,
-      "immersion": 15
+      "progression": 9,
+      "immersion": 11
     },
     "subs": {
       "gameplay": [
         {
           "name": "Controls & Movement",
-          "score": 5
-        },
-        {
-          "name": "Combat Mechanics",
-          "score": 5
-        },
-        {
-          "name": "Game Systems",
-          "score": 5
-        },
-        {
-          "name": "Pacing & Feedback",
-          "score": 5
+          "score": 10
         }
       ],
       "graphics": [
@@ -246,122 +234,106 @@
       "story": [
         {
           "name": "Plot & Structure",
-          "score": 5
-        },
-        {
-          "name": "Characters & Dialogue",
-          "score": 5
-        },
-        {
-          "name": "Thematic Depth",
-          "score": 5
+          "score": 10
         }
       ],
       "sound": [
         {
           "name": "Score & Themes",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Sound Effects",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Voice Acting",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Ambience",
-          "score": 5
+          "score": 10
         }
       ],
       "performance": [
         {
           "name": "Frame Rate & Stability",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Load Times",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Bug Count",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Platform Optimization",
-          "score": 5
+          "score": 10
         }
       ],
       "replayability": [
         {
           "name": "Post-Game Content",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Branching Paths",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Player Incentives",
-          "score": 5
+          "score": 10
         }
       ],
       "innovation": [
         {
           "name": "Originality",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Execution of Ideas",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Genre Impact",
-          "score": 5
+          "score": 10
         }
       ],
       "progression": [
         {
           "name": "Structure",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Pacing",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Balance",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Integration with Gameplay",
-          "score": 5
+          "score": 10
         }
       ],
       "immersion": [
         {
           "name": "World Building",
-          "score": 5
+          "score": 8.5
         },
         {
           "name": "Tone Consistency",
-          "score": 5
-        },
-        {
-          "name": "Emotional Engagement",
-          "score": 5
-        },
-        {
-          "name": "UI & HUD",
-          "score": 5
+          "score": 10
         }
       ]
     },
     "notes": {},
     "verdict": "",
     "recommend": true,
-    "finalScore": 5.75
+    "finalScore": 9.92
   },
   {
     "id": 1772856935043,
