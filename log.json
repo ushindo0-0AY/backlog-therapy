@@ -1,32 +1,32 @@
 [
   {
-    "id": 1772856775085,
-    "savedAt": "2026-03-07T04:14:19.397Z",
-    "title": "test1",
-    "platform": "Xbox 360",
-    "date": "2026-03-10",
-    "playTime": "123",
-    "perspective": "Third-Person",
+    "id": 1772856935043,
+    "savedAt": "2026-03-07T04:15:35.043Z",
+    "title": "122222",
+    "platform": "PC",
+    "date": "2026-03-07",
+    "playTime": "12",
+    "perspective": "",
     "hasMP": false,
     "genres": [
-      "Sandbox/Open World",
-      "Hack & Slash"
+      "Walking Sim",
+      "Simulation"
     ],
     "gw": {
-      "Sandbox/Open World": 2,
-      "Hack & Slash": 98
+      "Walking Sim": 50,
+      "Simulation": 50
     },
     "fw": {
-      "gameplay": 33,
-      "graphics": 12,
-      "story": 8,
-      "sound": 10,
-      "performance": 10,
-      "replayability": 8,
-      "innovation": 5,
+      "gameplay": 14,
+      "graphics": 16,
+      "story": 19,
+      "sound": 14,
+      "performance": 9,
+      "replayability": 10,
+      "innovation": 7,
       "multiplayer": 0,
-      "progression": 8,
-      "immersion": 6
+      "progression": 6,
+      "immersion": 5
     },
     "subs": {
       "gameplay": [
@@ -61,7 +61,7 @@
           "score": 5
         },
         {
-          "name": "Camera & Composition",
+          "name": "Camera",
           "score": 5
         }
       ],
@@ -99,7 +99,7 @@
       ],
       "performance": [
         {
-          "name": "Frame Rate & Stability",
+          "name": "Frame Rate",
           "score": 5
         },
         {
@@ -111,7 +111,7 @@
           "score": 5
         },
         {
-          "name": "Platform Optimization",
+          "name": "Optimization",
           "score": 5
         }
       ],
@@ -157,7 +157,7 @@
           "score": 5
         },
         {
-          "name": "Integration with Gameplay",
+          "name": "Integration",
           "score": 5
         }
       ],
