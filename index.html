@@ -93,6 +93,19 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .loading{text-align:center;padding:100px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:3px}
 @keyframes glowPulse{0%,100%{text-shadow:0 0 20px currentColor}50%{text-shadow:0 0 50px currentColor,0 0 100px currentColor}}
 .score-glow{animation:glowPulse 3s ease-in-out infinite}
+.score-sliders{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;margin-top:6px}
+.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:6px 10px}
+.sslider-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);width:36px;flex-shrink:0}
+.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
+.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:16px;text-align:right;flex-shrink:0}
+.top-cat-chip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .12s;user-select:none}
+.top-cat-chip.on{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.5);color:#c4b5fd}
+.score-filter-body{display:none}
+.score-filter-body.open{display:flex;flex-direction:column;gap:10px;width:100%}
+.filter-expand-row{width:100%;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.filter-expand-btn{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .15s}
+.filter-expand-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
 </style>
 </head>
 <body>
@@ -132,7 +145,20 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <div class="filter-sep"></div>
     <div class="filter-group"><div class="filter-lbl" id="t-perspective"></div><div class="chips" id="chips-perspective"></div></div>
     <div class="filter-sep"></div>
-    <button class="clear-btn" id="t-clear" onclick="clearFilters()"></button>
+    <div class="filter-expand-row">
+      <button class="filter-expand-btn" id="score-expand-btn" onclick="toggleScoreFilters()">⚡ SCORE FILTERS ▾</button>
+      <button class="clear-btn" id="t-clear" onclick="clearFilters()"></button>
+    </div>
+    <div class="score-filter-body" id="score-filter-body">
+      <div>
+        <div class="filter-lbl" id="t-topcatfilter">TOP CATEGORY</div>
+        <div class="chips" id="chips-topcat"></div>
+      </div>
+      <div>
+        <div class="filter-lbl" id="t-scoremin">MIN SCORE BY CATEGORY</div>
+        <div class="score-sliders" id="score-sliders"></div>
+      </div>
+    </div>
   </div>
   <div class="search-row"><input class="search-inp" id="search" oninput="render()"/></div>
   <div class="results-info" id="results-info"></div>
@@ -154,7 +180,7 @@ const LANGS=['en','ar','fr','es','ja','zh'];
 const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
 let LANG='en';
 let LOG=[];
-let F={genres:new Set(),platforms:new Set(),perspectives:new Set()};
+let F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
 const sc=s=>s>=9?"#00ffb3":s>=7.5?"#a3ff6e":s>=6?"#ffe566":s>=4?"#ff9f43":"#ff4d6d";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const r2=n=>Math.round(n*100)/100;
@@ -208,12 +234,41 @@ function buildChips(){
   const genres=new Set(),platforms=new Set(),perspectives=new Set();
   LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
   mkChips('chips-genre',[...genres].sort(),'genres');mkChips('chips-platform',[...platforms].sort(),'platforms');mkChips('chips-perspective',[...perspectives].sort(),'perspectives');
+  buildTopCatChips();buildScoreSliders();
+}
+function buildTopCatChips(){
+  const el=document.getElementById('chips-topcat');el.innerHTML='';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];
+    const ch=document.createElement('span');ch.className='top-cat-chip';
+    ch.innerHTML=m.icon+' '+m.label;
+    ch.onclick=()=>{F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);ch.classList.toggle('on');render();};
+    el.appendChild(ch);
+  });
+}
+function buildScoreSliders(){
+  const el=document.getElementById('score-sliders');el.innerHTML='';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];
+    if(!F.scoreMin[cat])F.scoreMin[cat]=0;
+    const row=document.createElement('div');row.className='sslider-row';
+    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=m.label.slice(0,4).toUpperCase();lbl.title=m.label;
+    const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
+    inp.style.setProperty('--pct',(inp.value/10*100)+'%');
+    const val=document.createElement('span');val.className='sslider-val';val.textContent=parseFloat(inp.value)||'—';
+    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';inp.style.setProperty('--pct',(inp.value/10*100)+'%');render();};
+    row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);el.appendChild(row);
+  });
+}
+function toggleScoreFilters(){
+  const body=document.getElementById('score-filter-body');const btn=document.getElementById('score-expand-btn');
+  const open=body.classList.toggle('open');btn.textContent='⚡ SCORE FILTERS '+(open?'▴':'▾');
 }
 function mkChips(id,items,fk){
   const c=document.getElementById(id);c.innerHTML='';
   items.forEach(item=>{const ch=document.createElement('span');ch.className='chip';ch.textContent=item;ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');render();};c.appendChild(ch);});
 }
-function clearFilters(){F={genres:new Set(),platforms:new Set(),perspectives:new Set()};document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));document.getElementById('search').value='';render();}
+function clearFilters(){F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};document.querySelectorAll('.chip,.top-cat-chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});document.getElementById('search').value='';render();}
 function render(){
   const t=T[LANG]||T.en;
   const q=document.getElementById('search').value.toLowerCase();
@@ -222,9 +277,24 @@ function render(){
     if(F.genres.size&&!(e.genres||[]).some(g=>F.genres.has(g)))return false;
     if(F.platforms.size&&!F.platforms.has(e.platform))return false;
     if(F.perspectives.size&&!F.perspectives.has(e.perspective))return false;
+    // top category filter
+    if(F.topCat.size){
+      const subs=e.subs||{};
+      const cats=Object.keys(subs).filter(c=>c!=='multiplayer'||e.hasMP);
+      if(!cats.length)return false;
+      const topCat=cats.reduce((best,c)=>{const s=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return s>(subs[best]&&subs[best].length?r2(avg(subs[best].map(x=>x.score))):0)?c:best;},cats[0]);
+      if(!F.topCat.has(topCat))return false;
+    }
+    // per-category min score filter
+    for(const [cat,minS] of Object.entries(F.scoreMin)){
+      if(!minS)continue;
+      const subs=(e.subs||{})[cat]||[];
+      const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;
+      if(cs<minS)return false;
+    }
     return true;
   });
-  const hasF=F.genres.size||F.platforms.size||F.perspectives.size||q;
+  const hasF=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0)||q;
   document.getElementById('results-info').textContent=hasF?filtered.length+' '+t.of+' '+LOG.length+' '+t.games:LOG.length+' '+t.games;
   const list=document.getElementById('list');list.innerHTML='';
   if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?t.noMatch:t.noGames)+'</div>';return;}

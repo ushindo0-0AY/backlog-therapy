@@ -7,12 +7,15 @@
 <meta name="theme-color" content="#03030a"/>
 <title>Backlog Therapy</title>
 <link rel="icon" type="image/png" href="icon-512.png"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Noto+Sans+Arabic:wght@500;700&family=Noto+Sans+JP:wght@500;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{--bg:#03030a;--bg2:#07070f;--bg3:#0c0c18;--bg4:#111120;--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.12);--text:#dde0f0;--muted:#383855;--muted2:#5a5a80;--accent:#ff2d6b;--accent2:#7c3aed;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px)}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
 body{font-family:'Rajdhani',sans-serif;color:var(--text);display:flex;flex-direction:column}
+body.rtl{direction:rtl;font-family:'Noto Sans Arabic',sans-serif}
+body.ja{font-family:'Noto Sans JP',sans-serif}
+body.zh{font-family:'Noto Sans SC',sans-serif}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:9999}
 #app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-top)}
 #topbar{flex-shrink:0;height:52px;background:rgba(3,3,10,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:100}
@@ -73,13 +76,34 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .results-info{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);letter-spacing:1px;padding:0 16px 8px}
 .empty{text-align:center;padding:60px 0;color:var(--muted2);font-size:14px}
 .loading-txt{text-align:center;padding:60px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:3px}
+/* lang dropdown */
+.lang-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted2);font-family:'Share Tech Mono',monospace;font-size:10px;padding:5px 9px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.lang-sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:300;display:none;align-items:flex-end}
+.lang-sheet.open{display:flex}
+.lang-panel{background:var(--bg2);border:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(20px + var(--safe-bot))}
+.lang-opt{padding:13px 16px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--muted2);cursor:pointer;border-radius:8px}
+.lang-opt:active{background:rgba(255,45,107,.1)}
+.lang-opt.active{color:var(--accent)}
+/* score filters */
+.fchip.purple{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.45);color:#c4b5fd}
+.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:6px}
+.sslider-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted2);width:36px;flex-shrink:0}
+.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
+.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:18px;text-align:right;flex-shrink:0}
+.score-filter-body{display:none}
+.score-filter-body.open{display:block}
+.score-toggle-btn{font-family:'Orbitron',sans-serif;font-size:8px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:6px;cursor:pointer;letter-spacing:1px;margin-top:6px}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="topbar">
     <div class="tb-logo">BT<em>LOG</em></div>
-    <div class="tb-count" id="tb-count">—</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="tb-count" id="tb-count">—</div>
+      <button class="lang-btn" onclick="openLangSheet()">🌐 <span id="lang-label">EN</span></button>
+    </div>
   </div>
   <div id="content">
     <div id="page-home" class="page active"><div class="loading-txt">SYNCING...</div></div>
@@ -90,6 +114,17 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
     <button class="nav-btn" id="nav-log" onclick="goLog()"><span class="ni">📋</span><span class="nl">LOG</span></button>
   </div>
 </div>
+<div class="lang-sheet" id="lang-sheet" onclick="if(event.target===this)closeLangSheet()">
+  <div class="lang-panel">
+    <div class="lbl" style="margin-bottom:12px">LANGUAGE</div>
+    <div class="lang-opt" id="lopt-en" onclick="setLang('en')">🇬🇧 English</div>
+    <div class="lang-opt" id="lopt-ar" onclick="setLang('ar')">🇩🇿 العربية</div>
+    <div class="lang-opt" id="lopt-fr" onclick="setLang('fr')">🇫🇷 Français</div>
+    <div class="lang-opt" id="lopt-es" onclick="setLang('es')">🇪🇸 Español</div>
+    <div class="lang-opt" id="lopt-ja" onclick="setLang('ja')">🇯🇵 日本語</div>
+    <div class="lang-opt" id="lopt-zh" onclick="setLang('zh')">🇨🇳 中文</div>
+  </div>
+</div>
 <div class="sheet-overlay" id="sheet" onclick="closeSheet(event)">
   <div class="sheet" id="sheet-inner">
     <div class="sheet-handle"></div>
@@ -98,43 +133,77 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
   </div>
 </div>
 <script>
+// ─── I18N ─────────────────────────────────────────────────────────────────────
+const T={
+  en:{noGames:'No games logged yet.',noMatch:'No games match filters.',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',verdict:'VERDICT',breakdown:'BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',of:'of',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',topcat:'TOP CATEGORY',scoremin:'MIN CATEGORY SCORE',scorefilters:'SCORE FILTERS',recent:'RECENT',search:'Search games...',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
+  ar:{noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',rated:'مُقيَّم',avg:'متوسط',top:'أعلى',rec:'موصى به',games:'ألعاب',verdict:'الحكم',breakdown:'تفصيل',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',of:'من',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',topcat:'الفئة الأولى',scoremin:'الحد الأدنى',scorefilters:'فلاتر الدرجات',recent:'الأخيرة',search:'بحث...',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
+  fr:{noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',rated:'NOTÉS',avg:'MOYENNE',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',verdict:'VERDICT',breakdown:'DÉTAIL',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',of:'sur',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'EFFACER',topcat:'TOP CATÉGORIE',scoremin:'SCORE MIN',scorefilters:'FILTRES SCORE',recent:'RÉCENTS',search:'Rechercher...',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
+  es:{noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',rated:'PUNTUADOS',avg:'PROMEDIO',top:'MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',verdict:'VEREDICTO',breakdown:'DESGLOSE',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',of:'de',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR',topcat:'TOP CATEGORÍA',scoremin:'PUNTUACIÓN MIN',scorefilters:'FILTROS SCORE',recent:'RECIENTES',search:'Buscar...',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
+  ja:{noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',rated:'評価済み',avg:'平均',top:'最高',rec:'おすすめ',games:'本',verdict:'総評',breakdown:'内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',of:'/',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',topcat:'トップ',scoremin:'最低スコア',scorefilters:'スコアフィルター',recent:'最近',search:'検索...',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
+  zh:{noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',rated:'已评分',avg:'均分',top:'最高',rec:'推荐',games:'款',verdict:'总评',breakdown:'细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',of:'/',genre:'类型',platform:'平台',perspective:'视角',clear:'清除',topcat:'最高分类',scoremin:'最低分',scorefilters:'分数筛选',recent:'最近',search:'搜索...',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
+};
+const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
+let LANG='en';
+function t(){return T[LANG]||T.en;}
+function slbl(s){return (t().scores||{})[Math.round(s)]||'';}
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
 const RAW='https://raw.githubusercontent.com/ushindo0-0ay/backlog-therapy/main/log.json';
 const sc=s=>s>=9?"#00ffb3":s>=7.5?"#a3ff6e":s>=6?"#ffe566":s>=4?"#ff9f43":"#ff4d6d";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const r2=n=>Math.round(n*100)/100;
-const SLBL={10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"};
-const slbl=s=>SLBL[Math.round(s)]||"Average";
 const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b"},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa"},story:{label:"Story",icon:"📖",color:"#34d399"},sound:{label:"Sound",icon:"🎵",color:"#f59e0b"},performance:{label:"Performance",icon:"⚡",color:"#38bdf8"},replayability:{label:"Replay",icon:"🔄",color:"#fb923c"},innovation:{label:"Innovation",icon:"💡",color:"#e879f9"},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80"},progression:{label:"Progression",icon:"📈",color:"#f472b6"},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9"}};
 let LOG=[];
-let F={genres:new Set(),platforms:new Set(),perspectives:new Set()};
+let F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
 
+// ─── LANG ─────────────────────────────────────────────────────────────────────
+function openLangSheet(){document.getElementById('lang-sheet').classList.add('open');}
+function closeLangSheet(){document.getElementById('lang-sheet').classList.remove('open');}
+function setLang(l){
+  LANG=l;closeLangSheet();
+  document.getElementById('lang-label').textContent=LANG_LABELS[l]||l.toUpperCase();
+  document.querySelectorAll('[id^="lopt-"]').forEach(o=>o.classList.remove('active'));
+  const a=document.getElementById('lopt-'+l);if(a)a.classList.add('active');
+  const rtl=l==='ar';
+  document.body.classList.toggle('rtl',rtl);
+  document.body.classList.toggle('ja',l==='ja');
+  document.body.classList.toggle('zh',l==='zh');
+  document.documentElement.setAttribute('dir',rtl?'rtl':'ltr');
+  localStorage.setItem('bt_lang',l);
+  if(LOG.length){renderHome();renderLog();}
+}
+
+// ─── LOAD ─────────────────────────────────────────────────────────────────────
 async function loadLog(){
   try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);}
   catch(e){LOG=[];}
-  document.getElementById('tb-count').textContent=LOG.length+' GAMES';
+  document.getElementById('tb-count').textContent=LOG.length+' '+(t().games||'GAMES');
   renderHome();renderLog();
 }
 
+// ─── NAV ──────────────────────────────────────────────────────────────────────
 function setNav(id){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const el=document.getElementById('nav-'+id);if(el)el.classList.add('active');}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const p=document.getElementById('page-'+id);if(p){p.classList.remove('active');void p.offsetWidth;p.classList.add('active');}document.getElementById('content').scrollTop=0;}
 function goHome(){showPage('home');setNav('home');}
 function goLog(){showPage('log');setNav('log');}
 
+// ─── HOME ─────────────────────────────────────────────────────────────────────
 function renderHome(){
+  const tx=t();
   const el=document.getElementById('page-home');el.innerHTML='';
   const hero=document.createElement('div');hero.className='home-hero';
   hero.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:10px;opacity:.8">// GAME RATING ARCHIVE</div><div style="font-family:\'Orbitron\',sans-serif;font-size:26px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:6px">EVERY GAME.<br><span style="color:var(--accent)">RATED.</span></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:var(--muted2);line-height:1.5">Genre-weighted scoring across 10 categories.</div>';
   el.appendChild(hero);
-  if(!LOG.length){el.innerHTML+='<div class="empty">No games logged yet.</div>';return;}
+  if(!LOG.length){el.innerHTML+='<div class="empty">'+tx.noGames+'</div>';return;}
   const avgS=r2(LOG.reduce((a,e)=>a+e.finalScore,0)/LOG.length);
   const top=Math.max(...LOG.map(e=>e.finalScore));
   const rec=LOG.filter(e=>e.recommend).length;
   const sg=document.createElement('div');sg.className='stats-grid';
-  [['RATED',LOG.length,'GAMES'],['AVG SCORE',avgS.toFixed(2),slbl(avgS)],['TOP SCORE',top.toFixed(2),slbl(top)],['RECOMMENDED',rec,Math.round(rec/LOG.length*100)+'%']]
+  [[tx.rated,LOG.length,tx.games],[tx.avg,avgS.toFixed(2),slbl(avgS)],[tx.top,top.toFixed(2),slbl(top)],[tx.rec,rec,Math.round(rec/LOG.length*100)+'%']]
     .forEach(([l,v,s])=>{const c=document.createElement('div');c.className='stat-card';c.innerHTML='<div class="lbl" style="margin-bottom:2px">'+l+'</div><div class="stat-val">'+v+'</div><div class="stat-sub">'+s+'</div>';sg.appendChild(c);});
   el.appendChild(sg);
   const rs=document.createElement('div');rs.style.padding='0 16px 16px';
-  rs.innerHTML='<div class="lbl">RECENT</div>';
+  rs.innerHTML='<div class="lbl">'+tx.recent+'</div>';
   LOG.slice(0,3).forEach(e=>{
     const clr=sc(e.finalScore);
     const c=document.createElement('div');c.className='log-row';
@@ -144,48 +213,102 @@ function renderHome(){
   el.appendChild(rs);
 }
 
+// ─── LOG PAGE ─────────────────────────────────────────────────────────────────
 function renderLog(){
+  const tx=t();
   const el=document.getElementById('page-log');el.innerHTML='';
   const genres=new Set(),platforms=new Set(),perspectives=new Set();
   LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
   const fs=document.createElement('div');fs.className='filter-section';
   let qInp;
-  function buildFC(label,items,fk){
+  function buildFC(label,items,fk,chipClass){
     if(!items.size)return;
     const g=document.createElement('div');g.innerHTML='<div class="lbl" style="margin-bottom:6px">'+label+'</div>';
     const chips=document.createElement('div');chips.className='fchips';
     [...items].sort().forEach(item=>{
-      const ch=document.createElement('span');ch.className='fchip';ch.textContent=item;
+      const ch=document.createElement('span');ch.className='fchip'+(chipClass?' '+chipClass:'');ch.textContent=item;
       ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');renderLogList(qInp?qInp.value:'');};
       chips.appendChild(ch);
     });
     g.appendChild(chips);fs.appendChild(g);
   }
-  buildFC('GENRE',genres,'genres');buildFC('PLATFORM',platforms,'platforms');buildFC('PERSPECTIVE',perspectives,'perspectives');
-  const clearBtn=document.createElement('button');clearBtn.className='clear-btn';clearBtn.textContent='CLEAR ALL';
-  clearBtn.onclick=()=>{F={genres:new Set(),platforms:new Set(),perspectives:new Set()};el.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));if(qInp)qInp.value='';renderLogList('');};
-  fs.appendChild(clearBtn);el.appendChild(fs);
+  buildFC(tx.genre,genres,'genres');buildFC(tx.platform,platforms,'platforms');buildFC(tx.perspective,perspectives,'perspectives');
+
+  // top-category chips
+  const tcDiv=document.createElement('div');
+  tcDiv.innerHTML='<div class="lbl" style="margin-bottom:6px">'+tx.topcat+'</div>';
+  const tcChips=document.createElement('div');tcChips.className='fchips';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];
+    const ch=document.createElement('span');ch.className='fchip';ch.textContent=m.icon+' '+m.label;
+    ch.onclick=()=>{F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);ch.classList.toggle('on');ch.style.background=ch.classList.contains('on')?'rgba(124,58,237,.15)':'';ch.style.borderColor=ch.classList.contains('on')?'rgba(124,58,237,.45)':'';ch.style.color=ch.classList.contains('on')?'#c4b5fd':'';renderLogList(qInp?qInp.value:'');};
+    tcChips.appendChild(ch);
+  });
+  tcDiv.appendChild(tcChips);
+
+  // score filter toggle
+  const scoreToggle=document.createElement('button');scoreToggle.className='score-toggle-btn';scoreToggle.textContent='⚡ '+tx.scorefilters+' ▾';
+  const scoreBody=document.createElement('div');scoreBody.className='score-filter-body';
+  scoreToggle.onclick=()=>{const open=scoreBody.classList.toggle('open');scoreToggle.textContent='⚡ '+tx.scorefilters+' '+(open?'▴':'▾');};
+
+  // score sliders
+  const sliderSec=document.createElement('div');sliderSec.innerHTML='<div class="lbl" style="margin:10px 0 6px">'+tx.scoremin+'</div>';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];if(!F.scoreMin[cat])F.scoreMin[cat]=0;
+    const row=document.createElement('div');row.className='sslider-row';
+    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=m.label.slice(0,4).toUpperCase();
+    const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
+    const val=document.createElement('span');val.className='sslider-val';val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';
+    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';renderLogList(qInp?qInp.value:'');};
+    row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);sliderSec.appendChild(row);
+  });
+  scoreBody.appendChild(tcDiv);scoreBody.appendChild(sliderSec);
+
+  // clear btn
+  const clearBtn=document.createElement('button');clearBtn.className='clear-btn';clearBtn.textContent=tx.clear;
+  clearBtn.onclick=()=>{
+    F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
+    el.querySelectorAll('.fchip').forEach(c=>{c.classList.remove('on');c.style.background='';c.style.borderColor='';c.style.color='';});
+    el.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});
+    if(qInp)qInp.value='';renderLogList('');
+  };
+  fs.appendChild(scoreToggle);fs.appendChild(scoreBody);fs.appendChild(clearBtn);el.appendChild(fs);
+
   const sw=document.createElement('div');sw.className='search-wrap';
-  qInp=document.createElement('input');qInp.className='search-inp';qInp.placeholder='Search games...';qInp.addEventListener('input',e=>renderLogList(e.target.value));
+  qInp=document.createElement('input');qInp.className='search-inp';qInp.placeholder=tx.search;qInp.addEventListener('input',e=>renderLogList(e.target.value));
   sw.appendChild(qInp);el.appendChild(sw);
   const ri=document.createElement('div');ri.className='results-info';ri.id='log-ri';el.appendChild(ri);
   const list=document.createElement('div');list.className='log-list';list.id='log-list';el.appendChild(list);
   renderLogList('');
 }
 
+// ─── LOG LIST ─────────────────────────────────────────────────────────────────
 function renderLogList(q){
+  const tx=t();
   const list=document.getElementById('log-list');const ri=document.getElementById('log-ri');if(!list)return;
   const filtered=LOG.filter(e=>{
     if(q&&!e.title.toLowerCase().includes(q.toLowerCase()))return false;
     if(F.genres.size&&!(e.genres||[]).some(g=>F.genres.has(g)))return false;
     if(F.platforms.size&&!F.platforms.has(e.platform))return false;
     if(F.perspectives.size&&!F.perspectives.has(e.perspective))return false;
+    if(F.topCat.size){
+      const subs=e.subs||{};const cats=Object.keys(subs).filter(c=>c!=='multiplayer'||e.hasMP);
+      if(!cats.length)return false;
+      const topCat=cats.reduce((best,c)=>{const s=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return s>(subs[best]&&subs[best].length?r2(avg(subs[best].map(x=>x.score))):0)?c:best;},cats[0]);
+      if(!F.topCat.has(topCat))return false;
+    }
+    for(const [cat,minS] of Object.entries(F.scoreMin)){
+      if(!minS)continue;
+      const subs=(e.subs||{})[cat]||[];
+      const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;
+      if(cs<minS)return false;
+    }
     return true;
   });
-  const hasF=F.genres.size||F.platforms.size||F.perspectives.size||q;
-  if(ri)ri.textContent=hasF?filtered.length+' of '+LOG.length+' games':LOG.length+' games';
+  const hasF=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0)||q;
+  if(ri)ri.textContent=hasF?filtered.length+' '+tx.of+' '+LOG.length+' '+tx.games:LOG.length+' '+tx.games;
   list.innerHTML='';
-  if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?'No games match filters.':'No games logged yet.')+'</div>';return;}
+  if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?tx.noMatch:tx.noGames)+'</div>';return;}
   filtered.forEach(e=>{
     const clr=sc(e.finalScore);
     const row=document.createElement('div');row.className='log-row';
@@ -194,13 +317,18 @@ function renderLogList(q){
   });
 }
 
+// ─── SHEET ────────────────────────────────────────────────────────────────────
 function openSheet(e){
-  const clr=sc(e.finalScore);
+  const tx=t();const clr=sc(e.finalScore);
   const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
-  document.getElementById('sheet-content').innerHTML='<div class="sheet-hero"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div><div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+e.finalScore+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(e.finalScore)+'</div></div><div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.08)">'+g+'</span>').join('')+'</div>'+(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?'✅ Rec':'❌ No')+'</div>':'')+'</div></div></div>'+(ac.length?'<div class="cat-grid-m">'+ac.map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};return'<div class="cat-card-m"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+m.label.toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted2)">w:'+w+'%</div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>'+subs.map(s=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+s.name+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')+'</div>';}).join('')+'</div>':'')+(e.verdict?'<div style="margin:0 16px 16px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">VERDICT</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'');
+  document.getElementById('sheet-content').innerHTML='<div class="sheet-hero"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div><div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+e.finalScore+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(e.finalScore)+'</div></div><div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.08)">'+g+'</span>').join('')+'</div>'+(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?tx.yes_rec:tx.no_rec)+'</div>':'')+'</div></div></div>'+(ac.length?'<div class="cat-grid-m">'+ac.map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};return'<div class="cat-card-m"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+m.label.toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted2)">w:'+w+'%</div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>'+subs.map(s=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+s.name+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')+'</div>';}).join('')+'</div>':'')+(e.verdict?'<div style="margin:0 16px 16px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">'+tx.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'');
   document.getElementById('sheet').classList.add('open');
 }
 function closeSheet(ev){if(!ev||ev.target===document.getElementById('sheet'))document.getElementById('sheet').classList.remove('open');}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+const savedLang=localStorage.getItem('bt_lang')||'en';
+setLang(savedLang);
 loadLog();
 </script>
 </body>
