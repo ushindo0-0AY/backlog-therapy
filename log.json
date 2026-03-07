@@ -1,7 +1,7 @@
 [
   {
     "id": 1772827623462,
-    "savedAt": "2026-03-06T20:07:03.462Z",
+    "savedAt": "2026-03-07T05:13:55.986Z",
     "title": "resident evil 4",
     "platform": "PS2",
     "date": "2026-03-06",
@@ -34,33 +34,33 @@
       "gameplay": [
         {
           "name": "Controls & Movement",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Combat Mechanics",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Game Systems",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Pacing & Feedback",
-          "score": 5
+          "score": 10
         }
       ],
       "graphics": [
         {
           "name": "Art Direction",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Technical Quality",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Animation",
-          "score": 5
+          "score": 10
         },
         {
           "name": "Camera & Composition",
@@ -182,10 +182,12 @@
         }
       ]
     },
-    "notes": {},
-    "verdict": "",
+    "notes": {
+      "performance": "okay"
+    },
+    "verdict": "great",
     "recommend": true,
-    "finalScore": 5
+    "finalScore": 6.36
   },
   {
     "id": 1772857734132,
