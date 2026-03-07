@@ -1,5 +1,179 @@
 [
   {
+    "id": 1772857734132,
+    "savedAt": "2026-03-07T04:28:54.132Z",
+    "title": "gta",
+    "platform": "PC",
+    "date": "2026-04-09",
+    "playTime": "12",
+    "perspective": "Third-Person",
+    "hasMP": false,
+    "genres": [
+      "Action-Adventure",
+      "Platformer"
+    ],
+    "gw": {
+      "Action-Adventure": 100,
+      "Platformer": 0
+    },
+    "fw": {
+      "gameplay": 20,
+      "graphics": 15,
+      "story": 15,
+      "sound": 10,
+      "performance": 10,
+      "replayability": 5,
+      "innovation": 5,
+      "multiplayer": 0,
+      "progression": 5,
+      "immersion": 15
+    },
+    "subs": {
+      "gameplay": [
+        {
+          "name": "Controls & Movement",
+          "score": 5
+        },
+        {
+          "name": "Combat Mechanics",
+          "score": 5
+        },
+        {
+          "name": "Game Systems",
+          "score": 5
+        },
+        {
+          "name": "Pacing & Feedback",
+          "score": 5
+        }
+      ],
+      "graphics": [
+        {
+          "name": "Art Direction",
+          "score": 10
+        }
+      ],
+      "story": [
+        {
+          "name": "Plot & Structure",
+          "score": 5
+        },
+        {
+          "name": "Characters & Dialogue",
+          "score": 5
+        },
+        {
+          "name": "Thematic Depth",
+          "score": 5
+        }
+      ],
+      "sound": [
+        {
+          "name": "Score & Themes",
+          "score": 5
+        },
+        {
+          "name": "Sound Effects",
+          "score": 5
+        },
+        {
+          "name": "Voice Acting",
+          "score": 5
+        },
+        {
+          "name": "Ambience",
+          "score": 5
+        }
+      ],
+      "performance": [
+        {
+          "name": "Frame Rate & Stability",
+          "score": 5
+        },
+        {
+          "name": "Load Times",
+          "score": 5
+        },
+        {
+          "name": "Bug Count",
+          "score": 5
+        },
+        {
+          "name": "Platform Optimization",
+          "score": 5
+        }
+      ],
+      "replayability": [
+        {
+          "name": "Post-Game Content",
+          "score": 5
+        },
+        {
+          "name": "Branching Paths",
+          "score": 5
+        },
+        {
+          "name": "Player Incentives",
+          "score": 5
+        }
+      ],
+      "innovation": [
+        {
+          "name": "Originality",
+          "score": 5
+        },
+        {
+          "name": "Execution of Ideas",
+          "score": 5
+        },
+        {
+          "name": "Genre Impact",
+          "score": 5
+        }
+      ],
+      "progression": [
+        {
+          "name": "Structure",
+          "score": 5
+        },
+        {
+          "name": "Pacing",
+          "score": 5
+        },
+        {
+          "name": "Balance",
+          "score": 5
+        },
+        {
+          "name": "Integration with Gameplay",
+          "score": 5
+        }
+      ],
+      "immersion": [
+        {
+          "name": "World Building",
+          "score": 5
+        },
+        {
+          "name": "Tone Consistency",
+          "score": 5
+        },
+        {
+          "name": "Emotional Engagement",
+          "score": 5
+        },
+        {
+          "name": "UI & HUD",
+          "score": 5
+        }
+      ]
+    },
+    "notes": {},
+    "verdict": "",
+    "recommend": true,
+    "finalScore": 5.75
+  },
+  {
     "id": 1772856935043,
     "savedAt": "2026-03-07T04:15:35.043Z",
     "title": "122222",
