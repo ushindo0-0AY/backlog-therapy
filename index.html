@@ -87,18 +87,27 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
 .modal-hero{position:relative;padding:40px;overflow:hidden;border-bottom:1px solid var(--border)}
 .modal-body{padding:28px 40px}
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:24px}
-.cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden}
+.cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s;-webkit-user-select:none;user-select:none}
+.cat-card:hover{border-color:rgba(255,255,255,.16)}
+.cat-card.open{border-color:rgba(255,255,255,.18)}
+.cat-card-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.cat-card.open .cat-card-body{display:block}
+.cat-card-arrow{position:absolute;top:10px;right:10px;font-size:10px;color:#3a3a5a;transition:transform .2s;line-height:1}
+.cat-card.open .cat-card-arrow{transform:rotate(180deg);color:var(--accent)}
 .lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted2);margin-bottom:8px}
 .empty{text-align:center;padding:80px;color:var(--muted2);font-size:15px}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid rgba(255,45,107,.4);border-radius:10px;padding:14px 24px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff;z-index:9998;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(255,45,107,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .loading{text-align:center;padding:100px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:3px}
 @keyframes glowPulse{0%,100%{text-shadow:0 0 20px currentColor}50%{text-shadow:0 0 50px currentColor,0 0 100px currentColor}}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 .score-glow{animation:glowPulse 3s ease-in-out infinite}
 .score-sliders{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;margin-top:6px}
 .sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:6px 10px}
-.sslider-lbl{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--muted2);width:72px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.sslider-lbl{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--muted2);width:80px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sslider-inp{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
 .sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
-.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:16px;text-align:right;flex-shrink:0}
+.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:24px;text-align:right;flex-shrink:0}
 .top-cat-chip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .12s;user-select:none}
 .top-cat-chip.on{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.5);color:#c4b5fd}
 .score-filter-body{display:none}
@@ -138,6 +147,7 @@ body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradie
       <div class="hero-tag" id="t-tag"></div>
       <div class="hero-title" id="t-title-wrap"><span id="t-line1"></span><br><span id="t-line2" style="color:var(--accent)"></span></div>
       <div class="hero-sub" id="t-sub"></div>
+      <button id="mobile-dl-btn" onclick="dlApp()" style="display:none;margin-top:20px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;background:linear-gradient(135deg,#ff2d6b,#c2185b);color:#fff;padding:12px 20px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(255,45,107,.35)">⬇ GET MOBILE APP</button>
     </div>
     <div class="hero-stats" id="hero-stats"><div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:3px;padding:20px 0">...</div></div>
   </div>
@@ -311,11 +321,11 @@ function buildScoreSliders(){
     const m=CAT_META[cat];
     if(!F.scoreMin[cat])F.scoreMin[cat]=0;
     const row=document.createElement('div');row.className='sslider-row';
-    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=CAT_META[cat].icon+' '+catLabel(cat);
+    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=catLabel(cat);
     const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
     inp.style.setProperty('--pct',(inp.value/10*100)+'%');
-    const val=document.createElement('span');val.className='sslider-val';val.textContent=parseFloat(inp.value)||'—';
-    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';inp.style.setProperty('--pct',(inp.value/10*100)+'%');render();};
+    const val=document.createElement('span');val.className='sslider-val';val.textContent=parseFloat(inp.value)>0?parseFloat(inp.value):'—';
+    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?parseFloat(F.scoreMin[cat]):'—';inp.style.setProperty('--pct',(inp.value/10*100)+'%');render();};
     row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);el.appendChild(row);
   });
 }
@@ -366,16 +376,136 @@ function render(){
     card.onclick=()=>openModal(e);list.appendChild(card);
   });
 }
+function openCatPopup(cat, cs, w, m, subs, note){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px';
+  ov.style.animation='fi .15s ease';
+  ov.onclick=ev=>{if(ev.target===ov)document.body.removeChild(ov);};
+  const box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border:1px solid '+m.color+'44;border-radius:16px;width:100%;max-width:420px;overflow:hidden;position:relative';
+  const topBar=document.createElement('div');
+  topBar.style.cssText='height:3px;background:linear-gradient(90deg,'+m.color+','+m.color+'44,transparent)';
+  box.appendChild(topBar);
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='×';closeBtn.style.cssText='position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted2);font-size:22px;cursor:pointer;line-height:1;padding:2px 8px';
+  closeBtn.onclick=()=>document.body.removeChild(ov);
+  box.appendChild(closeBtn);
+  const hdr=document.createElement('div');hdr.style.cssText='padding:20px 24px 14px';
+  hdr.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:'+m.color+';letter-spacing:3px;margin-bottom:6px;opacity:.8">'+m.icon+' '+catLabel(cat).toUpperCase()+'</div>'
+    +'<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">'
+    +'<div style="font-family:\'Orbitron\',sans-serif;font-size:48px;font-weight:900;color:'+sc(cs)+';line-height:1;filter:drop-shadow(0 0 12px '+sc(cs)+'88)">'+cs+'</div>'
+    +'<div style="text-align:right"><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:'+sc(cs)+';font-weight:700;margin-bottom:4px">'+slbl(cs)+'</div>'
+    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--muted2)">weight: '+w+'%</div>'
+    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:10px;color:'+m.color+'88">+'+( cs*w/100).toFixed(2)+' pts</div></div></div>'
+    +'<div style="height:3px;background:rgba(255,255,255,.05);border-radius:2px"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.8"></div></div>';
+  box.appendChild(hdr);
+  const body=document.createElement('div');body.style.cssText='padding:4px 24px 20px';
+  subs.forEach((s,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)';
+    const name=document.createElement('span');name.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:14px;font-weight:600;color:#c0c0d8;flex:1';
+    name.textContent=subLabel(cat,i)||s.name||'—';
+    const mini=document.createElement('div');mini.style.cssText='width:50px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;flex-shrink:0';
+    const miniFill=document.createElement('div');miniFill.style.cssText='height:100%;width:'+s.score*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+    mini.appendChild(miniFill);
+    const score=document.createElement('span');score.style.cssText='font-family:\'Share Tech Mono\',monospace;font-size:15px;font-weight:700;color:'+sc(s.score)+';flex-shrink:0;min-width:22px;text-align:right';
+    score.textContent=s.score;
+    row.append(name,mini,score);body.appendChild(row);
+  });
+  if(note){
+    const nd=document.createElement('div');
+    nd.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:13px;color:#7070a0;font-style:italic;margin-top:12px;padding:12px;background:rgba(255,255,255,.02);border-radius:8px;border-left:2px solid '+m.color+'44;line-height:1.6';
+    nd.textContent='"'+note+'"';body.appendChild(nd);
+  }
+  box.appendChild(body);ov.appendChild(box);document.body.appendChild(ov);
+}
 function openModal(e){
-  const t=T[LANG]||T.en;const clr=sc(e.finalScore);
+  const t=T[LANG]||T.en;
+  const clr=sc(e.finalScore);
   const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
-  document.getElementById('modal-content').innerHTML='<div class="modal-hero"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)"></div><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,'+clr+'08,transparent 60%);pointer-events:none"></div><div style="position:relative"><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:12px;opacity:.7">'+e.platform+(e.date?' // '+e.date:'')+(e.playTime?' // '+e.playTime+'HRS':'')+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:clamp(20px,3vw,34px);font-weight:900;color:#fff;margin-bottom:24px;line-height:1.1">'+e.title+'</div><div style="display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap"><div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:80px;font-weight:900;color:'+clr+';line-height:1">'+e.finalScore+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:'+clr+';margin-top:6px;font-weight:700;letter-spacing:2px">'+slbl(e.finalScore).toUpperCase()+'</div></div><div><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">'+(e.genres||[]).map(g=>'<span class="gtag" style="font-size:12px;color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.4);background:rgba(255,45,107,.1);padding:4px 12px">'+genreLabel(g)+'</span>').join('')+'</div>'+(e.perspective?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:#a78bfa;margin-bottom:8px;font-weight:700">'+perspLabel(e.perspective)+'</div>':'')+(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?t.yes_rec:t.no_rec)+'</div>':'')+'</div></div></div></div>'+'<div class="modal-body">'+(ac.length?'<div class="lbl">'+t.breakdown+'</div><div class="cat-grid">'+ac.map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};return'<div class="cat-card"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:8px;color:'+m.color+';letter-spacing:1px;margin-bottom:8px;padding-top:4px">'+m.icon+' '+catLabel(cat).toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px"><div style="font-family:\'Orbitron\',sans-serif;font-size:24px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="text-align:right"><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted2)">w:'+w+'%</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:'+m.color+'88">+'+(cs*w/100).toFixed(2)+'</div></div></div><div style="height:3px;background:rgba(255,255,255,.05);border-radius:2px;margin-bottom:10px"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.7"></div></div>'+subs.map((s,i)=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:12px;margin-bottom:3px"><span style="color:var(--muted2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px">'+subLabel(cat,i)+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')+'</div>';}).join('')+'</div>':'')+(e.verdict?'<div style="background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.5);border-radius:8px;padding:16px 20px"><div class="lbl">'+t.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:15px;color:#c0c0d8;line-height:1.7">'+e.verdict+'</div></div>':'')+'</div>';
+  const mc=document.getElementById('modal-content');mc.innerHTML='';
+  // hero
+  const hero=document.createElement('div');hero.className='modal-hero';
+  const heroBar=document.createElement('div');heroBar.style.cssText='position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)';
+  const heroBg=document.createElement('div');heroBg.style.cssText='position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,'+clr+'08,transparent 60%);pointer-events:none';
+  const heroInner=document.createElement('div');heroInner.style.cssText='position:relative';
+  const metaLine=document.createElement('div');metaLine.style.cssText="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:12px;opacity:.7";
+  metaLine.textContent=e.platform+(e.date?' // '+e.date:'')+(e.playTime?' // '+e.playTime+'HRS':'');
+  const titleEl=document.createElement('div');titleEl.style.cssText="font-family:'Orbitron',sans-serif;font-size:clamp(20px,3vw,34px);font-weight:900;color:#fff;margin-bottom:24px;line-height:1.1";
+  titleEl.textContent=e.title;
+  const scoreRow=document.createElement('div');scoreRow.style.cssText='display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap';
+  const scoreBlock=document.createElement('div');
+  const bigScore=document.createElement('div');bigScore.className='score-glow';bigScore.style.cssText="font-family:'Orbitron',sans-serif;font-size:80px;font-weight:900;color:"+clr+";line-height:1";bigScore.textContent=e.finalScore;
+  const scoreLbl=document.createElement('div');scoreLbl.style.cssText="font-family:'Rajdhani',sans-serif;font-size:14px;color:"+clr+";margin-top:6px;font-weight:700;letter-spacing:2px";scoreLbl.textContent=slbl(e.finalScore).toUpperCase();
+  scoreBlock.append(bigScore,scoreLbl);
+  const metaBlock=document.createElement('div');
+  const genreRow=document.createElement('div');genreRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px';
+  (e.genres||[]).forEach(g=>{const sp=document.createElement('span');sp.className='gtag';sp.style.cssText='font-size:12px;color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.4);background:rgba(255,45,107,.1);padding:4px 12px';sp.textContent=genreLabel(g);genreRow.appendChild(sp);});
+  metaBlock.appendChild(genreRow);
+  if(e.perspective){const pd=document.createElement('div');pd.style.cssText="font-family:'Rajdhani',sans-serif;font-size:13px;color:#a78bfa;margin-bottom:8px;font-weight:700";pd.textContent=perspLabel(e.perspective);metaBlock.appendChild(pd);}
+  if(e.recommend!=null){const rd=document.createElement('div');rd.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:14px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d');rd.textContent=e.recommend?t.yes_rec:t.no_rec;metaBlock.appendChild(rd);}
+  scoreRow.append(scoreBlock,metaBlock);
+  heroInner.append(metaLine,titleEl,scoreRow);
+  hero.append(heroBar,heroBg,heroInner);mc.appendChild(hero);
+  // body
+  const body=document.createElement('div');body.className='modal-body';
+  if(ac.length){
+    const bkLbl=document.createElement('div');bkLbl.className='lbl';bkLbl.textContent=t.breakdown;body.appendChild(bkLbl);
+    const grid=document.createElement('div');grid.className='cat-grid';
+    ac.forEach(cat=>{
+      const subs=(e.subs||{})[cat]||[];
+      const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;
+      const w=(e.fw||{})[cat]||0;
+      const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};
+      const note=(e.notes||{})[cat]||'';
+      const card=document.createElement('div');card.className='cat-card';
+      const cBar=document.createElement('div');cBar.style.cssText='position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)';
+      const cLbl=document.createElement('div');cLbl.style.cssText="font-family:'Orbitron',sans-serif;font-size:8px;color:"+m.color+";letter-spacing:1px;margin-bottom:8px;padding-top:4px";cLbl.textContent=m.icon+' '+catLabel(cat).toUpperCase();
+      const cRow=document.createElement('div');cRow.style.cssText='display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px';
+      const cScore=document.createElement('div');cScore.style.cssText="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:"+sc(cs);cScore.textContent=cs;
+      const cMeta=document.createElement('div');cMeta.style.cssText='text-align:right';
+      const cW=document.createElement('div');cW.style.cssText="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted2)";cW.textContent='w:'+w+'%';
+      const cPts=document.createElement('div');cPts.style.cssText="font-family:'Share Tech Mono',monospace;font-size:9px;color:"+m.color+'88';cPts.textContent='+'+( cs*w/100).toFixed(2);
+      cMeta.append(cW,cPts);cRow.append(cScore,cMeta);
+      const cTrack=document.createElement('div');cTrack.style.cssText='height:3px;background:rgba(255,255,255,.05);border-radius:2px';
+      const cFill=document.createElement('div');cFill.style.cssText='height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+      cTrack.appendChild(cFill);
+      if(subs.length||note){const hint=document.createElement('div');hint.style.cssText="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--muted2);margin-top:8px;letter-spacing:1px;opacity:.5";hint.textContent='CLICK TO EXPAND ›';card.append(cBar,cLbl,cRow,cTrack,hint);}
+      else{card.append(cBar,cLbl,cRow,cTrack);}
+      card.onclick=()=>openCatPopup(cat,cs,w,m,subs,note);
+      grid.appendChild(card);
+    });
+    body.appendChild(grid);
+  }
+  if(e.verdict){
+    const vd=document.createElement('div');vd.style.cssText='background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.5);border-radius:8px;padding:16px 20px';
+    const vLbl=document.createElement('div');vLbl.className='lbl';vLbl.textContent=t.verdict;
+    const vTxt=document.createElement('div');vTxt.style.cssText="font-family:'Rajdhani',sans-serif;font-size:15px;color:#c0c0d8;line-height:1.7";vTxt.textContent=e.verdict;
+    vd.append(vLbl,vTxt);body.appendChild(vd);
+  }
+  mc.appendChild(body);
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(ev){if(!ev||ev.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
 const savedLang=localStorage.getItem('bt_lang')||'en';
 setLang(savedLang);
 loadLog();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadLog();});
+window.addEventListener('focus',()=>loadLog());
+if(window.innerWidth<=768){document.getElementById('mobile-dl-btn').style.display='inline-block';}
+const DL_MSG={en:'Thanks for downloading my app :)',ar:'شكراً لتحميل تطبيقي :)',fr:"Merci d'avoir téléchargé mon app :)",es:'¡Gracias por descargar mi app :)',ja:'ダウンロードありがとう :)',zh:'感谢下载我的应用 :)'};
+let _toastTimer;
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+}
+function dlApp(){
+  window.open('https://download1325.mediafire.com/yiieav3cyovgqtYzlgFKJVtWSgbJOSvZl9L8IoL7d4hqBwYSfd0nvz2OeK9kHHtQhilJ13CC1sr79MWWAItfc3RmzUiOt9wn72Lss8rn2RRNIOfjXuNQtZh_MtTuuR0vpDYS-HYs46IPxrbCx9Hm58TGIxQEUJHX1UcytLCTZVs/pxun6iqormya1z9/backlog-therapy.apk','_blank');
+  setTimeout(()=>showToast(DL_MSG[LANG]||DL_MSG.en),400);
+}
 </script>
+<div id="toast" class="toast"></div>
 </body>
 </html>
