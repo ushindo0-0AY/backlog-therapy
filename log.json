@@ -741,74 +741,66 @@
   },
   {
     "id": 1772856935043,
-    "savedAt": "2026-03-07T05:15:56.649Z",
-    "title": "122222",
+    "savedAt": "2026-03-08T02:59:34.613Z",
+    "title": "pes 5",
     "platform": "PC",
     "date": "2026-03-07",
     "playTime": "12",
     "perspective": "Top-Down",
     "hasMP": false,
     "genres": [
-      "Walking Sim",
+      "Sports",
       "Simulation"
     ],
     "gw": {
-      "Walking Sim": 50,
-      "Simulation": 50
+      "Sports": 65,
+      "Simulation": 35
     },
     "fw": {
-      "gameplay": 14,
-      "graphics": 16,
-      "story": 19,
-      "sound": 14,
-      "performance": 9,
-      "replayability": 10,
+      "gameplay": 25,
+      "graphics": 13,
+      "story": 6,
+      "sound": 9,
+      "performance": 13,
+      "replayability": 14,
       "innovation": 7,
       "multiplayer": 0,
-      "progression": 6,
-      "immersion": 5
+      "progression": 7,
+      "immersion": 6
     },
     "subs": {
       "gameplay": [
         {
           "name": "Controls & Movement",
-          "score": 5
+          "score": 8
         },
         {
           "name": "Combat Mechanics",
-          "score": 5
+          "score": 8.5
         },
         {
           "name": "Game Systems",
-          "score": 5
+          "score": 9.5
         },
         {
           "name": "Pacing & Feedback",
-          "score": 5
+          "score": 9.5
         }
       ],
       "graphics": [
         {
           "name": "Art Direction",
-          "score": 5
+          "score": 9.5
         },
         {
           "name": "Technical Quality",
-          "score": 5
-        },
-        {
-          "name": "Animation",
-          "score": 5
-        },
-        {
-          "name": "Camera",
-          "score": 5
+          "score": 9.5
         }
       ],
       "story": [
         {
           "name": "Plot & Structure",
-          "score": 5
+          "score": 8.5
         },
         {
           "name": "Characters & Dialogue",
@@ -816,17 +808,17 @@
         },
         {
           "name": "Thematic Depth",
-          "score": 5
+          "score": 8.5
         }
       ],
       "sound": [
         {
           "name": "Score & Themes",
-          "score": 5
+          "score": 9.5
         },
         {
           "name": "Sound Effects",
-          "score": 5
+          "score": 9.5
         },
         {
           "name": "Voice Acting",
@@ -834,17 +826,17 @@
         },
         {
           "name": "Ambience",
-          "score": 5
+          "score": 8
         }
       ],
       "performance": [
         {
           "name": "Frame Rate",
-          "score": 5
+          "score": 9
         },
         {
           "name": "Load Times",
-          "score": 5
+          "score": 8
         },
         {
           "name": "Bug Count",
@@ -858,29 +850,29 @@
       "replayability": [
         {
           "name": "Post-Game Content",
-          "score": 5
+          "score": 8.5
         },
         {
           "name": "Branching Paths",
-          "score": 5
+          "score": 6
         },
         {
           "name": "Player Incentives",
-          "score": 5
+          "score": 4.5
         }
       ],
       "innovation": [
         {
           "name": "Originality",
-          "score": 5
+          "score": 8
         },
         {
           "name": "Execution of Ideas",
-          "score": 5
+          "score": 8
         },
         {
           "name": "Genre Impact",
-          "score": 5
+          "score": 7
         }
       ],
       "progression": [
@@ -923,6 +915,6 @@
     "notes": {},
     "verdict": "",
     "recommend": false,
-    "finalScore": 5
+    "finalScore": 7.57
   }
 ]
