@@ -115,7 +115,8 @@ textarea{resize:none;min-height:72px}
 /* ── DETAIL ───────────────────────────────────────────────────────────────── */
 .detail-hero{padding:20px 16px;position:relative;overflow:hidden}
 .detail-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.cat-mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden}
+.cat-mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s,transform .1s;-webkit-user-select:none;user-select:none}
+.cat-mini:active{border-color:rgba(255,255,255,.2);transform:scale(.97)}
 
 /* ── RATING WIZARD ────────────────────────────────────────────────────────── */
 .form-field{margin-bottom:14px}
@@ -561,6 +562,7 @@ function renderDetail(){
     const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;
     const w=(e.fw||{})[cat]||0;const m=CAT_META[cat];
     const c=document.createElement('div');c.className='cat-mini';
+    const note=(e.notes||{})[cat]||'';
     c.innerHTML=`
       <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${m.color},transparent)"></div>
       <div style="font-family:'Orbitron',sans-serif;font-size:7px;color:${m.color};letter-spacing:1px;margin-bottom:6px;padding-top:4px">${m.icon} ${m.label.toUpperCase()}</div>
@@ -571,7 +573,8 @@ function renderDetail(){
       <div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0">
         <div style="height:100%;width:${cs*10}%;background:${m.color};border-radius:1px;opacity:.7"></div>
       </div>
-      ${subs.map(s=>`<div style="display:flex;justify-content:space-between;font-family:'Rajdhani',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">${s.name}</span><span style="color:${sc(s.score)};font-weight:700;flex-shrink:0">${s.score}</span></div>`).join('')}`;
+      ${subs.length||note?'<div style="font-size:7px;color:var(--muted);letter-spacing:1px;opacity:.6;margin-top:4px">TAP ›</div>':''}`;
+    c.onclick=()=>openCatPopup(cat,cs,w,m,subs,note);
     grid.appendChild(c);
   });
   el.appendChild(grid);
@@ -584,6 +587,51 @@ function renderDetail(){
   editBtn.innerHTML='';
   const eb=document.createElement('button');eb.className='btn btn-primary';eb.textContent='EDIT RATING';eb.onclick=()=>editEntry(e.id);
   editBtn.appendChild(eb);el.appendChild(editBtn);
+}
+
+
+// ─── CAT ZOOM POPUP ───────────────────────────────────────────────────────────
+function openCatPopup(cat,cs,w,m,subs,note){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px';
+  ov.onclick=ev=>{if(ev.target===ov)document.body.removeChild(ov);};
+  const box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border-radius:16px;width:100%;max-width:400px;overflow:hidden;position:relative;border:1px solid '+m.color+'44;max-height:85vh;display:flex;flex-direction:column';
+  const topBar=document.createElement('div');topBar.style.cssText='height:3px;background:linear-gradient(90deg,'+m.color+','+m.color+'44,transparent);flex-shrink:0';
+  box.appendChild(topBar);
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='×';closeBtn.style.cssText='position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1;padding:2px 8px;z-index:1';
+  closeBtn.onclick=()=>document.body.removeChild(ov);
+  box.appendChild(closeBtn);
+  const hdr=document.createElement('div');hdr.style.cssText='padding:18px 20px 12px;flex-shrink:0';
+  const catNameEl=document.createElement('div');catNameEl.style.cssText='font-size:9px;letter-spacing:3px;margin-bottom:6px;opacity:.8;color:'+m.color;catNameEl.textContent=m.icon+' '+m.label.toUpperCase();
+  const scoreRow=document.createElement('div');scoreRow.style.cssText='display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px';
+  const bigScore=document.createElement('div');bigScore.style.cssText='font-size:44px;font-weight:900;line-height:1;color:'+sc(cs)+';filter:drop-shadow(0 0 10px '+sc(cs)+'88)';bigScore.textContent=cs;
+  const metaRight=document.createElement('div');metaRight.style.cssText='text-align:right';
+  const scoreLbl=document.createElement('div');scoreLbl.style.cssText='font-size:13px;font-weight:700;margin-bottom:3px;color:'+sc(cs);scoreLbl.textContent=slbl(cs);
+  const wLbl=document.createElement('div');wLbl.style.cssText='font-size:10px;color:var(--muted)';wLbl.textContent='weight: '+w+'%';
+  const ptsLbl=document.createElement('div');ptsLbl.style.cssText='font-size:10px;color:'+m.color+'88';ptsLbl.textContent='+'+(cs*w/100).toFixed(2)+' pts';
+  metaRight.append(scoreLbl,wLbl,ptsLbl);scoreRow.append(bigScore,metaRight);
+  const track=document.createElement('div');track.style.cssText='height:3px;background:rgba(255,255,255,.05);border-radius:2px';
+  const fill=document.createElement('div');fill.style.cssText='height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.8';
+  track.appendChild(fill);
+  hdr.append(catNameEl,scoreRow,track);
+  box.appendChild(hdr);
+  const body=document.createElement('div');body.style.cssText='padding:4px 20px 16px;overflow-y:auto;flex:1';
+  subs.forEach(s=>{
+    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)';
+    const name=document.createElement('span');name.style.cssText='font-size:14px;font-weight:600;color:#c0c0d8;flex:1';name.textContent=s.name||'—';
+    const mini=document.createElement('div');mini.style.cssText='width:40px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;flex-shrink:0';
+    const miniFill=document.createElement('div');miniFill.style.cssText='height:100%;width:'+s.score*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+    mini.appendChild(miniFill);
+    const score=document.createElement('span');score.style.cssText='font-size:15px;font-weight:700;color:'+sc(s.score)+';flex-shrink:0;min-width:22px;text-align:right';score.textContent=s.score;
+    row.append(name,mini,score);body.appendChild(row);
+  });
+  if(note){
+    const nd=document.createElement('div');nd.style.cssText='font-size:13px;color:#7070a0;font-style:italic;margin-top:12px;padding:10px 12px;background:rgba(255,255,255,.02);border-radius:8px;border-left:2px solid '+m.color+'44;line-height:1.5';
+    nd.textContent='"'+note+'"';body.appendChild(nd);
+  }
+  box.appendChild(body);ov.appendChild(box);document.body.appendChild(ov);
 }
 
 // ─── RATE ─────────────────────────────────────────────────────────────────────

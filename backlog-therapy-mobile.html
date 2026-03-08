@@ -6,9 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="theme-color" content="#04040a"/>
-<title>Backlog Therapy v3</title>
+<title>Backlog Therapy</title>
 <link rel="icon" type="image/png" href="icon-512.png"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&family=Noto+Sans+Arabic:wght@500;700&family=Noto+Sans+JP:wght@500;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -24,12 +24,15 @@ body{font-family:'Rajdhani',sans-serif;color:var(--text);display:flex;flex-direc
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 2px,rgba(0,0,0,.1) 4px);pointer-events:none;z-index:9999}
 #app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-top)}
 #topbar{flex-shrink:0;height:52px;background:rgba(4,4,10,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:100}
-#content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(64px + var(--safe-bot))}
-#navbar{position:fixed;bottom:0;left:0;right:0;height:calc(56px + var(--safe-bot));padding-bottom:var(--safe-bot);background:rgba(4,4,10,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100}
+#content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:calc(68px + var(--safe-bot))}
+#navbar{position:fixed;bottom:0;left:0;right:0;background:rgba(4,4,10,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:100;padding-bottom:var(--safe-bot)}
+#nav-tabs{display:flex;height:56px;align-items:stretch}
+#nav-lang{display:flex;align-items:center;justify-content:center;padding:0 10px;border-left:1px solid rgba(255,255,255,.05)}
+#lang-btn{background:none;border:none;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:2px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:4px;padding:4px 6px;white-space:nowrap}
+#lang-btn:active{opacity:.6}
 .tb-logo{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;letter-spacing:2px;color:#fff}
 .tb-logo span{color:var(--accent)}
 .tb-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#fff}
-.tb-action{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;background:linear-gradient(135deg,var(--accent),#c2185b);color:#fff;border:none;border-radius:6px;padding:8px 14px;cursor:pointer}
 .tb-back{background:none;border:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;padding:4px 8px 4px 0;display:flex;align-items:center}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;border:none;cursor:pointer;transition:color .15s;padding-top:6px}
 .nav-btn .nav-icon{font-size:20px;line-height:1}
@@ -69,6 +72,25 @@ textarea{resize:none;min-height:72px}
 .sdot.done{background:rgba(255,45,107,.15);color:var(--accent);border-color:rgba(255,45,107,.3)}
 .sline{width:16px;height:1px;background:var(--border)}
 .sline.done{background:rgba(255,45,107,.3)}
+.home-hero{padding:28px 16px 20px;position:relative;overflow:hidden}
+.home-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(255,45,107,.1),transparent 70%);pointer-events:none}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.stat-val{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:#fff;margin-top:4px}
+.recent-section{padding:0 16px 16px}
+.recent-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s}
+.recent-card:active{border-color:rgba(255,45,107,.4)}
+.log-row{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;margin-bottom:8px;transition:border-color .2s}
+.log-row:active{border-color:rgba(255,45,107,.4)}
+.log-bar{width:3px;align-self:stretch;border-radius:2px;flex-shrink:0}
+.log-info{flex:1;min-width:0}
+.log-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.log-meta{font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--muted)}
+.detail-hero{padding:20px 16px;position:relative;overflow:hidden}
+.detail-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+/* ── EXPANDABLE CAT MINI ───────────────────────────────────────────────────── */
+.cat-mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s;-webkit-user-select:none;user-select:none}
+.cat-mini:active{border-color:rgba(255,255,255,.18);transform:scale(.98)}
 .form-field{margin-bottom:14px}
 .sub-row{background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px}
 .sub-name-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
@@ -85,385 +107,161 @@ textarea{resize:none;min-height:72px}
 .ps-inp{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;outline:none;border:none;padding:0;display:block;cursor:pointer;touch-action:none}
 .ps-inp::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #ff2d6b;box-shadow:0 0 8px rgba(255,45,107,.6);margin-top:-8px;cursor:pointer}
 .ps-inp::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #ff2d6b;box-shadow:0 0 8px rgba(255,45,107,.6);cursor:pointer}
+#toast{position:fixed;bottom:calc(68px + var(--safe-bot));left:16px;right:16px;background:#1a0a0e;border:1px solid #ff4d6d;color:#ff4d6d;padding:12px 16px;border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;z-index:9998;display:none;animation:fadeUp .25s ease;text-align:center}
 .result-hero{position:relative;border-radius:14px;background:linear-gradient(135deg,rgba(255,45,107,.1),var(--bg3));border:1px solid rgba(255,45,107,.25);padding:24px 20px;margin-bottom:16px;overflow:hidden}
 .result-hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
-.log-row{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;margin-bottom:8px;transition:border-color .2s}
-.log-row:active{border-color:rgba(255,45,107,.4)}
-.log-bar{width:3px;align-self:stretch;border-radius:2px;flex-shrink:0}
-.log-score{min-width:44px;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;text-align:center}
-.log-info{flex:1;min-width:0}
-.log-title{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.log-meta{font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--muted)}
-.gtag{font-size:10px;padding:2px 7px;border-radius:3px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid}
-.filter-toggle-btn{display:flex;align-items:center;gap:6px;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:7px 12px;border-radius:6px;cursor:pointer;margin:12px 16px 0;transition:all .15s}
-.filter-toggle-btn.has-active{border-color:rgba(255,45,107,.45);color:#ff7a9a}
-.filter-section{padding:0 16px 12px;display:none}
-.filter-section.open{display:block}
-.fchips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.fchip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:5px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .1s}
-.fchip.on{background:rgba(255,45,107,.12);border-color:rgba(255,45,107,.45);color:#ff7a9a}
-.search-wrap{padding:0 16px 10px;position:sticky;top:0;background:var(--bg);z-index:10;padding-top:10px}
-.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:6px}
-.sslider-lbl{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--muted);min-width:90px;flex-shrink:0}
-.sslider-inp{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
-.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer}
-.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:20px;text-align:right;flex-shrink:0}
-.mine-actions{display:flex;gap:8px;padding:10px 16px 4px}
-.mine-action-btn{flex:1;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;padding:9px 4px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;text-align:center}
-.mine-action-btn.primary{background:linear-gradient(135deg,var(--accent),#c2185b);border:none;color:#fff}
-.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-end}
-.sheet-overlay.open{display:flex;animation:fi .2s ease}
-@keyframes fi{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--bg2);border:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;max-height:88vh;overflow-y:auto;padding-bottom:var(--safe-bot);position:relative}
-.sheet-handle{width:36px;height:4px;background:var(--muted);border-radius:2px;margin:12px auto 0}
-.sheet-close{position:absolute;top:14px;right:16px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
-.cat-mini{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden}
-.lang-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:10px;padding:5px 9px;cursor:pointer}
-.lang-sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:300;display:none;align-items:flex-end}
-.lang-sheet.open{display:flex}
-.lang-panel{background:var(--bg2);border:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(20px + var(--safe-bot))}
-.lang-opt{padding:13px 16px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:8px}
-.lang-opt.active{color:var(--accent)}
-#toast{position:fixed;bottom:calc(72px + var(--safe-bot));left:16px;right:16px;background:#1a0a0e;border:1px solid #ff4d6d;color:#ff4d6d;padding:12px 16px;border-radius:10px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;z-index:9998;display:none;animation:fadeUp .25s ease;text-align:center}
+.search-wrap{padding:12px 16px;position:sticky;top:0;background:var(--bg);z-index:10}
+.mine-io{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.io-btn{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);padding:12px 8px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.io-btn:active{transform:scale(.95);background:rgba(255,45,107,.08);border-color:rgba(255,45,107,.4);color:#ff6b8a}
+.lang-sheet{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:500;display:none;align-items:flex-end}
+.lang-sheet.open{display:flex;animation:lsIn .2s ease}
+@keyframes lsIn{from{opacity:0}to{opacity:1}}
+.lang-panel{background:var(--bg2);border:1px solid var(--border2);border-radius:20px 20px 0 0;width:100%;padding:20px 16px calc(16px + var(--safe-bot))}
+.lang-panel-title{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;color:#3a3a5a;margin-bottom:14px}
+.lang-opt{padding:13px 16px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:8px;transition:all .12s}
+.lang-opt:active{background:rgba(255,255,255,.04)}
+.lang-opt.sel{color:var(--accent);background:rgba(255,45,107,.07)}
+
+.score-fold-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--bg3);border:1px solid var(--border2);color:var(--muted);font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;padding:9px 14px;border-radius:7px;cursor:pointer;margin:8px 0 4px;transition:all .15s}
+.score-fold-btn.has-active{border-color:rgba(255,45,107,.45);color:#ff7a9a}
+.score-fold-body{display:none;flex-direction:column;gap:3px;margin-bottom:4px}
+.score-fold-body.open{display:flex}
+.ss-row{display:flex;align-items:center;gap:6px;background:var(--bg4);border:1px solid var(--border);border-radius:5px;padding:4px 8px}
+.ss-lbl{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;color:var(--muted);width:66px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ss-inp{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.ss-inp::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 5px rgba(255,45,107,.6)}
+.ss-val{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);width:20px;text-align:right;flex-shrink:0}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="topbar">
-    <div id="tb-left"><div class="tb-logo">B<span>T</span></div></div>
+    <div id="tb-left"></div>
     <div id="tb-center"></div>
-    <div id="tb-right"><button class="lang-btn" onclick="openLangSheet()">🌐 <span id="lang-label">EN</span></button></div>
+    <div id="tb-right"></div>
   </div>
   <div id="content">
-    <div id="page-home"   class="page active"></div>
-    <div id="page-log"    class="page"></div>
-    <div id="page-mine"   class="page"></div>
-    <div id="page-rate"   class="page"></div>
+    <div id="page-home"       class="page active"></div>
+    <div id="page-log"        class="page"></div>
+    <div id="page-mine"       class="page"></div>
+    <div id="page-detail"     class="page"></div>
+    <div id="page-minedetail" class="page"></div>
+    <div id="page-rate"       class="page"></div>
   </div>
   <div id="navbar">
-    <button class="nav-btn active" id="nav-home" onclick="goHome()"><span class="nav-icon">🏠</span><span class="nav-lbl" id="nl-home">HOME</span></button>
-    <button class="nav-btn" id="nav-log"  onclick="goLog()"><span class="nav-icon">📋</span><span class="nav-lbl" id="nl-log">LOG</span></button>
-    <button class="nav-btn" id="nav-mine" onclick="goMine()"><span class="nav-icon">📝</span><span class="nav-lbl" id="nl-mine">MINE</span></button>
-    <button class="nav-btn" id="nav-new"  onclick="startNew()"><span class="nav-icon" style="font-size:26px;color:var(--accent)">＋</span><span class="nav-lbl" style="color:var(--accent)" id="nl-new">RATE</span></button>
-  </div>
-</div>
-<div class="lang-sheet" id="lang-sheet" onclick="if(event.target===this)closeLangSheet()">
-  <div class="lang-panel">
-    <div class="lbl" style="margin-bottom:12px">LANGUAGE</div>
-    <div class="lang-opt" id="lopt-en" onclick="setLang('en')">🇬🇧 English</div>
-    <div class="lang-opt" id="lopt-ar" onclick="setLang('ar')">🇩🇿 العربية</div>
-    <div class="lang-opt" id="lopt-fr" onclick="setLang('fr')">🇫🇷 Français</div>
-    <div class="lang-opt" id="lopt-es" onclick="setLang('es')">🇪🇸 Español</div>
-    <div class="lang-opt" id="lopt-ja" onclick="setLang('ja')">🇯🇵 日本語</div>
-    <div class="lang-opt" id="lopt-zh" onclick="setLang('zh')">🇨🇳 中文</div>
-  </div>
-</div>
-<div class="sheet-overlay" id="sheet" onclick="closeSheet(event)">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <button class="sheet-close" onclick="closeSheet()">×</button>
-    <div id="sheet-content"></div>
+    <div id="nav-tabs">
+      <button class="nav-btn active" id="nav-home" onclick="goHome()">
+        <span class="nav-icon">🏠</span><span class="nav-lbl" id="nl-home">HOME</span>
+      </button>
+      <button class="nav-btn" id="nav-log" onclick="goLog()">
+        <span class="nav-icon">📋</span><span class="nav-lbl" id="nl-log">LOG</span>
+      </button>
+      <button class="nav-btn" id="nav-mine" onclick="goMine()">
+        <span class="nav-icon">⭐</span><span class="nav-lbl" id="nl-mine">MINE</span>
+      </button>
+      <div id="nav-lang">
+        <button id="lang-btn" onclick="openLang()">🌐 <span id="lang-lbl">EN</span></button>
+      </div>
+    </div>
   </div>
 </div>
 <div id="toast"></div>
-<script>
-// ─── I18N ─────────────────────────────────────────────────────────────────────
-const SCORE_LABELS_RAW={10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"};
-const T={
-  en:{nav_home:'HOME',nav_log:'LOG',nav_mine:'MINE',nav_new:'RATE',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',verdict:'VERDICT',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',search:'Search games...',noGames:'No games yet.',noMatch:'No results.',games:'GAMES',recent:'RECENT',filters:'FILTERS',hide:'HIDE',show:'SHOW',mine_empty:'No personal ratings yet.',mine_add:'+ ADD RATING',mine_export:'EXPORT',mine_import:'IMPORT',mine_delete:'Delete',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"},cats:{gameplay:"Gameplay",graphics:"Graphics",story:"Story",sound:"Sound",performance:"Performance",replayability:"Replay",innovation:"Innovation",multiplayer:"Multiplayer",progression:"Progression",immersion:"Immersion"},subs:{gameplay:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"],graphics:["Art Direction","Technical Quality","Animation","Camera"],story:["Plot & Structure","Characters & Dialogue","Thematic Depth"],sound:["Score & Themes","Sound Effects","Voice Acting","Ambience"],performance:["Frame Rate","Load Times","Bug Count","Optimization"],replayability:["Post-Game Content","Branching Paths","Player Incentives"],innovation:["Originality","Execution of Ideas","Genre Impact"],multiplayer:["Server Stability","Balance","Matchmaking","Rewards"],progression:["Structure","Pacing","Balance","Integration"],immersion:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]},genres:{"Action-Adventure":"Action-Adventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Stealth","Survival Horror":"Survival Horror","Horror":"Horror","Fighting":"Fighting","Racing":"Racing","Platformer":"Platformer","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Strategy","Tactics/TRPG":"Tactics/TRPG","Survival/Crafting":"Survival/Crafting","Sandbox/Open World":"Sandbox/Open World","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Visual Novel","Rhythm":"Rhythm","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Walking Sim"},perspectives:{"First-Person":"First-Person","Third-Person":"Third-Person","Top-Down":"Top-Down","Side-Scroller":"Side-Scroller","Isometric":"Isometric","2.5D":"2.5D","Mixed":"Mixed"}},
-  ar:{nav_home:'الرئيسية',nav_log:'السجل',nav_mine:'ملاحظاتي',nav_new:'تقييم',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',verdict:'الحكم',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',search:'بحث...',noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',games:'ألعاب',recent:'الأخيرة',filters:'الفلاتر',hide:'إخفاء',show:'إظهار',mine_empty:'لا توجد تقييمات شخصية بعد.',mine_add:'+ إضافة تقييم',mine_export:'تصدير',mine_import:'استيراد',mine_delete:'حذف',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"},cats:{gameplay:"اللعب",graphics:"الرسومات",story:"القصة",sound:"الصوت",performance:"الأداء",replayability:"إعادة اللعب",innovation:"الابتكار",multiplayer:"متعدد اللاعبين",progression:"التطور",immersion:"الانغماس"},subs:{gameplay:["التحكم","القتال","أنظمة اللعبة","الإيقاع"],graphics:["التوجيه الفني","الجودة التقنية","الرسوم المتحركة","الكاميرا"],story:["البنية","الشخصيات","العمق الفكري"],sound:["الموسيقى","المؤثرات","الأداء الصوتي","الأجواء"],performance:["الإطارات","التحميل","الأخطاء","التحسين"],replayability:["محتوى إضافي","المسارات","الحوافز"],innovation:["الأصالة","التنفيذ","التأثير"],multiplayer:["الخوادم","التوازن","المصارعة","المكافآت"],progression:["البنية","الإيقاع","التوازن","التكامل"],immersion:["بناء العالم","الاتساق","الارتباط","الواجهة"]},genres:{"Action-Adventure":"أكشن ومغامرة","RPG":"لعبة أدوار","JRPG":"JRPG","FPS":"منظور أول","TPS":"منظور ثالث","Stealth":"تسلل","Survival Horror":"رعب نجاة","Horror":"رعب","Fighting":"قتال","Racing":"سباق","Platformer":"منصات","Metroidvania":"ميترويدفانيا","Puzzle":"ألغاز","Strategy":"استراتيجية","Tactics/TRPG":"تكتيكات","Survival/Crafting":"نجاة وصناعة","Sandbox/Open World":"عالم مفتوح","Hack & Slash":"قطع وتشريح","Soulslike":"سولزلايك","Visual Novel":"رواية مرئية","Rhythm":"إيقاع","Sports":"رياضة","MMO":"MMO","Battle Royale":"باتل رويال","Point & Click":"نقر وإشارة","Simulation":"محاكاة","Walking Sim":"محاكاة المشي"},perspectives:{"First-Person":"منظور أول","Third-Person":"منظور ثالث","Top-Down":"من الأعلى","Side-Scroller":"جانبي","Isometric":"إيزوميتري","2.5D":"2.5 بعد","Mixed":"مختلط"}},
-  fr:{nav_home:'ACCUEIL',nav_log:'JOURNAL',nav_mine:'MES NOTES',nav_new:'NOTER',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',verdict:'VERDICT',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'EFFACER',search:'Rechercher...',noGames:'Aucun jeu.',noMatch:'Aucun résultat.',games:'JEUX',recent:'RÉCENTS',filters:'FILTRES',hide:'CACHER',show:'AFFICHER',mine_empty:'Aucune évaluation personnelle.',mine_add:'+ AJOUTER',mine_export:'EXPORTER',mine_import:'IMPORTER',mine_delete:'Supprimer',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"},cats:{gameplay:"Gameplay",graphics:"Graphismes",story:"Histoire",sound:"Son",performance:"Performance",replayability:"Rejouabilité",innovation:"Innovation",multiplayer:"Multijoueur",progression:"Progression",immersion:"Immersion"},subs:{gameplay:["Contrôles","Combat","Systèmes","Rythme"],graphics:["Direction artistique","Qualité","Animation","Caméra"],story:["Structure","Personnages","Profondeur"],sound:["Musique","Effets","Doublage","Ambiance"],performance:["FPS","Chargement","Bugs","Optimisation"],replayability:["Post-jeu","Chemins","Incitations"],innovation:["Originalité","Exécution","Impact"],multiplayer:["Serveurs","Équilibre","Matchmaking","Récompenses"],progression:["Structure","Rythme","Équilibre","Intégration"],immersion:["Monde","Cohérence","Engagement","Interface"]},genres:{"Action-Adventure":"Action-Aventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Infiltration","Survival Horror":"Horreur Survie","Horror":"Horreur","Fighting":"Combat","Racing":"Course","Platformer":"Plateforme","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Stratégie","Tactics/TRPG":"Tactique","Survival/Crafting":"Survie/Craft","Sandbox/Open World":"Monde Ouvert","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Roman Visuel","Rhythm":"Rythme","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Marche Sim"},perspectives:{"First-Person":"Première Personne","Third-Person":"Troisième Personne","Top-Down":"Vue de Dessus","Side-Scroller":"Latéral","Isometric":"Isométrique","2.5D":"2.5D","Mixed":"Mixte"}},
-  es:{nav_home:'INICIO',nav_log:'REGISTRO',nav_mine:'MIS NOTAS',nav_new:'PUNTUAR',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',verdict:'VEREDICTO',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR',search:'Buscar...',noGames:'Sin juegos.',noMatch:'Sin resultados.',games:'JUEGOS',recent:'RECIENTES',filters:'FILTROS',hide:'OCULTAR',show:'MOSTRAR',mine_empty:'Sin valoraciones personales.',mine_add:'+ AÑADIR',mine_export:'EXPORTAR',mine_import:'IMPORTAR',mine_delete:'Eliminar',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"},cats:{gameplay:"Jugabilidad",graphics:"Gráficos",story:"Historia",sound:"Sonido",performance:"Rendimiento",replayability:"Rejugabilidad",innovation:"Innovación",multiplayer:"Multijugador",progression:"Progresión",immersion:"Inmersión"},subs:{gameplay:["Controles","Combate","Sistemas","Ritmo"],graphics:["Arte","Calidad","Animación","Cámara"],story:["Estructura","Personajes","Profundidad"],sound:["Música","Efectos","Doblaje","Ambiente"],performance:["FPS","Carga","Bugs","Optimización"],replayability:["Extra","Ramificaciones","Incentivos"],innovation:["Originalidad","Ejecución","Impacto"],multiplayer:["Servidores","Balance","Matchmaking","Recompensas"],progression:["Estructura","Ritmo","Balance","Integración"],immersion:["Mundo","Coherencia","Engagement","Interfaz"]},genres:{"Action-Adventure":"Acción-Aventura","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Sigilo","Survival Horror":"Terror Supervivencia","Horror":"Terror","Fighting":"Lucha","Racing":"Carreras","Platformer":"Plataformas","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Estrategia","Tactics/TRPG":"Táctico","Survival/Crafting":"Supervivencia","Sandbox/Open World":"Mundo Abierto","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Novela Visual","Rhythm":"Ritmo","Sports":"Deportes","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulación","Walking Sim":"Walking Sim"},perspectives:{"First-Person":"Primera Persona","Third-Person":"Tercera Persona","Top-Down":"Vista Cenital","Side-Scroller":"Lateral","Isometric":"Isométrico","2.5D":"2.5D","Mixed":"Mixto"}},
-  ja:{nav_home:'ホーム',nav_log:'ログ',nav_mine:'マイノート',nav_new:'評価',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',verdict:'総評',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',search:'検索...',noGames:'まだゲームがありません。',noMatch:'結果なし。',games:'本',recent:'最近',filters:'フィルター',hide:'非表示',show:'表示',mine_empty:'個人評価はまだありません。',mine_add:'＋追加',mine_export:'エクスポート',mine_import:'インポート',mine_delete:'削除',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"},cats:{gameplay:"ゲームプレイ",graphics:"グラフィック",story:"ストーリー",sound:"サウンド",performance:"パフォーマンス",replayability:"リプレイ性",innovation:"革新性",multiplayer:"マルチプレイヤー",progression:"進行",immersion:"没入感"},subs:{gameplay:["操作性","戦闘","システム","ペース"],graphics:["アート","品質","アニメ","カメラ"],story:["プロット","キャラ","テーマ"],sound:["BGM","効果音","ボイス","雰囲気"],performance:["FPS","ロード","バグ","最適化"],replayability:["クリア後","分岐","やり込み"],innovation:["独創性","実行","影響"],multiplayer:["サーバー","バランス","マッチング","報酬"],progression:["構造","ペース","バランス","統合"],immersion:["世界観","一貫性","感情","UI"]},genres:{"Action-Adventure":"アクションアドベンチャー","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"ステルス","Survival Horror":"サバイバルホラー","Horror":"ホラー","Fighting":"格闘","Racing":"レーシング","Platformer":"プラットフォーマー","Metroidvania":"メトロイドヴァニア","Puzzle":"パズル","Strategy":"ストラテジー","Tactics/TRPG":"タクティクス","Survival/Crafting":"サバイバル","Sandbox/Open World":"オープンワールド","Hack & Slash":"ハック＆スラッシュ","Soulslike":"ソウルズライク","Visual Novel":"ビジュアルノベル","Rhythm":"リズム","Sports":"スポーツ","MMO":"MMO","Battle Royale":"バトルロイヤル","Point & Click":"ポイント＆クリック","Simulation":"シミュレーション","Walking Sim":"ウォーキングシム"},perspectives:{"First-Person":"一人称","Third-Person":"三人称","Top-Down":"真上から","Side-Scroller":"横スクロール","Isometric":"アイソメトリック","2.5D":"2.5D","Mixed":"混合"}},
-  zh:{nav_home:'首页',nav_log:'日志',nav_mine:'我的',nav_new:'评分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',verdict:'总评',genre:'类型',platform:'平台',perspective:'视角',clear:'清除',search:'搜索...',noGames:'暂无游戏。',noMatch:'无结果。',games:'款',recent:'最近',filters:'筛选',hide:'隐藏',show:'显示',mine_empty:'暂无个人评分。',mine_add:'＋添加评分',mine_export:'导出',mine_import:'导入',mine_delete:'删除',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"},cats:{gameplay:"游戏玩法",graphics:"画面",story:"故事",sound:"音效",performance:"性能",replayability:"重玩性",innovation:"创新性",multiplayer:"多人游戏",progression:"进程",immersion:"沉浸感"},subs:{gameplay:["操控","战斗","系统","节奏"],graphics:["美术","质量","动画","镜头"],story:["情节","角色","主题"],sound:["配乐","音效","配音","环境音"],performance:["帧率","加载","Bug","优化"],replayability:["后期","分支","激励"],innovation:["原创","执行","影响"],multiplayer:["服务器","平衡","匹配","奖励"],progression:["结构","节奏","平衡","整合"],immersion:["世界","一致性","情感","界面"]},genres:{"Action-Adventure":"动作冒险","RPG":"角色扮演","JRPG":"日式RPG","FPS":"第一人称射击","TPS":"第三人称射击","Stealth":"潜行","Survival Horror":"生存恐怖","Horror":"恐怖","Fighting":"格斗","Racing":"赛车","Platformer":"平台跳跃","Metroidvania":"银河城","Puzzle":"解谜","Strategy":"策略","Tactics/TRPG":"战棋","Survival/Crafting":"生存建造","Sandbox/Open World":"开放世界","Hack & Slash":"砍杀","Soulslike":"魂系","Visual Novel":"视觉小说","Rhythm":"音乐节奏","Sports":"体育","MMO":"MMO","Battle Royale":"大逃杀","Point & Click":"点击冒险","Simulation":"模拟","Walking Sim":"步行模拟"},perspectives:{"First-Person":"第一人称","Third-Person":"第三人称","Top-Down":"俯视角","Side-Scroller":"横版","Isometric":"等距","2.5D":"2.5D","Mixed":"混合"}}
-};
-const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
-let LANG='en';
-function tx(){return T[LANG]||T.en;}
-function slbl(s){return(tx().scores||{})[Math.round(s)]||'';}
-function catLabel(k){return(tx().cats||{})[k]||(CAT_META[k]||{}).label||k;}
-function subLabel(cat,idx){const s=(tx().subs||{})[cat];return s&&s[idx]!=null?s[idx]:((CAT_META[cat]||{}).subs||[])[idx]||'';}
-function genreLabel(g){return(tx().genres||{})[g]||g;}
-function perspLabel(p){return(tx().perspectives||{})[p]||p;}
+<div class="lang-sheet" id="lang-sheet" onclick="if(event.target===this)closeLang()">
+  <div class="lang-panel">
+    <div class="lang-panel-title">LANGUAGE / اللغة</div>
+    <div id="lang-opts"></div>
+  </div>
+</div>
+<input type="file" id="imp-file" accept=".json" style="display:none" onchange="handleImport(this)"/>
 
+<script>
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 const PLATFORMS=["PC","PS1","PS2","PS3","PS4","PS5","Xbox","Xbox 360","Xbox One","Xbox Series X/S","Nintendo 64","GameCube","Wii","Wii U","Nintendo Switch","Game Boy","GBA","Nintendo DS","Nintendo 3DS","PSP","PS Vita","Dreamcast","Sega Genesis","SNES","NES","Other"];
-const PERSPECTIVES=["First-Person","Third-Person","Top-Down","Side-Scroller","Isometric","2.5D","Mixed"];
 const GENRES={"Action-Adventure":{gameplay:20,graphics:15,story:15,sound:10,performance:10,replayability:5,innovation:5,multiplayer:0,progression:5,immersion:15},"RPG":{gameplay:15,graphics:10,story:20,sound:10,performance:5,replayability:10,innovation:5,multiplayer:0,progression:15,immersion:10},"JRPG":{gameplay:15,graphics:10,story:20,sound:12,performance:5,replayability:8,innovation:5,multiplayer:0,progression:15,immersion:10},"FPS":{gameplay:25,graphics:10,story:10,sound:10,performance:10,replayability:10,innovation:5,multiplayer:10,progression:5,immersion:5},"TPS":{gameplay:22,graphics:12,story:12,sound:10,performance:10,replayability:8,innovation:5,multiplayer:8,progression:5,immersion:8},"Stealth":{gameplay:20,graphics:10,story:15,sound:10,performance:10,replayability:5,innovation:5,multiplayer:0,progression:5,immersion:20},"Survival Horror":{gameplay:15,graphics:15,story:15,sound:15,performance:10,replayability:5,innovation:5,multiplayer:0,progression:5,immersion:15},"Horror":{gameplay:12,graphics:15,story:18,sound:18,performance:10,replayability:5,innovation:5,multiplayer:0,progression:2,immersion:15},"Fighting":{gameplay:30,graphics:10,story:5,sound:10,performance:10,replayability:5,innovation:5,multiplayer:10,progression:5,immersion:10},"Racing":{gameplay:25,graphics:15,story:5,sound:10,performance:15,replayability:10,innovation:5,multiplayer:5,progression:5,immersion:5},"Platformer":{gameplay:25,graphics:15,story:10,sound:10,performance:10,replayability:5,innovation:5,multiplayer:0,progression:5,immersion:15},"Metroidvania":{gameplay:22,graphics:12,story:12,sound:10,performance:8,replayability:8,innovation:8,multiplayer:0,progression:8,immersion:12},"Puzzle":{gameplay:20,graphics:10,story:10,sound:10,performance:10,replayability:15,innovation:10,multiplayer:0,progression:5,immersion:10},"Strategy":{gameplay:20,graphics:10,story:10,sound:10,performance:10,replayability:10,innovation:10,multiplayer:5,progression:10,immersion:5},"Tactics/TRPG":{gameplay:22,graphics:8,story:15,sound:8,performance:10,replayability:10,innovation:8,multiplayer:5,progression:10,immersion:4},"Survival/Crafting":{gameplay:20,graphics:10,story:10,sound:10,performance:10,replayability:10,innovation:5,multiplayer:5,progression:15,immersion:5},"Sandbox/Open World":{gameplay:20,graphics:15,story:10,sound:10,performance:10,replayability:5,innovation:5,multiplayer:5,progression:10,immersion:10},"Hack & Slash":{gameplay:28,graphics:12,story:8,sound:10,performance:10,replayability:8,innovation:5,multiplayer:5,progression:8,immersion:6},"Soulslike":{gameplay:25,graphics:12,story:12,sound:10,performance:10,replayability:8,innovation:8,multiplayer:5,progression:5,immersion:5},"Visual Novel":{gameplay:5,graphics:15,story:35,sound:15,performance:5,replayability:10,innovation:5,multiplayer:0,progression:5,immersion:5},"Rhythm":{gameplay:25,graphics:10,story:5,sound:30,performance:10,replayability:8,innovation:7,multiplayer:5,progression:0,immersion:0},"Sports":{gameplay:25,graphics:12,story:3,sound:8,performance:12,replayability:12,innovation:5,multiplayer:13,progression:5,immersion:5},"MMO":{gameplay:15,graphics:10,story:10,sound:10,performance:10,replayability:10,innovation:5,multiplayer:15,progression:10,immersion:5},"Battle Royale":{gameplay:22,graphics:10,story:0,sound:8,performance:12,replayability:15,innovation:8,multiplayer:15,progression:5,immersion:5},"Point & Click":{gameplay:15,graphics:12,story:28,sound:10,performance:5,replayability:10,innovation:8,multiplayer:0,progression:2,immersion:10},"Simulation":{gameplay:20,graphics:12,story:8,sound:8,performance:12,replayability:15,innovation:8,multiplayer:5,progression:7,immersion:5},"Walking Sim":{gameplay:5,graphics:20,story:30,sound:20,performance:5,replayability:5,innovation:5,multiplayer:0,progression:5,immersion:5}};
 const CATS=["gameplay","graphics","story","sound","performance","replayability","innovation","multiplayer","progression","immersion"];
-const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b",subs:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"]},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa",subs:["Art Direction","Technical Quality","Animation","Camera"]},story:{label:"Story",icon:"📖",color:"#34d399",subs:["Plot & Structure","Characters & Dialogue","Thematic Depth"]},sound:{label:"Sound",icon:"🎵",color:"#f59e0b",subs:["Score & Themes","Sound Effects","Voice Acting","Ambience"]},performance:{label:"Performance",icon:"⚡",color:"#38bdf8",subs:["Frame Rate","Load Times","Bug Count","Optimization"]},replayability:{label:"Replay",icon:"🔄",color:"#fb923c",subs:["Post-Game Content","Branching Paths","Player Incentives"]},innovation:{label:"Innovation",icon:"💡",color:"#e879f9",subs:["Originality","Execution of Ideas","Genre Impact"]},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80",subs:["Server Stability","Balance","Matchmaking","Rewards"]},progression:{label:"Progression",icon:"📈",color:"#f472b6",subs:["Structure","Pacing","Balance","Integration"]},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9",subs:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]}};
+const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b",subs:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"]},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa",subs:["Art Direction","Technical Quality","Animation","Camera"]},story:{label:"Story",icon:"📖",color:"#34d399",subs:["Plot & Structure","Characters & Dialogue","Thematic Depth"]},sound:{label:"Sound",icon:"🎵",color:"#f59e0b",subs:["Score & Themes","Sound Effects","Voice Acting","Ambience"]},performance:{label:"Performance",icon:"⚡",color:"#38bdf8",subs:["Frame Rate","Load Times","Bug Count","Optimization"]},replayability:{label:"Replayability",icon:"🔄",color:"#fb923c",subs:["Post-Game Content","Branching Paths","Player Incentives"]},innovation:{label:"Innovation",icon:"💡",color:"#e879f9",subs:["Originality","Execution of Ideas","Genre Impact"]},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80",subs:["Server Stability","Balance","Matchmaking","Rewards"]},progression:{label:"Progression",icon:"📈",color:"#f472b6",subs:["Structure","Pacing","Balance","Integration"]},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9",subs:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]}};
 
-const RAW='https://raw.githubusercontent.com/ushindo0-0ay/backlog-therapy/main/log.json';
+// ─── I18N ─────────────────────────────────────────────────────────────────────
+const LANG_NAMES={en:'EN — English',ar:'AR — العربية',fr:'FR — Français',es:'ES — Español',ja:'JA — 日本語',zh:'ZH — 中文'};
+const TT={
+  en:{home:'HOME',log:'LOG',mine:'MINE',add:'+ RATE A GAME',exp:'⬇ EXPORT',imp:'⬆ IMPORT',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',recent:'RECENT',search:'Search games…',no_log:'No games in log yet.',no_mine:'No ratings yet.',no_match:'No results.',step1:'GAME INFO',step2:'GENRES',step3:'RATE IT',step4:'RESULT',nxt:'NEXT →',bk:'← BACK',sv:'💾 SAVE',verdict:'VERDICT',recommend:'RECOMMEND?',yes:'✅ YES',no:'❌ NO',edit_r:'EDIT RATING',del:'DELETE',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',score_f:'⚡ SCORE FILTERS',cats:{gameplay:'Gameplay',graphics:'Graphics',story:'Story',sound:'Sound',performance:'Perform.',replayability:'Replay',innovation:'Innovat.',multiplayer:'Multiplay.',progression:'Progress.',immersion:'Immersion'},sc:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
+  ar:{home:'الرئيسية',log:'السجل',mine:'ألعابي',add:'+ تقييم لعبة',exp:'⬇ تصدير',imp:'⬆ استيراد',rated:'مُقيَّم',avg:'متوسط الدرجة',top:'أعلى درجة',rec:'موصى به',recent:'الأحدث',search:'ابحث...',no_log:'لا توجد ألعاب.',no_mine:'لا يوجد تقييم.',no_match:'لا نتائج.',step1:'معلومات',step2:'الأنواع',step3:'قيّم',step4:'النتيجة',nxt:'التالي →',bk:'→ رجوع',sv:'💾 حفظ',verdict:'الحكم',recommend:'توصية؟',yes:'✅ نعم',no:'❌ لا',edit_r:'تعديل التقييم',del:'حذف',genre:'النوع',platform:'المنصة',perspective:'المنظور',score_f:'⚡ فلاتر النقاط',cats:{gameplay:'اللعب',graphics:'الرسوم',story:'القصة',sound:'الصوت',performance:'الأداء',replayability:'إعادة اللعب',innovation:'الابتكار',multiplayer:'متعدد',progression:'التقدم',immersion:'الإحساس'},sc:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
+  fr:{home:'ACCUEIL',log:'JOURNAL',mine:'MES JEUX',add:'+ NOTER UN JEU',exp:'⬇ EXPORTER',imp:'⬆ IMPORTER',rated:'NOTÉS',avg:'SCORE MOY.',top:'MEILLEUR',rec:'RECOMMANDÉS',recent:'RÉCENTS',search:'Rechercher…',no_log:'Aucun jeu.',no_mine:'Aucune note.',no_match:'Aucun résultat.',step1:'INFOS',step2:'GENRES',step3:'NOTER',step4:'RÉSULTAT',nxt:'SUIVANT →',bk:'← RETOUR',sv:'💾 SAUVEGARDER',verdict:'VERDICT',recommend:'RECOMMANDER?',yes:'✅ OUI',no:'❌ NON',edit_r:'MODIFIER',del:'SUPPRIMER',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',score_f:'⚡ FILTRES SCORE',cats:{gameplay:'Gameplay',graphics:'Graphismes',story:'Histoire',sound:'Son',performance:'Performa.',replayability:'Rejouab.',innovation:'Innovat.',multiplayer:'Multi.',progression:'Progress.',immersion:'Immersion'},sc:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
+  es:{home:'INICIO',log:'REGISTRO',mine:'MIS JUEGOS',add:'+ PUNTUAR JUEGO',exp:'⬇ EXPORTAR',imp:'⬆ IMPORTAR',rated:'PUNTUADOS',avg:'PUNT. MEDIA',top:'PUNT. MÁX.',rec:'RECOMENDADOS',recent:'RECIENTES',search:'Buscar…',no_log:'Sin juegos.',no_mine:'Sin notas.',no_match:'Sin resultados.',step1:'INFO',step2:'GÉNEROS',step3:'PUNTUAR',step4:'RESULTADO',nxt:'SIGUIENTE →',bk:'← ATRÁS',sv:'💾 GUARDAR',verdict:'VEREDICTO',recommend:'¿RECOMIENDAS?',yes:'✅ SÍ',no:'❌ NO',edit_r:'EDITAR',del:'ELIMINAR',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',score_f:'⚡ FILTROS PUNTOS',cats:{gameplay:'Jugabilidad',graphics:'Gráficos',story:'Historia',sound:'Sonido',performance:'Rend.',replayability:'Repetib.',innovation:'Innov.',multiplayer:'Multi.',progression:'Progres.',immersion:'Inmersión'},sc:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
+  ja:{home:'ホーム',log:'ログ',mine:'マイ',add:'+ ゲームを評価',exp:'⬇ 書き出し',imp:'⬆ 読み込み',rated:'評価済み',avg:'平均スコア',top:'最高スコア',rec:'おすすめ',recent:'最近',search:'検索…',no_log:'なし。',no_mine:'評価なし。',no_match:'なし。',step1:'ゲーム情報',step2:'ジャンル',step3:'評価する',step4:'結果',nxt:'次へ →',bk:'← 戻る',sv:'💾 保存',verdict:'総評',recommend:'おすすめ？',yes:'✅ はい',no:'❌ いいえ',edit_r:'評価を編集',del:'削除',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',score_f:'⚡ スコアフィルター',cats:{gameplay:'ゲームプレイ',graphics:'グラフィック',story:'ストーリー',sound:'サウンド',performance:'パフォーマンス',replayability:'リプレイ',innovation:'革新性',multiplayer:'マルチ',progression:'成長',immersion:'没入感'},sc:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
+  zh:{home:'主页',log:'日志',mine:'我的',add:'+ 评分游戏',exp:'⬇ 导出',imp:'⬆ 导入',rated:'已评分',avg:'平均分',top:'最高分',rec:'推荐',recent:'最近',search:'搜索…',no_log:'暂无。',no_mine:'暂无评分。',no_match:'无结果。',step1:'游戏信息',step2:'类型',step3:'评分',step4:'结果',nxt:'下一步 →',bk:'← 返回',sv:'💾 保存',verdict:'总评',recommend:'推荐吗？',yes:'✅ 是',no:'❌ 否',edit_r:'编辑评分',del:'删除',genre:'类型',platform:'平台',perspective:'视角',score_f:'⚡ 分数筛选',cats:{gameplay:'玩法',graphics:'画面',story:'剧情',sound:'音效',performance:'性能',replayability:'重玩性',innovation:'创新',multiplayer:'多人',progression:'成长',immersion:'沉浸感'},sc:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
+};
+let lang='en';
+const t=()=>TT[lang];
+
+const GENRE_LABELS={
+  en:{"Action-Adventure":"Action-Adventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Stealth","Survival Horror":"Survival Horror","Horror":"Horror","Fighting":"Fighting","Racing":"Racing","Platformer":"Platformer","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Strategy","Tactics/TRPG":"Tactics/TRPG","Survival/Crafting":"Survival/Crafting","Sandbox/Open World":"Sandbox/Open World","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Visual Novel","Rhythm":"Rhythm","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Walking Sim"},
+  ar:{"Action-Adventure":"أكشن ومغامرة","RPG":"لعبة أدوار","JRPG":"JRPG","FPS":"منظور أول","TPS":"منظور ثالث","Stealth":"تسلل","Survival Horror":"رعب نجاة","Horror":"رعب","Fighting":"قتال","Racing":"سباق","Platformer":"منصات","Metroidvania":"ميترويدفانيا","Puzzle":"ألغاز","Strategy":"استراتيجية","Tactics/TRPG":"تكتيكات","Survival/Crafting":"نجاة وصناعة","Sandbox/Open World":"عالم مفتوح","Hack & Slash":"قطع وتشريح","Soulslike":"سولزلايك","Visual Novel":"رواية مرئية","Rhythm":"إيقاع","Sports":"رياضة","MMO":"MMO","Battle Royale":"باتل رويال","Point & Click":"نقر وإشارة","Simulation":"محاكاة","Walking Sim":"محاكاة المشي"},
+  fr:{"Action-Adventure":"Action-Aventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Infiltration","Survival Horror":"Horreur Survie","Horror":"Horreur","Fighting":"Combat","Racing":"Course","Platformer":"Plateforme","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Stratégie","Tactics/TRPG":"Tactique","Survival/Crafting":"Survie/Craft","Sandbox/Open World":"Monde Ouvert","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Roman Visuel","Rhythm":"Rythme","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Marche Sim"},
+  es:{"Action-Adventure":"Acción-Aventura","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Sigilo","Survival Horror":"Terror Supervivencia","Horror":"Terror","Fighting":"Lucha","Racing":"Carreras","Platformer":"Plataformas","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Estrategia","Tactics/TRPG":"Táctico","Survival/Crafting":"Supervivencia","Sandbox/Open World":"Mundo Abierto","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Novela Visual","Rhythm":"Ritmo","Sports":"Deportes","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulación","Walking Sim":"Walking Sim"},
+  ja:{"Action-Adventure":"アクションアドベンチャー","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"ステルス","Survival Horror":"サバイバルホラー","Horror":"ホラー","Fighting":"格闘","Racing":"レーシング","Platformer":"プラットフォーマー","Metroidvania":"メトロイドヴァニア","Puzzle":"パズル","Strategy":"ストラテジー","Tactics/TRPG":"タクティクス","Survival/Crafting":"サバイバル","Sandbox/Open World":"オープンワールド","Hack & Slash":"ハック＆スラッシュ","Soulslike":"ソウルズライク","Visual Novel":"ビジュアルノベル","Rhythm":"リズム","Sports":"スポーツ","MMO":"MMO","Battle Royale":"バトルロイヤル","Point & Click":"ポイント＆クリック","Simulation":"シミュレーション","Walking Sim":"ウォーキングシム"},
+  zh:{"Action-Adventure":"动作冒险","RPG":"角色扮演","JRPG":"日式RPG","FPS":"第一人称射击","TPS":"第三人称射击","Stealth":"潜行","Survival Horror":"生存恐怖","Horror":"恐怖","Fighting":"格斗","Racing":"赛车","Platformer":"平台跳跃","Metroidvania":"银河城","Puzzle":"解谜","Strategy":"策略","Tactics/TRPG":"战棋","Survival/Crafting":"生存建造","Sandbox/Open World":"开放世界","Hack & Slash":"砍杀","Soulslike":"魂系","Visual Novel":"视觉小说","Rhythm":"音乐节奏","Sports":"体育","MMO":"MMO","Battle Royale":"大逃杀","Point & Click":"点击冒险","Simulation":"模拟","Walking Sim":"步行模拟"}
+};
+const PERSPECTIVE_LABELS={
+  en:{"First-Person":"First-Person","Third-Person":"Third-Person","Top-Down":"Top-Down","Side-Scroller":"Side-Scroller","Isometric":"Isometric","2.5D":"2.5D","Mixed":"Mixed"},
+  ar:{"First-Person":"منظور أول","Third-Person":"منظور ثالث","Top-Down":"من الأعلى","Side-Scroller":"جانبي","Isometric":"إيزوميتري","2.5D":"2.5 بعد","Mixed":"مختلط"},
+  fr:{"First-Person":"Première Personne","Third-Person":"Troisième Personne","Top-Down":"Vue de Dessus","Side-Scroller":"Défilement Latéral","Isometric":"Isométrique","2.5D":"2.5D","Mixed":"Mixte"},
+  es:{"First-Person":"Primera Persona","Third-Person":"Tercera Persona","Top-Down":"Vista Cenital","Side-Scroller":"Desplazamiento Lateral","Isometric":"Isométrico","2.5D":"2.5D","Mixed":"Mixto"},
+  ja:{"First-Person":"一人称","Third-Person":"三人称","Top-Down":"真上から","Side-Scroller":"横スクロール","Isometric":"アイソメトリック","2.5D":"2.5D","Mixed":"混合"},
+  zh:{"First-Person":"第一人称","Third-Person":"第三人称","Top-Down":"俯视角","Side-Scroller":"横版","Isometric":"等距","2.5D":"2.5D","Mixed":"混合"}
+};
+function genreLabel(g){return(GENRE_LABELS[lang]||GENRE_LABELS.en)[g]||g;}
+function perspLabel(p){return(PERSPECTIVE_LABELS[lang]||PERSPECTIVE_LABELS.en)[p]||p;}
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
 const sc=s=>s>=9?"#00ffb3":s>=7.5?"#a3ff6e":s>=6?"#ffe566":s>=4?"#ff9f43":"#ff4d6d";
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 const r2=n=>Math.round(n*100)/100;
-const h=s=>{const d=document.createElement('div');d.innerHTML=s;return d.firstElementChild;};
+const slbl=s=>{const sl=t().sc;return sl[Math.round(s)]||sl[5];};
 
+// ─── STORAGE ──────────────────────────────────────────────────────────────────
+const GH_RAW='https://raw.githubusercontent.com/ushindo0-0ay/backlog-therapy/main/log.json';
 let LOG=[];
 let MINE=[];
-let F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
-let logFilterOpen=false;
-let curView='home';
-let sess={};
-let detailE=null;
+
+async function loadLog(){
+  try{const r=await fetch(GH_RAW+'?t='+Date.now());const d=await r.json();LOG=Array.isArray(d)?d:(d.log||[]);}
+  catch{LOG=[];}
+  renderHome();
+}
+function saveMine(){try{localStorage.setItem('bt_mine',JSON.stringify(MINE));}catch{}}
+function loadMine(){try{const d=localStorage.getItem('bt_mine');MINE=d?JSON.parse(d):[];}catch{MINE=[];}}
+
+// ─── SESSION ──────────────────────────────────────────────────────────────────
+let curView='home',detailE=null,mineDE=null,sess={};
 function resetSess(){sess={editId:null,step:'info',title:'',platform:'',date:'',playTime:'',perspective:'',hasMP:false,genres:[],gw:{},fw:{},subs:{},notes:{},verdict:'',recommend:null};}
 resetSess();
 
+// ─── TOAST ────────────────────────────────────────────────────────────────────
 let toastT;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>el.style.display='none',2800);}
+function toast(m){const el=document.getElementById('toast');el.textContent=m;el.style.display='block';clearTimeout(toastT);toastT=setTimeout(()=>el.style.display='none',2800);}
 
 // ─── LANG ─────────────────────────────────────────────────────────────────────
-function openLangSheet(){document.getElementById('lang-sheet').classList.add('open');}
-function closeLangSheet(){document.getElementById('lang-sheet').classList.remove('open');}
-function setLang(l){
-  LANG=l;closeLangSheet();
-  document.getElementById('lang-label').textContent=LANG_LABELS[l]||l.toUpperCase();
-  document.querySelectorAll('[id^="lopt-"]').forEach(o=>o.classList.remove('active'));
-  const a=document.getElementById('lopt-'+l);if(a)a.classList.add('active');
-  document.body.style.direction=l==='ar'?'rtl':'ltr';
-  localStorage.setItem('bt_lang',l);
-  const t=tx();
-  document.getElementById('nl-home').textContent=t.nav_home;
-  document.getElementById('nl-log').textContent=t.nav_log;
-  document.getElementById('nl-mine').textContent=t.nav_mine;
-  document.getElementById('nl-new').textContent=t.nav_new;
-  if(curView==='home')renderHome();
-  else if(curView==='log')renderLog();
-  else if(curView==='mine')renderMine();
-}
-
-// ─── STORAGE ──────────────────────────────────────────────────────────────────
-async function loadLog(){
-  try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);}
-  catch(e){LOG=[];}
-  renderHome();
-}
-function loadMine(){try{const r=localStorage.getItem('bt_mine');MINE=r?JSON.parse(r):[];}catch(e){MINE=[];}}
-function saveMine(){localStorage.setItem('bt_mine',JSON.stringify(MINE));}
-
-// ─── NAV ──────────────────────────────────────────────────────────────────────
-function setNav(id){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const el=document.getElementById('nav-'+id);if(el)el.classList.add('active');}
-function showPage(id,title,showBack,rightEl){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  const p=document.getElementById('page-'+id);if(p){p.classList.remove('active');void p.offsetWidth;p.classList.add('active');}
-  curView=id;
-  const tbL=document.getElementById('tb-left');
-  const tbC=document.getElementById('tb-center');
-  const tbR=document.getElementById('tb-right');
-  if(showBack){
-    tbL.innerHTML='';
-    const bk=document.createElement('button');bk.className='tb-back';bk.innerHTML='&#8592;';
-    bk.onclick=()=>{if(id==='rate'){resetSess();goMine();}else goHome();};
-    tbL.appendChild(bk);
-    tbC.innerHTML='<div class="tb-title">'+(title||'')+'</div>';
-  } else {
-    tbL.innerHTML='<div class="tb-logo">B<span>T</span></div>';
-    tbC.innerHTML='';
-  }
-  tbR.innerHTML='';
-  if(rightEl)tbR.appendChild(rightEl);
-  else if(!showBack){tbR.innerHTML='<button class="lang-btn" onclick="openLangSheet()">🌐 <span id="lang-label">'+LANG_LABELS[LANG]+'</span></button>';}
-  document.getElementById('content').scrollTop=0;
-}
-function goHome(){renderHome();showPage('home','',false);setNav('home');}
-function goLog(){renderLog();showPage('log','',false);setNav('log');}
-function goMine(){renderMine();showPage('mine','',false);setNav('mine');}
-function startNew(){resetSess();renderRate();showPage('rate','NEW RATING',true);setNav('new');}
-
-// ─── HOME ─────────────────────────────────────────────────────────────────────
-function renderHome(){
-  const t=tx();const el=document.getElementById('page-home');el.innerHTML='';
-  const hero=document.createElement('div');hero.style.cssText='padding:24px 16px 16px;position:relative;overflow:hidden';
-  hero.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:10px;opacity:.8">// GAME RATING ARCHIVE</div><div style="font-family:\'Orbitron\',sans-serif;font-size:26px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:6px">EVERY GAME.<br><span style="color:var(--accent)">RATED.</span></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:var(--muted);margin-bottom:20px">Genre-weighted scoring across 10 categories.</div>';
-  el.appendChild(hero);
-  if(!LOG.length){el.innerHTML+='<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">'+t.noGames+'</div>';return;}
-  const avgS=r2(LOG.reduce((a,e)=>a+e.finalScore,0)/LOG.length);
-  const top=Math.max(...LOG.map(e=>e.finalScore));
-  const rec=LOG.filter(e=>e.recommend).length;
-  const sg=document.createElement('div');sg.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px';
-  [['RATED',LOG.length,t.games],['AVG',avgS.toFixed(2),slbl(avgS)],['TOP',top.toFixed(2),slbl(top)],['REC',rec,Math.round(rec/LOG.length*100)+'%']]
-    .forEach(([l,v,s])=>{const c=document.createElement('div');c.style.cssText='background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;position:relative;overflow:hidden';c.innerHTML='<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)"></div><div class="lbl" style="margin-bottom:2px">'+l+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:22px;font-weight:900;color:#fff;margin-top:4px">'+v+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);margin-top:3px">'+s+'</div>';sg.appendChild(c);});
-  el.appendChild(sg);
-  const rs=document.createElement('div');rs.style.padding='0 16px 16px';
-  rs.innerHTML='<div class="lbl">'+t.recent+'</div>';
-  LOG.slice(0,3).forEach(e=>{
-    const clr=sc(e.finalScore);const c=document.createElement('div');c.className='log-row';
-    c.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div><div class="log-score" style="color:'+clr+'">'+e.finalScore+'</div><div class="log-info"><div class="log-title">'+e.title+'</div><div class="log-meta">'+e.platform+(e.genres&&e.genres.length?' · '+genreLabel(e.genres[0]):'')+'</div></div><div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700;flex-shrink:0">'+slbl(e.finalScore)+'</div>';
-    c.onclick=()=>openSheet(e);rs.appendChild(c);
+function openLang(){
+  const lo=document.getElementById('lang-opts');lo.innerHTML='';
+  Object.keys(LANG_NAMES).forEach(l=>{
+    const d=document.createElement('div');d.className='lang-opt'+(l===lang?' sel':'');
+    d.textContent=LANG_NAMES[l];
+    d.onclick=()=>{lang=l;document.getElementById('lang-lbl').textContent=l.toUpperCase();updateNavLabels();closeLang();refreshPage();};
+    lo.appendChild(d);
   });
-  el.appendChild(rs);
+  document.getElementById('lang-sheet').classList.add('open');
 }
-
-// ─── LOG PAGE ─────────────────────────────────────────────────────────────────
-function renderLog(){
-  const t=tx();const el=document.getElementById('page-log');el.innerHTML='';
-  const genres=new Set(),platforms=new Set(),perspectives=new Set();
-  LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
-  const hasActive=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
-  const ftBtn=document.createElement('button');
-  ftBtn.className='filter-toggle-btn'+(hasActive?' has-active':'');
-  ftBtn.innerHTML='⚙ '+(logFilterOpen?t.hide:t.show)+' '+t.filters+(hasActive?' ●':'');
-  ftBtn.onclick=()=>{logFilterOpen=!logFilterOpen;renderLog();};
-  el.appendChild(ftBtn);
-  const fs=document.createElement('div');fs.className='filter-section'+(logFilterOpen?' open':'');
-  let qVal='';
-  function buildFC(label,items,fk,lblFn){
-    if(!items.size)return;
-    const g=document.createElement('div');g.style.marginBottom='10px';
-    g.innerHTML='<div class="lbl" style="margin-bottom:6px">'+label+'</div>';
-    const chips=document.createElement('div');chips.className='fchips';
-    [...items].sort().forEach(item=>{
-      const ch=document.createElement('span');ch.className='fchip'+(F[fk].has(item)?' on':'');
-      ch.textContent=lblFn?lblFn(item):item;
-      ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');refreshFBtn();renderLogList(qVal);};
-      chips.appendChild(ch);
-    });
-    g.appendChild(chips);fs.appendChild(g);
-  }
-  buildFC(t.genre,genres,'genres',genreLabel);
-  buildFC(t.platform,platforms,'platforms');
-  buildFC(t.perspective,perspectives,'perspectives',perspLabel);
-  // top cat
-  const tcDiv=document.createElement('div');tcDiv.style.marginBottom='10px';
-  tcDiv.innerHTML='<div class="lbl" style="margin-bottom:6px">TOP CATEGORY</div>';
-  const tcChips=document.createElement('div');tcChips.className='fchips';
-  Object.keys(CAT_META).forEach(cat=>{
-    const m=CAT_META[cat];const ch=document.createElement('span');ch.className='fchip'+(F.topCat.has(cat)?' on':'');
-    ch.textContent=m.icon+' '+catLabel(cat);
-    ch.onclick=()=>{F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);ch.classList.toggle('on');refreshFBtn();renderLogList(qVal);};
-    tcChips.appendChild(ch);
-  });
-  tcDiv.appendChild(tcChips);fs.appendChild(tcDiv);
-  // score sliders
-  const ssDiv=document.createElement('div');ssDiv.innerHTML='<div class="lbl" style="margin-bottom:6px">MIN SCORE</div>';
-  Object.keys(CAT_META).forEach(cat=>{
-    const m=CAT_META[cat];if(!F.scoreMin[cat])F.scoreMin[cat]=0;
-    const row=document.createElement('div');row.className='sslider-row';
-    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=m.icon+' '+catLabel(cat);
-    const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
-    const val=document.createElement('span');val.className='sslider-val';val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';
-    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?F.scoreMin[cat]:'—';refreshFBtn();renderLogList(qVal);};
-    row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);ssDiv.appendChild(row);
-  });
-  fs.appendChild(ssDiv);
-  const clearBtn=document.createElement('button');clearBtn.style.cssText='font-family:\'Orbitron\',sans-serif;font-size:8px;background:none;border:1px solid var(--border2);color:var(--muted);padding:5px 10px;border-radius:6px;cursor:pointer;margin-top:6px';clearBtn.textContent=t.clear;
-  clearBtn.onclick=()=>{F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};renderLog();};
-  fs.appendChild(clearBtn);el.appendChild(fs);
-  const sw=document.createElement('div');sw.className='search-wrap';
-  const si=document.createElement('input');si.style.cssText='background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:\'Rajdhani\',sans-serif;font-size:16px;font-weight:600;padding:11px 14px;width:100%;outline:none;-webkit-appearance:none';
-  si.placeholder=t.search;si.addEventListener('input',e=>{qVal=e.target.value;renderLogList(qVal);});
-  sw.appendChild(si);el.appendChild(sw);
-  const ri=document.createElement('div');ri.id='log-ri';ri.style.cssText='font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;padding:0 16px 8px';el.appendChild(ri);
-  const list=document.createElement('div');list.id='log-list';list.style.padding='0 16px 8px';el.appendChild(list);
-  renderLogList('');
-  function refreshFBtn(){
-    const ha=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
-    ftBtn.className='filter-toggle-btn'+(ha?' has-active':'');
-    ftBtn.innerHTML='⚙ '+(logFilterOpen?t.hide:t.show)+' '+t.filters+(ha?' ●':'');
-  }
-}
-function renderLogList(q){
-  const t=tx();const list=document.getElementById('log-list');const ri=document.getElementById('log-ri');if(!list)return;
-  const filtered=LOG.filter(e=>{
-    if(q&&!e.title.toLowerCase().includes(q.toLowerCase()))return false;
-    if(F.genres.size&&!(e.genres||[]).some(g=>F.genres.has(g)))return false;
-    if(F.platforms.size&&!F.platforms.has(e.platform))return false;
-    if(F.perspectives.size&&!F.perspectives.has(e.perspective))return false;
-    if(F.topCat.size){const subs=e.subs||{};const cats=Object.keys(subs).filter(c=>c!=='multiplayer'||e.hasMP);if(!cats.length)return false;const top=cats.reduce((b,c)=>{const sa=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return sa>(subs[b]&&subs[b].length?r2(avg(subs[b].map(x=>x.score))):0)?c:b;},cats[0]);if(!F.topCat.has(top))return false;}
-    for(const[cat,minS]of Object.entries(F.scoreMin)){if(!minS)continue;const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;if(cs<minS)return false;}
-    return true;
-  });
-  if(ri)ri.textContent=filtered.length+' / '+LOG.length+' '+t.games;
-  list.innerHTML='';
-  if(!filtered.length){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">'+(LOG.length?t.noMatch:t.noGames)+'</div>';return;}
-  filtered.forEach(e=>{
-    const clr=sc(e.finalScore);const row=document.createElement('div');row.className='log-row';
-    row.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div>'
-      +'<div class="log-score" style="color:'+clr+'">'+e.finalScore+'</div>'
-      +'<div class="log-info"><div class="log-title">'+e.title+'</div>'
-      +'<div class="log-meta">'+e.platform+(e.date?' · '+e.date:'')+'</div>'
-      +'<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">'
-      +(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.07)">'+genreLabel(g)+'</span>').join('')
-      +(e.perspective?'<span class="gtag" style="color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07)">'+perspLabel(e.perspective)+'</span>':'')
-      +(e.recommend!=null?'<span style="font-size:12px">'+(e.recommend?'✅':'❌')+'</span>':'')
-      +'</div></div>'
-      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700;flex-shrink:0">'+slbl(e.finalScore)+'</div>';
-    row.onclick=()=>openSheet(e);list.appendChild(row);
-  });
-}
-
-// ─── MINE PAGE ────────────────────────────────────────────────────────────────
-function renderMine(){
-  const t=tx();const el=document.getElementById('page-mine');el.innerHTML='';
-  const hd=document.createElement('div');hd.style.cssText='padding:20px 16px 6px';
-  hd.innerHTML='<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:4px">MY RATINGS</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--muted)">'+MINE.length+' '+t.games+'</div>';
-  el.appendChild(hd);
-  const acts=document.createElement('div');acts.className='mine-actions';
-  const addBtn=document.createElement('button');addBtn.className='mine-action-btn primary';addBtn.textContent=t.mine_add;addBtn.onclick=()=>startNew();
-  const expBtn=document.createElement('button');expBtn.className='mine-action-btn';expBtn.textContent='⬇ '+t.mine_export;expBtn.onclick=exportMine;
-  const impLbl=document.createElement('label');impLbl.className='mine-action-btn';impLbl.style.cursor='pointer';impLbl.textContent='⬆ '+t.mine_import;
-  const impInp=document.createElement('input');impInp.type='file';impInp.accept='.json';impInp.style.display='none';impInp.onchange=ev=>{if(ev.target.files[0])importMine(ev.target.files[0]);};
-  impLbl.appendChild(impInp);acts.append(addBtn,expBtn,impLbl);el.appendChild(acts);
-  if(!MINE.length){el.innerHTML+='<div style="text-align:center;padding:60px;color:var(--muted);font-size:14px">'+t.mine_empty+'</div>';return;}
-  const sw=document.createElement('div');sw.className='search-wrap';
-  const si=document.createElement('input');si.style.cssText='background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:\'Rajdhani\',sans-serif;font-size:16px;font-weight:600;padding:11px 14px;width:100%;outline:none;-webkit-appearance:none';
-  si.placeholder=t.search;
-  const list=document.createElement('div');list.style.padding='0 16px 8px';
-  si.addEventListener('input',e=>{
-    const q=e.target.value.toLowerCase();const filtered=q?MINE.filter(x=>x.title.toLowerCase().includes(q)):MINE;
-    renderMineList(list,filtered);
-  });
-  sw.appendChild(si);el.appendChild(sw);el.appendChild(list);
-  renderMineList(list,MINE);
-}
-function renderMineList(list,items){
-  const t=tx();list.innerHTML='';
-  if(!items.length){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);font-size:14px">'+t.noMatch+'</div>';return;}
-  items.forEach(e=>{
-    const score=e.finalScore||0;const clr=sc(score);const row=document.createElement('div');row.className='log-row';
-    row.innerHTML='<div class="log-bar" style="background:linear-gradient(180deg,'+clr+','+clr+'44)"></div>'
-      +'<div class="log-score" style="color:'+clr+'">'+score+'</div>'
-      +'<div class="log-info"><div class="log-title">'+e.title+'</div>'
-      +'<div class="log-meta">'+(e.platform||'')+(e.date?' · '+e.date:'')+'</div>'
-      +(e.genres&&e.genres.length?'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.07)">'+genreLabel(g)+'</span>').join('')+'</div>':'')
-      +'</div>'
-      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:'+clr+';font-weight:700;flex-shrink:0">'+slbl(score)+'</div>';
-    row.onclick=()=>openSheet({...e,_mine:true});list.appendChild(row);
-  });
-}
-function exportMine(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(MINE,null,2)],{type:'application/json'}));a.download='my-backlog-ratings.json';a.click();}
-function importMine(file){const r=new FileReader();r.onload=e=>{try{const arr=JSON.parse(e.target.result);if(!Array.isArray(arr))throw 0;const ids=new Set(MINE.map(x=>x.id));MINE=[...arr.filter(x=>!ids.has(x.id)),...MINE];saveMine();renderMine();}catch{toast('Invalid file.');}};r.readAsText(file);}
-
-// ─── SHEET ────────────────────────────────────────────────────────────────────
-function openSheet(e){
-  const t=tx();const score=e.finalScore||0;const clr=sc(score);
-  const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
-  document.getElementById('sheet-content').innerHTML=
-    '<div style="padding:20px 16px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)">'
-    +'<div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+',transparent)"></div>'
-    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+e.platform+(e.date?' // '+e.date:'')+'</div>'
-    +'<div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+e.title+'</div>'
-    +'<div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px">'
-      +'<div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:52px;font-weight:900;color:'+clr+';line-height:1">'+score+'</div>'
-      +'<div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:'+clr+';margin-top:4px;font-weight:700">'+slbl(score)+'</div></div>'
-      +'<div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.08)">'+genreLabel(g)+'</span>').join('')+'</div>'
-      +(e.perspective?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:12px;color:#a78bfa;margin-bottom:6px;font-weight:700">'+perspLabel(e.perspective)+'</div>':'')
-      +(e.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d')+'">'+(e.recommend?t.yes_rec:t.no_rec)+'</div>':'')+'</div></div></div>'
-    +(ac.length?'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px">'+ac.map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const w=(e.fw||{})[cat]||0;const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};return'<div class="cat-mini"><div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+catLabel(cat).toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted)">w:'+w+'%</div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>'+subs.map((s,i)=>'<div style="display:flex;justify-content:space-between;font-family:\'Rajdhani\',sans-serif;font-size:10px;margin-bottom:2px"><span style="color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">'+subLabel(cat,i)+'</span><span style="color:'+sc(s.score)+';font-weight:700;flex-shrink:0">'+s.score+'</span></div>').join('')+'</div>';}).join('')+'</div>':'')
-    +(e.verdict?'<div style="margin:0 16px 8px;background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.4);border-radius:8px;padding:14px 16px"><div class="lbl">'+t.verdict+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.6">'+e.verdict+'</div></div>':'')
-    +(e._mine?'<div style="display:flex;gap:8px;padding:12px 16px"><button onclick="editMineEntry(\''+e.id+'\')" style="flex:1;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:11px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer">✏ EDIT</button><button onclick="deleteMineEntry(\''+e.id+'\')" style="flex:1;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;padding:11px;border-radius:6px;border:1px solid rgba(255,77,109,.3);background:transparent;color:#ff4d6d;cursor:pointer">✕ '+t.mine_delete+'</button></div>':'');
-  document.getElementById('sheet').classList.add('open');
-}
-function closeSheet(ev){if(!ev||ev.target===document.getElementById('sheet'))document.getElementById('sheet').classList.remove('open');}
-function editMineEntry(id){const e=MINE.find(x=>String(x.id)===String(id));if(!e)return;closeSheet();sess={editId:e.id,step:'info',title:e.title,platform:e.platform,date:e.date||'',playTime:e.playTime||'',perspective:e.perspective||'',hasMP:e.hasMP||false,genres:[...(e.genres||[])],gw:{...(e.gw||{})},fw:{...(e.fw||{})},subs:JSON.parse(JSON.stringify(e.subs||{})),notes:{...(e.notes||{})},verdict:e.verdict||'',recommend:e.recommend!=null?e.recommend:null};renderRate();showPage('rate','EDIT RATING',true);setNav('new');}
-function deleteMineEntry(id){if(!confirm(tx().mine_delete+'?'))return;MINE=MINE.filter(e=>String(e.id)!==String(id));saveMine();closeSheet();renderMine();}
+function closeLang(){document.getElementById('lang-sheet').classList.remove('open');}
+function updateNavLabels(){const tl=t();document.getElementById('nl-home').textContent=tl.home;document.getElementById('nl-log').textContent=tl.log;document.getElementById('nl-mine').textContent=tl.mine;}
+function refreshPage(){if(curView==='home')renderHome();else if(curView==='log')renderLog();else if(curView==='mine')renderMine();}
 
 // ─── GENRE LOGIC ─────────────────────────────────────────────────────────────
 function reblend(){
   const {genres,gw,hasMP}=sess;if(!genres.length)return;
   const total=Object.values(gw).reduce((a,b)=>a+b,0);if(!total)return;
-  const bl={};
-  CATS.forEach(cat=>{let w=0;genres.forEach(g=>{w+=(GENRES[g][cat]||0)*((gw[g]||0)/total);});bl[cat]=Math.round(w);});
+  const bl={};CATS.forEach(cat=>{let w=0;genres.forEach(g=>{w+=(GENRES[g][cat]||0)*((gw[g]||0)/total);});bl[cat]=Math.round(w);});
   if(!hasMP&&(bl.multiplayer||0)>0){const mp=bl.multiplayer;bl.multiplayer=0;const ks=CATS.filter(k=>k!=='multiplayer');const pk=Math.floor(mp/ks.length);ks.forEach(k=>{bl[k]=(bl[k]||0)+pk;});bl[ks[0]]=(bl[ks[0]]||0)+mp-pk*ks.length;}
   const sum=Object.values(bl).reduce((a,b)=>a+b,0);if(sum!==100)bl[CATS[0]]=(bl[CATS[0]]||0)+(100-sum);
   sess.fw=bl;
@@ -473,67 +271,384 @@ function toggleGenre(g){
   else if(sess.genres.length<3)sess.genres.push(g);
   else return;
   if(!sess.genres.length){sess.gw={};sess.fw={};return;}
-  const even=Math.floor(100/sess.genres.length),rem=100-even*sess.genres.length;
-  sess.gw={};sess.genres.forEach((genre,i)=>{sess.gw[genre]=even+(i===0?rem:0);});
-  reblend();
+  const ev=Math.floor(100/sess.genres.length),rm=100-ev*sess.genres.length;
+  sess.gw={};sess.genres.forEach((g2,i)=>{sess.gw[g2]=ev+(i===0?rm:0);});reblend();
 }
 function adjWeight(g,val){
-  const others=sess.genres.filter(x=>x!==g);
-  const rem=100-val,tot=others.reduce((a,x)=>a+(sess.gw[x]||0),0);
+  const others=sess.genres.filter(x=>x!==g);const rem=100-val,tot=others.reduce((a,x)=>a+(sess.gw[x]||0),0);
   sess.gw[g]=val;
   if(tot>0)others.forEach(x=>{sess.gw[x]=Math.round((sess.gw[x]/tot)*rem);});
   else{const ev=Math.floor(rem/others.length);others.forEach((x,i)=>{sess.gw[x]=ev+(i===0?rem-ev*others.length:0);});}
   reblend();
 }
-function initSubs(){
-  if(Object.keys(sess.subs).length)return;
-  CATS.filter(c=>c!=='multiplayer'||sess.hasMP).forEach(cat=>{sess.subs[cat]=CAT_META[cat].subs.map(n=>({name:n,score:5}));});
-}
+function initSubs(){if(Object.keys(sess.subs).length)return;CATS.filter(c=>c!=='multiplayer'||sess.hasMP).forEach(cat=>{sess.subs[cat]=CAT_META[cat].subs.map(n=>({name:n,score:5}));});}
 const aCats=()=>CATS.filter(c=>c!=='multiplayer'||sess.hasMP);
 const catScore=cat=>{const s=sess.subs[cat]||[];return s.length?r2(avg(s.map(x=>x.score))):5;};
 const finalScore=()=>r2(aCats().reduce((acc,c)=>acc+catScore(c)*(sess.fw[c]||0)/100,0));
 
 // ─── SLIDERS ──────────────────────────────────────────────────────────────────
 function neonSlider(val,color,onChange){
-  const pct=val*10;
-  const wrap=document.createElement('div');wrap.className='ns-wrap';
+  const pct=val*10;const wrap=document.createElement('div');wrap.className='ns-wrap';
   const track=document.createElement('div');track.className='ns-track';
-  const bg=h('<div class="ns-bg"></div>');
-  const fill=document.createElement('div');fill.className='ns-fill';
-  fill.style.cssText='width:'+pct+'%;background:linear-gradient(90deg,rgba(255,45,107,.4),'+color+');box-shadow:0 0 6px '+color+'66';
-  const thumb=document.createElement('div');thumb.className='ns-thumb';
-  thumb.style.cssText='left:'+pct+'%;background:radial-gradient(circle at 35% 35%,#fff,'+color+');box-shadow:0 0 0 2px '+color+'44,0 0 10px '+color+'88';
+  const bg=document.createElement('div');bg.className='ns-bg';
+  const fill=document.createElement('div');fill.className='ns-fill';fill.style.cssText=`width:${pct}%;background:linear-gradient(90deg,rgba(255,45,107,.4),${color});box-shadow:0 0 6px ${color}66`;
+  const thumb=document.createElement('div');thumb.className='ns-thumb';thumb.style.cssText=`left:${pct}%;background:radial-gradient(circle at 35% 35%,#fff,${color});box-shadow:0 0 0 2px ${color}44,0 0 10px ${color}88`;
   const valEl=document.createElement('div');valEl.className='ns-val';valEl.style.color=sc(val);valEl.textContent=val;
   const lblEl=document.createElement('div');lblEl.className='ns-lbl';lblEl.textContent=slbl(val);
   track.append(bg,fill,thumb);wrap.append(track,valEl,lblEl);
-  const calc=clientX=>{const r=track.getBoundingClientRect();return Math.round(Math.max(0,Math.min(1,(clientX-r.left)/r.width))*10/0.5)*0.5;};
+  const calc=cx=>{const r=track.getBoundingClientRect();return Math.round(Math.max(0,Math.min(1,(cx-r.left)/r.width))*10/0.5)*0.5;};
   const upd=v=>{const p=v*10;fill.style.width=p+'%';thumb.style.left=p+'%';valEl.textContent=v;valEl.style.color=sc(v);lblEl.textContent=slbl(v);onChange(v);};
-  track.addEventListener('mousedown',e=>{e.preventDefault();upd(calc(e.clientX));const mv=e2=>upd(calc(e2.clientX));const up=()=>{window.removeEventListener('mousemove',mv);window.removeEventListener('mouseup',up);};window.addEventListener('mousemove',mv);window.addEventListener('mouseup',up);});
-  track.addEventListener('touchstart',e=>{upd(calc(e.touches[0].clientX));const mv=e2=>upd(calc(e2.touches[0].clientX));const up=()=>{window.removeEventListener('touchmove',mv);window.removeEventListener('touchend',up);};window.addEventListener('touchmove',mv,{passive:true});window.addEventListener('touchend',up);},{passive:true});
+  track.addEventListener('mousedown',e=>{e.preventDefault();upd(calc(e.clientX));const mv=e2=>upd(calc(e2.clientX));const up=()=>{removeEventListener('mousemove',mv);removeEventListener('mouseup',up);};addEventListener('mousemove',mv);addEventListener('mouseup',up);});
+  track.addEventListener('touchstart',e=>{upd(calc(e.touches[0].clientX));const mv=e2=>upd(calc(e2.touches[0].clientX));const up=()=>{removeEventListener('touchmove',mv);removeEventListener('touchend',up);};addEventListener('touchmove',mv,{passive:true});addEventListener('touchend',up);},{passive:true});
   return wrap;
 }
-function setFill(inp,v){inp.style.background='linear-gradient(90deg,#ff2d6b '+v+'%,rgba(255,255,255,.07) '+v+'%)';}
-function percentSlider(val,onChange){
-  const inp=document.createElement('input');inp.type='range';inp.min=0;inp.max=100;inp.step=1;inp.value=val;inp.className='ps-inp';
-  setFill(inp,val);
-  inp.addEventListener('input',e=>{const v=parseInt(e.target.value);setFill(inp,v);onChange(v,inp);});
-  return inp;
+function setFill(i,v){i.style.background=`linear-gradient(90deg,#ff2d6b ${v}%,rgba(255,255,255,.07) ${v}%)`;}
+function pctSlider(val,onChange){
+  const i=document.createElement('input');i.type='range';i.min=0;i.max=100;i.step=1;i.value=val;i.className='ps-inp';setFill(i,val);
+  i.addEventListener('input',e=>{const v=parseInt(e.target.value);setFill(i,v);onChange(v,i);});return i;
 }
 
-// ─── RATING WIZARD (exact logger pattern) ────────────────────────────────────
-function renderRate(){const el=document.getElementById('page-rate');el.innerHTML='<div class="pad" id="rate-body"></div>';renderStep();}
-function renderStep(){
-  const body=document.getElementById('rate-body');if(!body)return;
-  body.innerHTML='';
-  const steps=['info','genre','rate','result'];
-  const si=steps.indexOf(sess.step);
-  const stepsEl=document.createElement('div');stepsEl.className='steps';
-  steps.forEach((s,i)=>{
-    const d=document.createElement('div');d.className='sdot';
-    if(i<si)d.classList.add('done');else if(i===si)d.classList.add('active');
-    d.textContent=i+1;stepsEl.appendChild(d);
-    if(i<3){const l=document.createElement('div');l.className='sline';if(i<si)l.classList.add('done');stepsEl.appendChild(l);}
+// ─── NAV ──────────────────────────────────────────────────────────────────────
+function setNav(id){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));const el=document.getElementById('nav-'+id);if(el)el.classList.add('active');}
+function showPage(id,title,showBack=false){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const p=document.getElementById('page-'+id);if(p){p.classList.remove('active');void p.offsetWidth;p.classList.add('active');}
+  curView=id;
+  const tbL=document.getElementById('tb-left'),tbC=document.getElementById('tb-center'),tbR=document.getElementById('tb-right');
+  if(showBack){
+    tbL.innerHTML='';const bk=document.createElement('button');bk.className='tb-back';bk.innerHTML='&#8592;';
+    bk.onclick=()=>{if(id==='detail')goLog();else if(id==='minedetail')goMine();else if(id==='rate'){resetSess();goMine();}else goHome();};
+    tbL.appendChild(bk);tbC.innerHTML=`<div class="tb-title">${title}</div>`;
+  } else {tbL.innerHTML=`<div class="tb-logo">B<span>T</span></div>`;tbC.innerHTML='';}
+  tbR.innerHTML='';document.getElementById('content').scrollTop=0;
+}
+function goHome(){resetSess();renderHome();showPage('home','');setNav('home');}
+function goLog(){renderLog();showPage('log','GAME LOG',true);setNav('log');}
+function goMine(){renderMine();showPage('mine','',false);setNav('mine');}
+function goDetail(e){detailE=e;renderDetail();showPage('detail',e.title.slice(0,16)+(e.title.length>16?'…':''),true);setNav('log');}
+function goMineDetail(e){mineDE=e;renderMineDetail();showPage('minedetail',e.title.slice(0,16)+(e.title.length>16?'…':''),true);setNav('mine');}
+function startNew(){resetSess();renderRate();showPage('rate','NEW RATING',true);setNav('mine');}
+
+// ─── EXPORT / IMPORT ──────────────────────────────────────────────────────────
+function doExport(){
+  if(!MINE.length)return toast('Nothing to export.');
+  const data=JSON.stringify({version:1,exportedAt:new Date().toISOString(),log:MINE},null,2);
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+  a.download='my-backlog-ratings-'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();setTimeout(()=>document.body.removeChild(a),100);
+}
+function doImport(){document.getElementById('imp-file').click();}
+function handleImport(inp){
+  const file=inp.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const parsed=JSON.parse(ev.target.result);
+      const entries=Array.isArray(parsed)?parsed:(parsed.log||[]);
+      if(!Array.isArray(entries))throw 0;
+      const ids=new Set(MINE.map(x=>x.id));
+      const fresh=entries.filter(x=>!ids.has(x.id));
+      MINE=[...fresh,...MINE];saveMine();
+      toast('Imported '+fresh.length+' entr'+(fresh.length===1?'y':'ies'));
+      goMine();
+    }catch{toast('Invalid JSON file.');}
+  };
+  reader.readAsText(file);inp.value='';
+}
+
+// ─── HOME ─────────────────────────────────────────────────────────────────────
+function renderHome(){
+  const el=document.getElementById('page-home');el.innerHTML='';const tl=t();
+  const avg_=LOG.length?(LOG.reduce((a,e)=>a+e.finalScore,0)/LOG.length).toFixed(2):null;
+  const topS=LOG.length?Math.max(...LOG.map(e=>e.finalScore)).toFixed(2):null;
+  // search bar at top of home
+  const sw=document.createElement('div');sw.className='search-wrap';
+  const si=document.createElement('input');si.placeholder=tl.search;
+  const homeList=document.createElement('div');homeList.style.padding='0 16px';
+  si.addEventListener('input',ev=>renderHomeList(ev.target.value,homeList,el,tl));
+  sw.appendChild(si);el.appendChild(sw);el.appendChild(homeList);
+  renderHomeList('', homeList, el, tl);
+}
+function renderHomeList(q, list, el, tl){
+  // stats block (reuse existing or create)
+  let sg=el.querySelector('.stats-grid');
+  if(!sg && LOG.length){
+    const avg_=LOG.length?(LOG.reduce((a,e)=>a+e.finalScore,0)/LOG.length).toFixed(2):null;
+    const topS=LOG.length?Math.max(...LOG.map(e=>e.finalScore)).toFixed(2):null;
+    sg=document.createElement('div');sg.className='stats-grid';
+    [[tl.rated,LOG.length],[tl.avg,avg_],[tl.top,topS],[tl.rec,LOG.filter(e=>e.recommend).length]].forEach(([l,v])=>{
+      const s=document.createElement('div');s.className='stat-card';s.innerHTML=`<div class="lbl" style="margin-bottom:2px">${l}</div><div class="stat-val">${v}</div>`;sg.appendChild(s);
+    });
+    // insert stats after search-wrap
+    const sw=el.querySelector('.search-wrap');if(sw&&sw.nextSibling)el.insertBefore(sg,sw.nextSibling);else el.insertBefore(sg,list);
+  }
+  list.innerHTML='';
+  const f=LOG.filter(e=>e.title.toLowerCase().includes((q||'').toLowerCase()));
+  if(!f.length){
+    if(LOG.length){list.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:15px">${tl.no_match}</div>`;}
+    else{list.innerHTML=`<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:15px">${tl.no_log}</div>`;}
+    return;
+  }
+  const rs=document.createElement('div');rs.className='recent-section';
+  rs.innerHTML=`<div class="lbl" style="margin-bottom:10px">${tl.recent}</div>`;
+  f.forEach(e=>{
+    const c=document.createElement('div');c.className='recent-card';
+    c.innerHTML=`<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${sc(e.finalScore)},transparent)"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#fff;margin-bottom:2px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.title}</div>
+          <div style="font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--muted)">${e.platform}${e.genres?.length?' · '+e.genres[0]:''}</div></div>
+        <div style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:${sc(e.finalScore)};filter:drop-shadow(0 0 6px ${sc(e.finalScore)}88)">${e.finalScore}</div>
+      </div>`;
+    c.onclick=()=>goDetail(e);rs.appendChild(c);
   });
+  list.appendChild(rs);
+}
+
+// ─── LOG ──────────────────────────────────────────────────────────────────────
+let logF={genres:new Set(),platforms:new Set(),perspectives:new Set(),scoreMin:{}};
+function renderLog(){
+  const el=document.getElementById('page-log');el.innerHTML='';const tl=t();
+  logF={genres:new Set(),platforms:new Set(),perspectives:new Set(),scoreMin:{}};
+  // search
+  const sw=document.createElement('div');sw.className='search-wrap';
+  const si=document.createElement('input');si.id='log-search';si.placeholder=tl.search;
+  sw.appendChild(si);el.appendChild(sw);
+  // filter section
+  const fbar=document.createElement('div');fbar.style.cssText='padding:0 16px 10px';
+  // genre chips
+  const genres=new Set();const platforms=new Set();const perspectives=new Set();
+  LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
+  function addChipSection(label,items,filterSet,labelFn){
+    if(!items.size)return;
+    const lbl=document.createElement('div');lbl.style.cssText='font-size:8px;letter-spacing:2px;color:#3a3a5a;margin-bottom:4px;margin-top:10px';lbl.textContent=label;fbar.appendChild(lbl);
+    const row=document.createElement('div');row.style.cssText='display:flex;flex-wrap:wrap;gap:2px';
+    [...items].sort().forEach(item=>{
+      const ch=document.createElement('span');ch.className='chip';ch.style.cssText='font-size:11px;padding:5px 10px;margin:2px';
+      ch.textContent=labelFn?labelFn(item):item;
+      ch.onclick=()=>{
+        if(filterSet.has(item))filterSet.delete(item);else filterSet.add(item);
+        ch.classList.toggle('on',filterSet.has(item));
+        renderLogList(document.getElementById('log-search').value,list);
+      };
+      row.appendChild(ch);
+    });
+    fbar.appendChild(row);
+  }
+  addChipSection(tl.genre||'GENRE',genres,logF.genres,genreLabel);
+  addChipSection(tl.platform||'PLATFORM',platforms,logF.platforms,null);
+  addChipSection(tl.perspective||'PERSPECTIVE',perspectives,logF.perspectives,perspLabel);
+  // score fold button
+  const sfBtn=document.createElement('button');sfBtn.className='score-fold-btn';sfBtn.id='sf-btn';
+  sfBtn.innerHTML=(tl.score_f||'⚡ SCORE FILTERS')+' <span id="sf-arrow">▾</span>';
+  sfBtn.onclick=()=>{const b=document.getElementById('sf-body');const open=b.classList.toggle('open');document.getElementById('sf-arrow').textContent=open?'▴':'▾';};
+  fbar.appendChild(sfBtn);
+  const sfBody=document.createElement('div');sfBody.className='score-fold-body';sfBody.id='sf-body';
+  const CAT_KEYS=['gameplay','graphics','story','sound','performance','replayability','innovation','multiplayer','progression','immersion'];
+  const CAT_SHORT=tl.cats||{gameplay:'Gameplay',graphics:'Graphics',story:'Story',sound:'Sound',performance:'Perform.',replayability:'Replay',innovation:'Innovat.',multiplayer:'Multiplay.',progression:'Progress.',immersion:'Immersion'};
+  CAT_KEYS.forEach(cat=>{
+    logF.scoreMin[cat]=0;
+    const row=document.createElement('div');row.className='ss-row';
+    const lbl=document.createElement('span');lbl.className='ss-lbl';lbl.textContent=CAT_SHORT[cat];
+    const inp=document.createElement('input');inp.type='range';inp.className='ss-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=0;
+    const val=document.createElement('span');val.className='ss-val';val.textContent='—';
+    inp.oninput=()=>{
+      logF.scoreMin[cat]=parseFloat(inp.value);
+      val.textContent=logF.scoreMin[cat]>0?logF.scoreMin[cat]:'—';
+      const active=Object.values(logF.scoreMin).some(v=>v>0);
+      sfBtn.classList.toggle('has-active',active);
+      renderLogList(document.getElementById('log-search').value,list);
+    };
+    row.append(lbl,inp,val);sfBody.appendChild(row);
+  });
+  fbar.appendChild(sfBody);
+  if(genres.size||platforms.size||perspectives.size||true)el.appendChild(fbar);
+  const list=document.createElement('div');list.style.padding='0 16px';el.appendChild(list);
+  si.addEventListener('input',e=>renderLogList(e.target.value,list));
+  renderLogList('',list);
+}
+function renderLogList(q,list){
+  const tl=t();list.innerHTML='';
+  const f=LOG.filter(e=>{
+    if(q&&!e.title.toLowerCase().includes(q.toLowerCase()))return false;
+    if(logF.genres.size&&!(e.genres||[]).some(g=>logF.genres.has(g)))return false;
+    if(logF.platforms.size&&!logF.platforms.has(e.platform))return false;
+    if(logF.perspectives.size&&!logF.perspectives.has(e.perspective))return false;
+    if(logF.scoreMin){for(const[cat,min]of Object.entries(logF.scoreMin)){if(min>0){const subs=(e.subs||{})[cat]||[];const cs=subs.length?Math.round(subs.reduce((a,s)=>a+s.score,0)/subs.length*100)/100:5;if(cs<min)return false;}}}
+    return true;
+  });
+  if(!f.length){list.innerHTML=`<div style="text-align:center;padding:60px 0;color:var(--muted);font-size:15px">${LOG.length?tl.no_match:tl.no_log}</div>`;return;}
+  f.forEach(e=>{
+    const row=document.createElement('div');row.className='log-row';
+    const genreTxt=(e.genres||[]).map(g=>genreLabel(g)).join('/');
+    const perspTxt=e.perspective?perspLabel(e.perspective):'';
+    row.innerHTML=`<div class="log-bar" style="background:linear-gradient(180deg,${sc(e.finalScore)},${sc(e.finalScore)}44)"></div>
+      <div style="min-width:46px;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:${sc(e.finalScore)};text-align:center">${e.finalScore}</div>
+      <div class="log-info"><div class="log-title">${e.title}</div>
+        <div class="log-meta">${e.platform}${genreTxt?' · '+genreTxt:''}${perspTxt?' · <span style="color:#a78bfa">'+perspTxt+'</span>':''}${e.recommend!=null?' · '+(e.recommend?'✅':'❌'):''}</div></div>`;
+    row.onclick=()=>goDetail(e);list.appendChild(row);
+  });
+}
+
+// ─── MINE ─────────────────────────────────────────────────────────────────────
+function renderMine(){
+  const el=document.getElementById('page-mine');el.innerHTML='';const tl=t();
+  // topbar shows logo (no back)
+  document.getElementById('tb-left').innerHTML=`<div class="tb-logo">B<span>T</span></div>`;
+  document.getElementById('tb-center').innerHTML='';document.getElementById('tb-right').innerHTML='';
+  const wrap=document.createElement('div');wrap.style.padding='16px 16px 0';
+  const addBtn=document.createElement('button');addBtn.className='btn btn-primary';addBtn.style.marginBottom='12px';addBtn.textContent=tl.add;addBtn.onclick=startNew;
+  wrap.appendChild(addBtn);
+  const ioRow=document.createElement('div');ioRow.className='mine-io';
+  const expB=document.createElement('button');expB.className='io-btn';expB.innerHTML=tl.exp;expB.onclick=doExport;
+  const impB=document.createElement('button');impB.className='io-btn';impB.innerHTML=tl.imp;impB.onclick=doImport;
+  ioRow.append(expB,impB);wrap.appendChild(ioRow);el.appendChild(wrap);
+  const sw=document.createElement('div');sw.className='search-wrap';
+  const si=document.createElement('input');si.placeholder='Search my ratings…';si.addEventListener('input',e=>renderMineList(e.target.value,list));
+  sw.appendChild(si);el.appendChild(sw);
+  const list=document.createElement('div');list.style.padding='0 16px';el.appendChild(list);
+  renderMineList('',list);
+}
+function renderMineList(q,list){
+  const tl=t();list.innerHTML='';
+  const f=MINE.filter(e=>e.title.toLowerCase().includes(q.toLowerCase()));
+  if(!f.length){list.innerHTML=`<div style="text-align:center;padding:40px 0;color:var(--muted);font-size:15px">${MINE.length?tl.no_match:tl.no_mine}</div>`;return;}
+  f.forEach(e=>{
+    const row=document.createElement('div');row.className='log-row';
+    row.innerHTML=`<div class="log-bar" style="background:linear-gradient(180deg,${sc(e.finalScore)},${sc(e.finalScore)}44)"></div>
+      <div style="min-width:46px;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:${sc(e.finalScore)};text-align:center">${e.finalScore}</div>
+      <div class="log-info"><div class="log-title">${e.title}</div>
+        <div class="log-meta">${e.platform}${e.genres?.length?' · '+e.genres.join('/'):''}${e.recommend!=null?' · '+(e.recommend?'✅':'❌'):''}</div></div>`;
+    row.onclick=()=>goMineDetail(e);list.appendChild(row);
+  });
+}
+
+// ─── DETAIL (LOG — read only) ─────────────────────────────────────────────────
+function renderDetail(){
+  const e=detailE;if(!e)return;
+  const el=document.getElementById('page-detail');el.innerHTML='';
+  const ac=CATS.filter(c=>c!=='multiplayer'||e.hasMP);
+  el.appendChild(buildHero(e));
+  buildCatGrid(el,e,ac);
+  if(e.verdict){const v=document.createElement('div');v.style.padding='0 16px 16px';v.innerHTML=`<div class="card"><div class="lbl">VERDICT</div><div style="font-family:'Rajdhani',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.5">${e.verdict}</div></div>`;el.appendChild(v);}
+}
+
+// ─── MINE DETAIL (editable) ───────────────────────────────────────────────────
+function renderMineDetail(){
+  const e=mineDE;if(!e)return;const tl=t();
+  const el=document.getElementById('page-minedetail');el.innerHTML='';
+  const ac=CATS.filter(c=>c!=='multiplayer'||e.hasMP);
+  el.appendChild(buildHero(e));
+  buildCatGrid(el,e,ac);
+  if(e.verdict){const v=document.createElement('div');v.style.padding='0 16px 16px';v.innerHTML=`<div class="card"><div class="lbl">${tl.verdict}</div><div style="font-family:'Rajdhani',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.5">${e.verdict}</div></div>`;el.appendChild(v);}
+  const btns=document.createElement('div');btns.style.padding='0 16px 16px';btns.className='btn-row';
+  const eb=document.createElement('button');eb.className='btn btn-primary';eb.textContent=tl.edit_r;eb.onclick=()=>editMineEntry(e.id);
+  const db=document.createElement('button');db.className='btn btn-ghost';db.textContent='🗑 '+tl.del;db.onclick=()=>{if(confirm('Remove?')){MINE=MINE.filter(x=>x.id!==e.id);saveMine();goMine();}};
+  btns.append(eb,db);el.appendChild(btns);
+}
+function editMineEntry(id){
+  const e=MINE.find(x=>x.id===id);if(!e)return;
+  sess={editId:e.id,step:'info',title:e.title,platform:e.platform,date:e.date||'',playTime:e.playTime||'',perspective:e.perspective||'',hasMP:e.hasMP||false,genres:[...(e.genres||[])],gw:{...(e.gw||{})},fw:{...(e.fw||{})},subs:JSON.parse(JSON.stringify(e.subs||{})),notes:{...(e.notes||{})},verdict:e.verdict||'',recommend:e.recommend??null};
+  renderRate();showPage('rate','EDITING',true);setNav('mine');
+}
+
+// ─── SHARED DETAIL COMPONENTS ─────────────────────────────────────────────────
+function buildHero(e){
+  const hero=document.createElement('div');hero.className='detail-hero';
+  hero.innerHTML=`<div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">${e.platform}${e.date?' // '+e.date:''}</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">${e.title}</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between">
+      <div><div class="score-glow" style="font-family:'Orbitron',sans-serif;font-size:56px;font-weight:900;color:${sc(e.finalScore)};line-height:1">${e.finalScore}</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:${sc(e.finalScore)};margin-top:4px;font-weight:700">${slbl(e.finalScore)}</div></div>
+      <div style="text-align:right">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">${(e.genres||[]).map(g=>`<span style="font-size:10px;background:rgba(255,45,107,.12);color:rgba(255,107,138,.9);padding:3px 8px;border-radius:4px;border:1px solid rgba(255,45,107,.3);font-family:'Rajdhani',sans-serif;font-weight:700">${g}</span>`).join('')}</div>
+        ${e.perspective?`<span style="font-size:10px;background:rgba(167,139,250,.12);color:#c4b5fd;padding:3px 8px;border-radius:4px;border:1px solid rgba(167,139,250,.3);font-family:'Rajdhani',sans-serif;font-weight:700;display:inline-block;margin-bottom:6px">${e.perspective}</span>`:''}
+        ${e.recommend!=null?`<div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:${e.recommend?'#4ade80':'#ff4d6d'}">${e.recommend?'✅ Rec':'❌ No'}</div>`:''}</div>
+    </div>`;
+  return hero;
+}
+// ─── CAT ZOOM POPUP ───────────────────────────────────────────────────────────
+function openCatPopup(cat,cs,w,m,subs,note){
+  const tl=t();
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(10px);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px';
+  ov.onclick=ev=>{if(ev.target===ov)document.body.removeChild(ov);};
+  const box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border-radius:16px;width:100%;max-width:400px;overflow:hidden;position:relative;border:1px solid '+m.color+'44;max-height:85vh;display:flex;flex-direction:column';
+  // top bar
+  const topBar=document.createElement('div');topBar.style.cssText='height:3px;background:linear-gradient(90deg,'+m.color+','+m.color+'44,transparent);flex-shrink:0';
+  box.appendChild(topBar);
+  // close
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='×';closeBtn.style.cssText='position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1;padding:2px 8px;z-index:1';
+  closeBtn.onclick=()=>document.body.removeChild(ov);
+  box.appendChild(closeBtn);
+  // header
+  const hdr=document.createElement('div');hdr.style.cssText='padding:18px 20px 12px;flex-shrink:0';
+  const catNameEl=document.createElement('div');catNameEl.style.cssText='font-size:9px;letter-spacing:3px;margin-bottom:6px;opacity:.8;color:'+m.color;catNameEl.textContent=m.icon+' '+m.label.toUpperCase();
+  const scoreRow=document.createElement('div');scoreRow.style.cssText='display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px';
+  const bigScore=document.createElement('div');bigScore.style.cssText='font-size:44px;font-weight:900;line-height:1;color:'+sc(cs)+';filter:drop-shadow(0 0 10px '+sc(cs)+'88)';bigScore.textContent=cs;
+  const metaRight=document.createElement('div');metaRight.style.cssText='text-align:right';
+  const scoreLbl=document.createElement('div');scoreLbl.style.cssText='font-size:13px;font-weight:700;margin-bottom:3px;color:'+sc(cs);scoreLbl.textContent=slbl(cs);
+  const wLbl=document.createElement('div');wLbl.style.cssText='font-size:10px;color:var(--muted)';wLbl.textContent='weight: '+w+'%';
+  const ptsLbl=document.createElement('div');ptsLbl.style.cssText='font-size:10px;color:'+m.color+'88';ptsLbl.textContent='+'+(cs*w/100).toFixed(2)+' pts';
+  metaRight.append(scoreLbl,wLbl,ptsLbl);scoreRow.append(bigScore,metaRight);
+  const track=document.createElement('div');track.style.cssText='height:3px;background:rgba(255,255,255,.05);border-radius:2px';
+  const fill=document.createElement('div');fill.style.cssText='height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.8';
+  track.appendChild(fill);
+  hdr.append(catNameEl,scoreRow,track);
+  box.appendChild(hdr);
+  // subs (scrollable)
+  const body=document.createElement('div');body.style.cssText='padding:4px 20px 16px;overflow-y:auto;flex:1';
+  subs.forEach(s=>{
+    const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)';
+    const name=document.createElement('span');name.style.cssText='font-size:14px;font-weight:600;color:#c0c0d8;flex:1';name.textContent=s.name||'—';
+    const mini=document.createElement('div');mini.style.cssText='width:40px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;flex-shrink:0';
+    const miniFill=document.createElement('div');miniFill.style.cssText='height:100%;width:'+s.score*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+    mini.appendChild(miniFill);
+    const score=document.createElement('span');score.style.cssText='font-size:15px;font-weight:700;color:'+sc(s.score)+';flex-shrink:0;min-width:22px;text-align:right';score.textContent=s.score;
+    row.append(name,mini,score);body.appendChild(row);
+  });
+  if(note){
+    const nd=document.createElement('div');nd.style.cssText='font-size:13px;color:#7070a0;font-style:italic;margin-top:12px;padding:10px 12px;background:rgba(255,255,255,.02);border-radius:8px;border-left:2px solid '+m.color+'44;line-height:1.5';
+    nd.textContent='"'+note+'"';body.appendChild(nd);
+  }
+  box.appendChild(body);ov.appendChild(box);document.body.appendChild(ov);
+}
+
+function buildCatGrid(container,e,ac){
+  const grid=document.createElement('div');grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 16px';
+  ac.forEach(cat=>{
+    const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;
+    const w=(e.fw||{})[cat]||0;const m=CAT_META[cat];const note=(e.notes||{})[cat]||'';
+    const c=document.createElement('div');c.className='cat-mini';c.style.cursor='pointer';
+    // top accent line
+    const tl2=document.createElement('div');tl2.style.cssText='position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)';c.appendChild(tl2);
+    // summary (always visible)
+    const summary=document.createElement('div');
+    summary.innerHTML=`<div style="font-size:7px;color:${m.color};letter-spacing:1px;margin-bottom:6px;padding-top:4px">${m.icon} ${m.label.toUpperCase()}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div style="font-size:20px;font-weight:900;color:${sc(cs)}">${cs}</div>
+        <div style="font-size:8px;color:var(--muted)">w:${w}%</div>
+      </div>
+      <div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin:6px 0">
+        <div style="height:100%;width:${cs*10}%;background:${m.color};border-radius:1px;opacity:.7"></div>
+      </div>
+      ${subs.length||note?'<div style="font-size:7px;color:var(--muted);letter-spacing:1px;opacity:.6;margin-top:2px">TAP ›</div>':''}`;
+    c.appendChild(summary);
+    c.onclick=()=>openCatPopup(cat,cs,w,m,subs,note);
+    grid.appendChild(c);
+  });
+  container.appendChild(grid);
+}
+
+
+// ─── WIZARD ───────────────────────────────────────────────────────────────────
+function renderRate(){document.getElementById('page-rate').innerHTML='<div class="pad" id="rate-body"></div>';renderStep();}
+function renderStep(){
+  const body=document.getElementById('rate-body');if(!body)return;body.innerHTML='';
+  const steps=['info','genre','rate','result'];const si=steps.indexOf(sess.step);
+  const stepsEl=document.createElement('div');stepsEl.className='steps';
+  steps.forEach((s,i)=>{const d=document.createElement('div');d.className='sdot';if(i<si)d.classList.add('done');else if(i===si)d.classList.add('active');d.textContent=i+1;stepsEl.appendChild(d);if(i<3){const l=document.createElement('div');l.className='sline';if(i<si)l.classList.add('done');stepsEl.appendChild(l);}});
   document.getElementById('tb-center').innerHTML='';document.getElementById('tb-center').appendChild(stepsEl);
   if(sess.step==='info')   renderInfo(body);
   if(sess.step==='genre')  renderGenre(body);
@@ -543,196 +658,145 @@ function renderStep(){
 function setStep(s){sess.step=s;document.getElementById('content').scrollTop=0;renderStep();}
 
 function renderInfo(body){
-  body.innerHTML='<div class="stag">// STEP 01</div><div class="stitle">GAME INFO</div><div style="height:16px"></div>';
-  fld(body,'GAME TITLE *',inp('text',sess.title,'e.g. Resident Evil 4',v=>sess.title=v,true));
-  const pSel=document.createElement('select');
-  pSel.innerHTML='<option value="">Select platform...</option>'+PLATFORMS.map(p=>'<option value="'+p+'"'+(sess.platform===p?' selected':'')+'>'+p+'</option>').join('');
-  pSel.onchange=e=>sess.platform=e.target.value;fld(body,'PLATFORM *',pSel);
-  const row=document.createElement('div');row.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:10px';
-  const dWrap=document.createElement('div');dWrap.innerHTML='<div class="lbl">DATE PLAYED</div>';dWrap.appendChild(inp('date',sess.date,'',v=>sess.date=v));
-  const ptWrap=document.createElement('div');ptWrap.innerHTML='<div class="lbl">PLAY TIME (HRS)</div>';ptWrap.appendChild(inp('number',sess.playTime,'e.g. 20',v=>sess.playTime=v));
-  row.append(dWrap,ptWrap);body.appendChild(row);body.appendChild(document.createElement('div')).style.height='14px';
-  const perSel=document.createElement('select');
-  perSel.innerHTML='<option value="">Perspective...</option>'+PERSPECTIVES.map(p=>'<option value="'+p+'"'+(sess.perspective===p?' selected':'')+'>'+perspLabel(p)+'</option>').join('');
-  perSel.onchange=e=>sess.perspective=e.target.value;fld(body,'PERSPECTIVE',perSel);
-  const mpDiv=document.createElement('div');mpDiv.innerHTML='<div class="lbl">MULTIPLAYER?</div>';
-  const mpRow=document.createElement('div');mpRow.style='display:flex;gap:8px';
-  ['Yes','No'].forEach(v=>{
-    const b=document.createElement('button');b.className='tbtn'+(sess.hasMP===(v==='Yes')?' on':'');
-    b.textContent=v;b.onclick=()=>{sess.hasMP=v==='Yes';renderStep();};mpRow.appendChild(b);
-  });
-  mpDiv.appendChild(mpRow);body.appendChild(mpDiv);
-  body.appendChild(document.createElement('div')).className='div';
-  const nb=document.createElement('button');nb.className='btn btn-primary';nb.textContent='NEXT →';
-  nb.onclick=()=>{if(!sess.title||!sess.platform)return toast('Fill in title and platform.');initSubs();setStep('genre');};
-  body.appendChild(nb);
+  const tl=t();
+  body.innerHTML=`<div class="stag">// STEP 01</div><div class="stitle">${tl.step1}</div><div style="height:16px"></div>`;
+  fld(body,'GAME TITLE *',mkInp('text',sess.title,'e.g. Resident Evil 4',v=>sess.title=v,true));
+  const ps=document.createElement('select');ps.innerHTML='<option value="">Select platform...</option>'+PLATFORMS.map(p=>`<option value="${p}"${sess.platform===p?' selected':''}>${p}</option>`).join('');ps.onchange=e=>sess.platform=e.target.value;fld(body,'PLATFORM *',ps);
+  const row=document.createElement('div');row.style='display:grid;grid-template-columns:1fr 1fr;gap:10px';
+  const dw=document.createElement('div');dw.innerHTML='<div class="lbl">DATE</div>';dw.appendChild(mkInp('date',sess.date,'',v=>sess.date=v));
+  const pw=document.createElement('div');pw.innerHTML='<div class="lbl">HOURS</div>';pw.appendChild(mkInp('number',sess.playTime,'20',v=>sess.playTime=v));
+  row.append(dw,pw);body.appendChild(row);const sp=document.createElement('div');sp.style.height='14px';body.appendChild(sp);
+  const perS=document.createElement('select');perS.innerHTML='<option value="">Perspective...</option>'+["First-Person","Third-Person","Top-Down","Side-Scroller","Isometric","2.5D","Mixed"].map(p=>`<option value="${p}"${sess.perspective===p?' selected':''}>${p}</option>`).join('');perS.onchange=e=>sess.perspective=e.target.value;fld(body,'PERSPECTIVE',perS);
+  const mpD=document.createElement('div');mpD.innerHTML='<div class="lbl">MULTIPLAYER?</div>';const mpR=document.createElement('div');mpR.style='display:flex;gap:8px';
+  ['Yes','No'].forEach(v=>{const b=document.createElement('button');b.className='tbtn'+(sess.hasMP===(v==='Yes')?' on':'');b.textContent=v;b.onclick=()=>{sess.hasMP=v==='Yes';renderStep();};mpR.appendChild(b);});
+  mpD.appendChild(mpR);body.appendChild(mpD);
+  const div=document.createElement('div');div.className='div';body.appendChild(div);
+  const nb=document.createElement('button');nb.className='btn btn-primary';nb.textContent=tl.nxt;nb.onclick=()=>{if(!sess.title||!sess.platform)return toast('Fill title & platform.');initSubs();setStep('genre');};body.appendChild(nb);
 }
 
 function renderGenre(body){
-  body.innerHTML='<div class="stag">// STEP 02</div><div class="stitle">GENRES</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:var(--muted);margin-bottom:16px">Pick up to 3. Weights auto-balance.</div>';
+  const tl=t();
+  body.innerHTML=`<div class="stag">// STEP 02</div><div class="stitle">${tl.step2}</div><div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:var(--muted);margin-bottom:16px">Pick up to 3. Weights auto-balance.</div>`;
   const chips=document.createElement('div');chips.style.marginBottom='20px';
-  Object.keys(GENRES).forEach(g=>{
-    const c=document.createElement('span');c.className='chip'+(sess.genres.includes(g)?' on':'');
-    c.textContent=genreLabel(g);c.onclick=()=>{toggleGenre(g);renderStep();};chips.appendChild(c);
-  });
+  Object.keys(GENRES).forEach(g=>{const c=document.createElement('span');c.className='chip'+(sess.genres.includes(g)?' on':'');c.textContent=g;c.onclick=()=>{toggleGenre(g);renderStep();};chips.appendChild(c);});
   body.appendChild(chips);
   if(sess.genres.length>1){
     const card=document.createElement('div');card.className='card';card.style.marginBottom='16px';
-    const cardHeader=document.createElement('div');cardHeader.style='display:flex;justify-content:space-between;align-items:center;margin-bottom:14px';
-    const hLbl=document.createElement('div');hLbl.className='lbl';hLbl.style.marginBottom='0';hLbl.textContent='DOMINANCE';
-    const totEl=document.createElement('div');totEl.style='font-family:"Share Tech Mono",monospace;font-size:12px;font-weight:700';
-    cardHeader.append(hLbl,totEl);card.appendChild(cardHeader);
-    function buildSliders(){
+    const ch=document.createElement('div');ch.style='display:flex;justify-content:space-between;align-items:center;margin-bottom:14px';
+    const hl=document.createElement('div');hl.className='lbl';hl.style.marginBottom='0';hl.textContent='DOMINANCE';
+    const tot=document.createElement('div');tot.style='font-family:"Share Tech Mono",monospace;font-size:12px;font-weight:700';
+    ch.append(hl,tot);card.appendChild(ch);
+    function buildDom(){
       while(card.children.length>1)card.removeChild(card.lastChild);
-      const tw=Object.values(sess.gw).reduce((a,b)=>a+b,0);
-      totEl.style.color=tw===100?'#4ade80':'#ff4d6d';totEl.textContent=tw+' / 100%';
+      const tw=Object.values(sess.gw).reduce((a,b)=>a+b,0);tot.style.color=tw===100?'#4ade80':'#ff4d6d';tot.textContent=tw+' / 100%';
       sess.genres.forEach(g=>{
-        const gDiv=document.createElement('div');gDiv.style.marginBottom='14px';
+        const gd=document.createElement('div');gd.style.marginBottom='14px';
         const gh=document.createElement('div');gh.style='display:flex;justify-content:space-between;margin-bottom:6px';
-        const gn=document.createElement('span');gn.style='font-family:"Rajdhani",sans-serif;font-size:14px;color:#c0c0d8;font-weight:700';gn.textContent=genreLabel(g);
+        const gn=document.createElement('span');gn.style='font-family:"Rajdhani",sans-serif;font-size:14px;color:#c0c0d8;font-weight:700';gn.textContent=g;
         const gv=document.createElement('span');gv.dataset.gwFor=g;gv.style='font-family:"Share Tech Mono",monospace;font-size:12px;color:var(--accent);font-weight:700';gv.textContent=(sess.gw[g]||0)+'%';
-        gh.append(gn,gv);gDiv.appendChild(gh);
-        const si=percentSlider(sess.gw[g]||0,(v,self)=>{
-          adjWeight(g,v);
-          sess.genres.forEach(og=>{
-            if(og===g)return;
-            const oInp=card.querySelector('[data-gfor="'+og+'"]');
-            const oVal=card.querySelector('[data-gw-for="'+og+'"]');
-            if(oInp){oInp.value=sess.gw[og]||0;setFill(oInp,sess.gw[og]||0);}
-            if(oVal)oVal.textContent=(sess.gw[og]||0)+'%';
-          });
-          gv.textContent=v+'%';
-          const tw2=Object.values(sess.gw).reduce((a,b)=>a+b,0);
-          totEl.style.color=tw2===100?'#4ade80':'#ff4d6d';totEl.textContent=tw2+' / 100%';
-          renderFWSection();
-        });
-        si.dataset.gfor=g;gv.dataset.gwFor=g;
-        gDiv.appendChild(si);card.appendChild(gDiv);
+        gh.append(gn,gv);gd.appendChild(gh);
+        const sl=pctSlider(sess.gw[g]||0,(v)=>{adjWeight(g,v);sess.genres.forEach(og=>{if(og===g)return;const oi=card.querySelector(`[data-gfor="${og}"]`);const ov=card.querySelector(`[data-gw-for="${og}"]`);if(oi){oi.value=sess.gw[og]||0;setFill(oi,sess.gw[og]||0);}if(ov)ov.textContent=(sess.gw[og]||0)+'%';});gv.textContent=v+'%';const tw2=Object.values(sess.gw).reduce((a,b)=>a+b,0);tot.style.color=tw2===100?'#4ade80':'#ff4d6d';tot.textContent=tw2+' / 100%';renderFW();});
+        sl.dataset.gfor=g;gv.dataset.gwFor=g;gd.appendChild(sl);card.appendChild(gd);
       });
     }
-    buildSliders();body.appendChild(card);
+    buildDom();body.appendChild(card);
   }
-  renderFWSection(body);
-  body.appendChild(document.createElement('div')).className='div';
-  const btnRow=document.createElement('div');btnRow.className='btn-row';
-  const bk=document.createElement('button');bk.className='btn btn-ghost';bk.textContent='← BACK';bk.onclick=()=>setStep('info');
-  const nx=document.createElement('button');nx.className='btn btn-primary';nx.textContent='NEXT →';
-  nx.onclick=()=>{if(!sess.genres.length)return toast('Pick at least 1 genre.');setStep('rate');};
-  btnRow.append(bk,nx);body.appendChild(btnRow);
+  renderFW(body);
+  const div=document.createElement('div');div.className='div';body.appendChild(div);
+  const br=document.createElement('div');br.className='btn-row';
+  const bk=document.createElement('button');bk.className='btn btn-ghost';bk.textContent=tl.bk;bk.onclick=()=>setStep('info');
+  const nx=document.createElement('button');nx.className='btn btn-primary';nx.textContent=tl.nxt;nx.onclick=()=>{if(!sess.genres.length)return toast('Pick at least 1 genre.');setStep('rate');};
+  br.append(bk,nx);body.appendChild(br);
 }
-function renderFWSection(body){
-  let sec=document.getElementById('fw-section');
-  if(!sec){if(!body)return;sec=document.createElement('div');sec.id='fw-section';body.appendChild(sec);}
+function renderFW(body){
+  let sec=document.getElementById('fw-sec');if(!sec){if(!body)return;sec=document.createElement('div');sec.id='fw-sec';body.appendChild(sec);}
   if(!sess.genres.length||!Object.keys(sess.fw).length){sec.innerHTML='';return;}
   const ac=aCats();
-  sec.innerHTML='<div class="card" style="margin-bottom:16px"><div class="lbl">COMPUTED WEIGHTS</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">'+ac.map(c=>'<div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg4);border-radius:6px;padding:6px 10px;border-left:2px solid '+CAT_META[c].color+'44"><span style="font-family:\'Rajdhani\',sans-serif;font-size:11px;color:var(--muted)">'+CAT_META[c].icon+' '+CAT_META[c].label+'</span><span style="font-family:\'Share Tech Mono\',monospace;font-size:11px;color:'+CAT_META[c].color+';font-weight:700">'+(sess.fw[c]||0)+'%</span></div>').join('')+'</div></div>';
+  sec.innerHTML=`<div class="card" style="margin-bottom:16px"><div class="lbl">COMPUTED WEIGHTS</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">${ac.map(c=>`<div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg4);border-radius:6px;padding:6px 10px;border-left:2px solid ${CAT_META[c].color}44"><span style="font-family:'Rajdhani',sans-serif;font-size:11px;color:var(--muted)">${CAT_META[c].icon} ${CAT_META[c].label}</span><span style="font-family:'Share Tech Mono',monospace;font-size:11px;color:${CAT_META[c].color};font-weight:700">${sess.fw[c]||0}%</span></div>`).join('')}</div></div>`;
 }
 
 function renderRateStep(body){
-  body.innerHTML='<div class="stag">// STEP 03</div><div class="stitle">RATE IT</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:var(--muted);margin-bottom:16px">Sub-scores average into each category.</div>';
+  const tl=t();
+  body.innerHTML=`<div class="stag">// STEP 03</div><div class="stitle">${tl.step3}</div><div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:var(--muted);margin-bottom:16px">Sub-scores average into each category.</div>`;
   aCats().forEach(cat=>body.appendChild(makeCatCard(cat)));
-  const vc=document.createElement('div');vc.className='card';vc.style.marginBottom='16px';
-  vc.innerHTML='<div class="lbl">PERSONAL VERDICT</div>';
-  const vta=document.createElement('textarea');vta.value=sess.verdict;vta.placeholder='Final thoughts…';vta.oninput=e=>sess.verdict=e.target.value;
-  vc.appendChild(vta);
-  const recDiv=document.createElement('div');recDiv.style.marginTop='12px';recDiv.innerHTML='<div class="lbl">RECOMMEND?</div>';
-  const recRow=document.createElement('div');recRow.style='display:flex;gap:8px';
-  [['✅ Yes',true],['❌ No',false]].forEach(([lbl,v])=>{
-    const b=document.createElement('button');b.className='tbtn'+(sess.recommend===v?' on':'');
-    b.textContent=lbl;b.onclick=()=>{sess.recommend=v;renderStep();};recRow.appendChild(b);
-  });
-  recDiv.appendChild(recRow);vc.appendChild(recDiv);body.appendChild(vc);
-  body.appendChild(document.createElement('div')).className='div';
-  const btnRow=document.createElement('div');btnRow.className='btn-row';
-  const bk=document.createElement('button');bk.className='btn btn-ghost';bk.textContent='← BACK';bk.onclick=()=>setStep('genre');
+  const vc=document.createElement('div');vc.className='card';vc.style.marginBottom='16px';vc.innerHTML=`<div class="lbl">${tl.verdict}</div>`;
+  const vta=document.createElement('textarea');vta.value=sess.verdict;vta.placeholder='Final thoughts…';vta.oninput=e=>sess.verdict=e.target.value;vc.appendChild(vta);
+  const rd=document.createElement('div');rd.style.marginTop='12px';rd.innerHTML=`<div class="lbl">${tl.recommend}</div>`;
+  const rr=document.createElement('div');rr.style='display:flex;gap:8px';
+  [[tl.yes,true],[tl.no,false]].forEach(([lbl,v])=>{const b=document.createElement('button');b.className='tbtn'+(sess.recommend===v?' on':'');b.textContent=lbl;b.onclick=()=>{sess.recommend=v;renderStep();};rr.appendChild(b);});
+  rd.appendChild(rr);vc.appendChild(rd);body.appendChild(vc);
+  const div=document.createElement('div');div.className='div';body.appendChild(div);
+  const br=document.createElement('div');br.className='btn-row';
+  const bk=document.createElement('button');bk.className='btn btn-ghost';bk.textContent=tl.bk;bk.onclick=()=>setStep('genre');
   const nx=document.createElement('button');nx.className='btn btn-primary';nx.textContent='RESULTS →';nx.onclick=()=>setStep('result');
-  btnRow.append(bk,nx);body.appendChild(btnRow);
+  br.append(bk,nx);body.appendChild(br);
 }
 function makeCatCard(cat){
   const m=CAT_META[cat];const subs=sess.subs[cat]||[];const cs=catScore(cat);
-  const card=document.createElement('div');card.className='card';card.style.cssText='margin-bottom:14px;position:relative;overflow:hidden;padding-top:18px';
-  const topBar=document.createElement('div');topBar.style.cssText='position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)';
+  const card=document.createElement('div');card.className='card';card.style='margin-bottom:14px;position:relative;overflow:hidden;padding-top:18px';
+  const tb=document.createElement('div');tb.style=`position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${m.color},transparent)`;
   const hdr=document.createElement('div');hdr.style='display:flex;justify-content:space-between;align-items:center;margin-bottom:12px';
-  hdr.innerHTML='<div style="font-family:\'Orbitron\',sans-serif;font-size:10px;color:'+m.color+';font-weight:700;letter-spacing:1px">'+m.icon+' '+m.label.toUpperCase()+'</div><div id="cs-'+cat+'" style="font-family:\'Orbitron\',sans-serif;font-size:22px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div>';
-  card.append(topBar,hdr);
-  const barWrap=document.createElement('div');barWrap.style='height:3px;background:rgba(255,255,255,.05);border-radius:2px;margin-bottom:14px';
-  const barFill=document.createElement('div');barFill.id='bar-'+cat;barFill.style.cssText='height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
-  barWrap.appendChild(barFill);card.appendChild(barWrap);
-  const subsWrap=document.createElement('div');subsWrap.id='subs-'+cat;
-  subs.forEach((sub,idx)=>subsWrap.appendChild(makeSubRow(cat,idx,sub,m.color)));
-  card.appendChild(subsWrap);
-  const addBtn=document.createElement('button');addBtn.className='add-sub-btn';addBtn.textContent='+ Add Sub-Category';
-  addBtn.onclick=()=>{sess.subs[cat].push({name:'New Sub-Category',score:5});subsWrap.appendChild(makeSubRow(cat,sess.subs[cat].length-1,sess.subs[cat].at(-1),m.color));};
-  card.appendChild(addBtn);
-  const nta=document.createElement('textarea');nta.value=sess.notes[cat]||'';nta.placeholder='Notes on '+m.label.toLowerCase()+'…';nta.style.cssText='margin-top:10px;font-size:13px;min-height:44px';nta.oninput=e=>sess.notes[cat]=e.target.value;
-  card.appendChild(nta);
+  hdr.innerHTML=`<div style="font-family:'Orbitron',sans-serif;font-size:10px;color:${m.color};font-weight:700;letter-spacing:1px">${m.icon} ${m.label.toUpperCase()}</div><div id="cs-${cat}" style="font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;color:${sc(cs)}">${cs}</div>`;
+  card.append(tb,hdr);
+  const bw=document.createElement('div');bw.style='height:3px;background:rgba(255,255,255,.05);border-radius:2px;margin-bottom:14px';
+  const bf=document.createElement('div');bf.id='bar-'+cat;bf.style=`height:100%;width:${cs*10}%;background:${m.color};border-radius:2px;opacity:.7`;
+  bw.appendChild(bf);card.appendChild(bw);
+  const sw=document.createElement('div');sw.id='subs-'+cat;
+  subs.forEach((sub,idx)=>sw.appendChild(makeSubRow(cat,idx,sub,m.color)));card.appendChild(sw);
+  const addB=document.createElement('button');addB.className='add-sub-btn';addB.textContent='+ Add Sub-Category';addB.onclick=()=>{sess.subs[cat].push({name:'New Sub-Category',score:5});sw.appendChild(makeSubRow(cat,sess.subs[cat].length-1,sess.subs[cat].at(-1),m.color));};card.appendChild(addB);
+  const nta=document.createElement('textarea');nta.value=sess.notes[cat]||'';nta.placeholder=`Notes on ${m.label.toLowerCase()}…`;nta.style='margin-top:10px;font-size:13px;min-height:44px';nta.oninput=e=>sess.notes[cat]=e.target.value;card.appendChild(nta);
   return card;
 }
 function makeSubRow(cat,idx,sub,color){
   const row=document.createElement('div');row.className='sub-row';
   const nr=document.createElement('div');nr.className='sub-name-row';
   const dot=document.createElement('div');dot.className='sub-dot';dot.style.background=color;
-  const ni=document.createElement('input');ni.value=sub.name;ni.style.cssText='flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);border-radius:0;padding:2px 0;font-size:14px;color:#c0c0d8;font-weight:600';
-  ni.oninput=e=>sess.subs[cat][idx].name=e.target.value;
-  const del=document.createElement('button');del.className='sub-del';del.textContent='×';
-  del.onclick=()=>{sess.subs[cat].splice(idx,1);const sw=document.getElementById('subs-'+cat);if(!sw)return;sw.innerHTML='';sess.subs[cat].forEach((s,i)=>sw.appendChild(makeSubRow(cat,i,s,color)));updCS(cat);};
-  nr.append(dot,ni,del);row.appendChild(nr);
-  row.appendChild(neonSlider(sub.score,color,v=>{sess.subs[cat][idx].score=v;updCS(cat);}));
-  return row;
+  const ni=document.createElement('input');ni.value=sub.name;ni.style='flex:1;background:transparent;border:none;border-bottom:1px solid var(--border);border-radius:0;padding:2px 0;font-size:14px;color:#c0c0d8;font-weight:600';ni.oninput=e=>sess.subs[cat][idx].name=e.target.value;
+  const del=document.createElement('button');del.className='sub-del';del.textContent='×';del.onclick=()=>{sess.subs[cat].splice(idx,1);const sw=document.getElementById('subs-'+cat);if(!sw)return;sw.innerHTML='';sess.subs[cat].forEach((s,i)=>sw.appendChild(makeSubRow(cat,i,s,color)));updCS(cat);};
+  nr.append(dot,ni,del);row.appendChild(nr);row.appendChild(neonSlider(sub.score,color,v=>{sess.subs[cat][idx].score=v;updCS(cat);}));return row;
 }
-function updCS(cat){
-  const cs=catScore(cat);const el=document.getElementById('cs-'+cat);const bar=document.getElementById('bar-'+cat);
-  if(el){el.textContent=cs;el.style.color=sc(cs);}if(bar)bar.style.width=cs*10+'%';
-}
+function updCS(cat){const cs=catScore(cat);const el2=document.getElementById('cs-'+cat);const bar=document.getElementById('bar-'+cat);if(el2){el2.textContent=cs;el2.style.color=sc(cs);}if(bar)bar.style.width=cs*10+'%';}
 
 function renderResult(body){
-  const fs=finalScore();const ac=aCats();
-  body.innerHTML='<div class="stag">// STEP 04</div><div class="stitle">RESULT</div>';
+  const fs=finalScore();const ac=aCats();const tl=t();
+  body.innerHTML=`<div class="stag">// STEP 04</div><div class="stitle">${tl.step4}</div>`;
   const hero=document.createElement('div');hero.className='result-hero';
-  hero.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">'+sess.platform+(sess.date?' // '+sess.date:'')+'</div><div style="font-family:\'Orbitron\',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">'+sess.title+'</div><div style="display:flex;align-items:flex-end;justify-content:space-between"><div><div class="score-glow" style="font-family:\'Orbitron\',sans-serif;font-size:56px;font-weight:900;color:'+sc(fs)+';line-height:1">'+fs.toFixed(2)+'</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:'+sc(fs)+';margin-top:4px;font-weight:700">'+slbl(fs)+'</div></div><div style="text-align:right"><div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">'+sess.genres.map(g=>'<span style="font-size:10px;background:rgba(255,45,107,.12);color:rgba(255,107,138,.9);padding:3px 8px;border-radius:4px;border:1px solid rgba(255,45,107,.3);font-family:\'Rajdhani\',sans-serif;font-weight:700">'+genreLabel(g)+'</span>').join('')+'</div>'+(sess.recommend!=null?'<div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;font-weight:700;color:'+(sess.recommend?'#4ade80':'#ff4d6d')+'">'+(sess.recommend?'✅ Rec':'❌ No')+'</div>':'')+'</div></div>';
+  hero.innerHTML=`<div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px">${sess.platform}${sess.date?' // '+sess.date:''}</div>
+    <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:#fff;margin-bottom:16px;line-height:1.2">${sess.title}</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between">
+      <div><div class="score-glow" style="font-family:'Orbitron',sans-serif;font-size:56px;font-weight:900;color:${sc(fs)};line-height:1">${fs.toFixed(2)}</div>
+        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:${sc(fs)};margin-top:4px;font-weight:700">${slbl(fs)}</div></div>
+      <div style="text-align:right">
+        <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;margin-bottom:6px">${sess.genres.map(g=>`<span style="font-size:10px;background:rgba(255,45,107,.12);color:rgba(255,107,138,.9);padding:3px 8px;border-radius:4px;border:1px solid rgba(255,45,107,.3);font-family:'Rajdhani',sans-serif;font-weight:700">${g}</span>`).join('')}</div>
+        ${sess.recommend!=null?`<div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:${sess.recommend?'#4ade80':'#ff4d6d'}">${sess.recommend?tl.yes:tl.no}</div>`:''}</div>
+    </div>`;
   body.appendChild(hero);
   const grid=document.createElement('div');grid.style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px';
-  ac.forEach(cat=>{
-    const cs=catScore(cat),w=sess.fw[cat]||0,m=CAT_META[cat];
-    const c=document.createElement('div');c.style.cssText='background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden';
-    c.innerHTML='<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)"></div><div style="font-family:\'Orbitron\',sans-serif;font-size:7px;color:'+m.color+';letter-spacing:1px;margin-bottom:6px;padding-top:4px">'+m.icon+' '+m.label.toUpperCase()+'</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:\'Orbitron\',sans-serif;font-size:20px;font-weight:900;color:'+sc(cs)+'">'+cs+'</div><div style="text-align:right"><div style="font-family:\'Share Tech Mono\',monospace;font-size:8px;color:var(--muted)">w:'+w+'%</div><div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:'+m.color+'88">+'+(cs*w/100).toFixed(2)+'</div></div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin-top:8px"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:1px;opacity:.7"></div></div>';
-    grid.appendChild(c);
-  });
+  ac.forEach(cat=>{const cs=catScore(cat),w=sess.fw[cat]||0,m=CAT_META[cat];const c=document.createElement('div');c.style=`background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;position:relative;overflow:hidden`;c.innerHTML=`<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,${m.color},transparent)"></div><div style="font-family:'Orbitron',sans-serif;font-size:7px;color:${m.color};letter-spacing:1px;margin-bottom:6px;padding-top:4px">${m.icon} ${m.label.toUpperCase()}</div><div style="display:flex;justify-content:space-between;align-items:flex-end"><div style="font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:${sc(cs)}">${cs}</div><div style="text-align:right"><div style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted)">w:${w}%</div><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:${m.color}88">+${(cs*w/100).toFixed(2)}</div></div></div><div style="height:2px;background:rgba(255,255,255,.05);border-radius:1px;margin-top:8px"><div style="height:100%;width:${cs*10}%;background:${m.color};border-radius:1px;opacity:.7"></div></div>`;grid.appendChild(c);});
   body.appendChild(grid);
-  if(sess.verdict){const vd=document.createElement('div');vd.className='card';vd.style.marginBottom='16px';vd.innerHTML='<div class="lbl">VERDICT</div><div style="font-family:\'Rajdhani\',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.5">'+sess.verdict+'</div>';body.appendChild(vd);}
-  body.appendChild(document.createElement('div')).className='div';
-  const btnRow=document.createElement('div');btnRow.className='btn-row';
+  if(sess.verdict){const vd=document.createElement('div');vd.className='card';vd.style.marginBottom='16px';vd.innerHTML=`<div class="lbl">${tl.verdict}</div><div style="font-family:'Rajdhani',sans-serif;font-size:14px;color:#c0c0d8;line-height:1.5">${sess.verdict}</div>`;body.appendChild(vd);}
+  const div=document.createElement('div');div.className='div';body.appendChild(div);
+  const br=document.createElement('div');br.className='btn-row';
   const bk=document.createElement('button');bk.className='btn btn-ghost';bk.textContent='← EDIT';bk.onclick=()=>setStep('rate');
-  const sv=document.createElement('button');sv.className='btn btn-primary';sv.textContent='💾 SAVE';sv.onclick=saveEntry;
-  btnRow.append(bk,sv);body.appendChild(btnRow);
+  const sv=document.createElement('button');sv.className='btn btn-primary';sv.textContent=tl.sv;sv.onclick=saveEntry;
+  br.append(bk,sv);body.appendChild(br);
 }
 
-// ─── SAVE TO LOCALSTORAGE ─────────────────────────────────────────────────────
 function saveEntry(){
   const fs=finalScore();
   const entry={id:sess.editId||Date.now(),savedAt:new Date().toISOString(),title:sess.title,platform:sess.platform,date:sess.date,playTime:sess.playTime,perspective:sess.perspective,hasMP:sess.hasMP,genres:[...sess.genres],gw:{...sess.gw},fw:{...sess.fw},subs:JSON.parse(JSON.stringify(sess.subs)),notes:{...sess.notes},verdict:sess.verdict,recommend:sess.recommend,finalScore:parseFloat(fs.toFixed(2))};
-  if(sess.editId)MINE=MINE.map(e=>String(e.id)===String(sess.editId)?entry:e);else MINE.unshift(entry);
+  if(sess.editId)MINE=MINE.map(e=>e.id===sess.editId?entry:e);else MINE.unshift(entry);
   saveMine();resetSess();toast('Saved!');goMine();
 }
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
-function fld(parent,label,inputEl){
-  const w=document.createElement('div');w.className='form-field';
-  w.innerHTML='<div class="lbl">'+label+'</div>';w.appendChild(inputEl);parent.appendChild(w);
-}
-function inp(type,val,placeholder,onChange,large){
-  const i=document.createElement('input');i.type=type;i.value=val;i.placeholder=placeholder;
-  if(large)i.style.cssText='font-size:18px;font-weight:700;padding:14px';
-  i.addEventListener('input',e=>onChange(e.target.value));return i;
-}
+function fld(parent,label,inputEl){const w=document.createElement('div');w.className='form-field';w.innerHTML=`<div class="lbl">${label}</div>`;w.appendChild(inputEl);parent.appendChild(w);}
+function mkInp(type,val,ph,onChange,large=false){const i=document.createElement('input');i.type=type;i.value=val;i.placeholder=ph;if(large)i.style='font-size:18px;font-weight:700;padding:14px';i.addEventListener('input',e=>onChange(e.target.value));return i;}
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
-console.log('Backlog Therapy v3 loaded ✓ — wizard ready');
 loadMine();
-const savedLang=localStorage.getItem('bt_lang')||'en';
-setLang(savedLang);
 loadLog();
-renderHome();
+console.log('Backlog Therapy v4 loaded ✓');
 </script>
 </body>
 </html>
