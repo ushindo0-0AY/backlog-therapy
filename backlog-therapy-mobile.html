@@ -182,6 +182,22 @@ const GENRES={"Action-Adventure":{gameplay:20,graphics:15,story:15,sound:10,perf
 const CATS=["gameplay","graphics","story","sound","performance","replayability","innovation","multiplayer","progression","immersion"];
 const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b",subs:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"]},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa",subs:["Art Direction","Technical Quality","Animation","Camera"]},story:{label:"Story",icon:"📖",color:"#34d399",subs:["Plot & Structure","Characters & Dialogue","Thematic Depth"]},sound:{label:"Sound",icon:"🎵",color:"#f59e0b",subs:["Score & Themes","Sound Effects","Voice Acting","Ambience"]},performance:{label:"Performance",icon:"⚡",color:"#38bdf8",subs:["Frame Rate","Load Times","Bug Count","Optimization"]},replayability:{label:"Replayability",icon:"🔄",color:"#fb923c",subs:["Post-Game Content","Branching Paths","Player Incentives"]},innovation:{label:"Innovation",icon:"💡",color:"#e879f9",subs:["Originality","Execution of Ideas","Genre Impact"]},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80",subs:["Server Stability","Balance","Matchmaking","Rewards"]},progression:{label:"Progression",icon:"📈",color:"#f472b6",subs:["Structure","Pacing","Balance","Integration"]},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9",subs:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]}};
 
+const SUB_LABELS={"en":{"gameplay":["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"],"graphics":["Art Direction","Technical Quality","Animation","Camera"],"story":["Plot & Structure","Characters & Dialogue","Thematic Depth"],"sound":["Score & Themes","Sound Effects","Voice Acting","Ambience"],"performance":["Frame Rate","Load Times","Bug Count","Optimization"],"replayability":["Post-Game Content","Branching Paths","Player Incentives"],"innovation":["Originality","Execution of Ideas","Genre Impact"],"multiplayer":["Server Stability","Balance","Matchmaking","Rewards"],"progression":["Structure","Pacing","Balance","Integration"],"immersion":["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]},"ar":{"gameplay":["التحكم والحركة","ميكانيكيات القتال","أنظمة اللعبة","الإيقاع والتغذية الراجعة"],"graphics":["التوجيه الفني","الجودة التقنية","الرسوم المتحركة","الكاميرا"],"story":["الحبكة والبنية","الشخصيات والحوار","العمق الفكري"],"sound":["الموسيقى والمقاطع","المؤثرات الصوتية","التمثيل الصوتي","الأصوات المحيطة"],"performance":["معدل الإطارات","أوقات التحميل","عدد الأخطاء","التحسين"],"replayability":["محتوى ما بعد اللعبة","المسارات المتفرعة","حوافز اللاعب"],"innovation":["الأصالة","تنفيذ الأفكار","التأثير على النوع"],"multiplayer":["استقرار الخوادم","التوازن","نظام المباريات","المكافآت"],"progression":["البنية","الإيقاع","التوازن","التكامل"],"immersion":["بناء العالم","اتساق النبرة","التفاعل العاطفي","الواجهة والـ HUD"]},"fr":{"gameplay":["Contrôles & Déplacements","Mécaniques de Combat","Systèmes de Jeu","Rythme & Feedback"],"graphics":["Direction Artistique","Qualité Technique","Animation","Caméra"],"story":["Intrigue & Structure","Personnages & Dialogues","Profondeur Thématique"],"sound":["Musiques & Thèmes","Effets Sonores","Doublage","Ambiance"],"performance":["Fréquence d'Images","Temps de Chargement","Bugs","Optimisation"],"replayability":["Contenu Post-Jeu","Embranchements","Motivations du Joueur"],"innovation":["Originalité","Exécution des Idées","Impact sur le Genre"],"multiplayer":["Stabilité Serveurs","Équilibre","Matchmaking","Récompenses"],"progression":["Structure","Rythme","Équilibre","Intégration"],"immersion":["Construction du Monde","Cohérence du Ton","Engagement Émotionnel","UI & HUD"]},"es":{"gameplay":["Controles y Movimiento","Mecánicas de Combate","Sistemas de Juego","Ritmo y Retroalimentación"],"graphics":["Dirección de Arte","Calidad Técnica","Animación","Cámara"],"story":["Trama y Estructura","Personajes y Diálogos","Profundidad Temática"],"sound":["Banda Sonora","Efectos de Sonido","Doblaje","Ambiente"],"performance":["Tasa de Fotogramas","Tiempos de Carga","Bugs","Optimización"],"replayability":["Contenido Post-Juego","Caminos Ramificados","Incentivos del Jugador"],"innovation":["Originalidad","Ejecución de Ideas","Impacto en el Género"],"multiplayer":["Estabilidad de Servidores","Balance","Matchmaking","Recompensas"],"progression":["Estructura","Ritmo","Balance","Integración"],"immersion":["Construcción del Mundo","Consistencia Tonal","Engagement Emocional","UI & HUD"]},"ja":{"gameplay":["操作と動き","戦闘メカニクス","ゲームシステム","テンポとフィードバック"],"graphics":["アートディレクション","技術品質","アニメーション","カメラ"],"story":["プロットと構成","キャラとセリフ","テーマの深さ"],"sound":["楽曲とテーマ","効果音","声優","環境音"],"performance":["フレームレート","ロード時間","バグ数","最適化"],"replayability":["エンドコンテンツ","分岐ルート","プレイヤーの動機"],"innovation":["独自性","アイデアの実行","ジャンルへの影響"],"multiplayer":["サーバー安定性","バランス","マッチメイキング","報酬"],"progression":["構造","テンポ","バランス","統合"],"immersion":["世界観","トーンの一貫性","感情的関与","UIとHUD"]},"zh":{"gameplay":["操控与移动","战斗机制","游戏系统","节奏与反馈"],"graphics":["艺术风格","技术质量","动画","镜头"],"story":["情节与结构","角色与对话","主题深度"],"sound":["配乐与主题","音效","配音","环境声"],"performance":["帧率","加载时间","Bug数量","优化"],"replayability":["后期内容","分支路线","玩家激励"],"innovation":["原创性","创意执行","对类型的影响"],"multiplayer":["服务器稳定性","平衡性","匹配系统","奖励"],"progression":["结构","节奏","平衡","整合"],"immersion":["世界构建","基调一致性","情感共鸣","UI与HUD"]}};
+function catLabel(cat){return(t().cats||{})[cat]||CAT_META[cat].label;}
+function subLabel(cat,subName){
+  // find index of subName in en subs
+  const enSubs=SUB_LABELS.en[cat]||[];
+  const idx=enSubs.indexOf(subName);
+  if(idx===-1)return subName;
+  return(SUB_LABELS[lang]||SUB_LABELS.en)[cat]?.[idx]||subName;
+}
+
+function updateCatMeta(){
+  const tc=t().cats||{};
+  Object.keys(CAT_META).forEach(k=>{if(tc[k])CAT_META[k].label=tc[k];});
+}
+
+
 // ─── I18N ─────────────────────────────────────────────────────────────────────
 const LANG_NAMES={en:'EN — English',ar:'AR — العربية',fr:'FR — Français',es:'ES — Español',ja:'JA — 日本語',zh:'ZH — 中文'};
 const TT={
@@ -248,7 +264,7 @@ function openLang(){
   Object.keys(LANG_NAMES).forEach(l=>{
     const d=document.createElement('div');d.className='lang-opt'+(l===lang?' sel':'');
     d.textContent=LANG_NAMES[l];
-    d.onclick=()=>{lang=l;document.getElementById('lang-lbl').textContent=l.toUpperCase();updateNavLabels();closeLang();refreshPage();};
+    d.onclick=()=>{lang=l;document.getElementById('lang-lbl').textContent=l.toUpperCase();localStorage.setItem('bt_lang',l);updateCatMeta();updateNavLabels();closeLang();refreshPage();};
     lo.appendChild(d);
   });
   document.getElementById('lang-sheet').classList.add('open');
@@ -601,7 +617,7 @@ function openCatPopup(cat,cs,w,m,subs,note){
   const body=document.createElement('div');body.style.cssText='padding:4px 20px 16px;overflow-y:auto;flex:1';
   subs.forEach(s=>{
     const row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)';
-    const name=document.createElement('span');name.style.cssText='font-size:14px;font-weight:600;color:#c0c0d8;flex:1';name.textContent=s.name||'—';
+    const name=document.createElement('span');name.style.cssText='font-size:14px;font-weight:600;color:#c0c0d8;flex:1';name.textContent=subLabel(cat,s.name)||'—';
     const mini=document.createElement('div');mini.style.cssText='width:40px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;flex-shrink:0';
     const miniFill=document.createElement('div');miniFill.style.cssText='height:100%;width:'+s.score*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
     mini.appendChild(miniFill);
@@ -744,7 +760,7 @@ function makeCatCard(cat){
   const sw=document.createElement('div');sw.id='subs-'+cat;
   subs.forEach((sub,idx)=>sw.appendChild(makeSubRow(cat,idx,sub,m.color)));card.appendChild(sw);
   const addB=document.createElement('button');addB.className='add-sub-btn';addB.textContent='+ Add Sub-Category';addB.onclick=()=>{sess.subs[cat].push({name:'New Sub-Category',score:5});sw.appendChild(makeSubRow(cat,sess.subs[cat].length-1,sess.subs[cat].at(-1),m.color));};card.appendChild(addB);
-  const nta=document.createElement('textarea');nta.value=sess.notes[cat]||'';nta.placeholder=`Notes on ${m.label.toLowerCase()}…`;nta.style='margin-top:10px;font-size:13px;min-height:44px';nta.oninput=e=>sess.notes[cat]=e.target.value;card.appendChild(nta);
+  const nta=document.createElement('textarea');nta.value=sess.notes[cat]||'';nta.placeholder=`Notes on ${catLabel(cat).toLowerCase()}…`;nta.style='margin-top:10px;font-size:13px;min-height:44px';nta.oninput=e=>sess.notes[cat]=e.target.value;card.appendChild(nta);
   return card;
 }
 function makeSubRow(cat,idx,sub,color){
@@ -794,6 +810,9 @@ function fld(parent,label,inputEl){const w=document.createElement('div');w.class
 function mkInp(type,val,ph,onChange,large=false){const i=document.createElement('input');i.type=type;i.value=val;i.placeholder=ph;if(large)i.style='font-size:18px;font-weight:700;padding:14px';i.addEventListener('input',e=>onChange(e.target.value));return i;}
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+const _savedLang=localStorage.getItem('bt_lang');
+if(_savedLang&&TT[_savedLang]){lang=_savedLang;document.getElementById('lang-lbl').textContent=_savedLang.toUpperCase();}
+updateCatMeta();
 loadMine();
 loadLog();
 console.log('Backlog Therapy v4 loaded ✓');
