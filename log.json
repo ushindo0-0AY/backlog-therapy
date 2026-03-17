@@ -1,5 +1,187 @@
 [
   {
+    "id": 1773774455875,
+    "savedAt": "2026-03-17T19:07:35.875Z",
+    "title": "resident evil revelations",
+    "platform": "Xbox 360",
+    "date": "2026-03-15",
+    "playTime": "3",
+    "perspective": "Third-Person",
+    "hasMP": false,
+    "genres": [
+      "Action-Adventure",
+      "Survival Horror"
+    ],
+    "gw": {
+      "Action-Adventure": 80,
+      "Survival Horror": 20
+    },
+    "fw": {
+      "gameplay": 19,
+      "graphics": 15,
+      "story": 15,
+      "sound": 11,
+      "performance": 10,
+      "replayability": 5,
+      "innovation": 5,
+      "multiplayer": 0,
+      "progression": 5,
+      "immersion": 15
+    },
+    "subs": {
+      "gameplay": [
+        {
+          "name": "Controls & Movement",
+          "score": 9
+        },
+        {
+          "name": "Combat Mechanics",
+          "score": 8.5
+        },
+        {
+          "name": "Pacing & Feedback",
+          "score": 9
+        }
+      ],
+      "graphics": [
+        {
+          "name": "Art Direction",
+          "score": 8
+        },
+        {
+          "name": "Technical Quality",
+          "score": 8
+        },
+        {
+          "name": "Animation",
+          "score": 7
+        },
+        {
+          "name": "Camera & Composition",
+          "score": 9
+        }
+      ],
+      "story": [
+        {
+          "name": "Plot & Structure",
+          "score": 7
+        },
+        {
+          "name": "Characters & Dialogue",
+          "score": 8
+        },
+        {
+          "name": "Thematic Depth",
+          "score": 8
+        }
+      ],
+      "sound": [
+        {
+          "name": "Score & Themes",
+          "score": 6
+        },
+        {
+          "name": "Sound Effects",
+          "score": 8
+        },
+        {
+          "name": "Voice Acting",
+          "score": 9.5
+        },
+        {
+          "name": "Ambience",
+          "score": 8.5
+        }
+      ],
+      "performance": [
+        {
+          "name": "Frame Rate & Stability",
+          "score": 9
+        },
+        {
+          "name": "Load Times",
+          "score": 8
+        },
+        {
+          "name": "Bug Count",
+          "score": 10
+        },
+        {
+          "name": "Platform Optimization",
+          "score": 9
+        }
+      ],
+      "replayability": [
+        {
+          "name": "Post-Game Content",
+          "score": 5
+        },
+        {
+          "name": "Branching Paths",
+          "score": 5
+        },
+        {
+          "name": "Player Incentives",
+          "score": 5
+        }
+      ],
+      "innovation": [
+        {
+          "name": "Originality",
+          "score": 5
+        },
+        {
+          "name": "Execution of Ideas",
+          "score": 7
+        },
+        {
+          "name": "Genre Impact",
+          "score": 5
+        }
+      ],
+      "progression": [
+        {
+          "name": "Structure",
+          "score": 7.5
+        },
+        {
+          "name": "Pacing",
+          "score": 7
+        },
+        {
+          "name": "Balance",
+          "score": 8
+        },
+        {
+          "name": "Integration with Gameplay",
+          "score": 9
+        }
+      ],
+      "immersion": [
+        {
+          "name": "World Building",
+          "score": 8
+        },
+        {
+          "name": "Tone Consistency",
+          "score": 9
+        },
+        {
+          "name": "Emotional Engagement",
+          "score": 9
+        },
+        {
+          "name": "UI & HUD",
+          "score": 9
+        }
+      ]
+    },
+    "notes": {},
+    "verdict": "",
+    "recommend": true,
+    "finalScore": 8.05
+  },
+  {
     "id": 1772911690449,
     "savedAt": "2026-03-07T19:28:10.449Z",
     "title": "bloddstrike xxxxxxxxxxxxx",
