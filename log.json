@@ -1,7 +1,7 @@
 [
   {
     "id": 1773774455875,
-    "savedAt": "2026-03-17T19:07:35.875Z",
+    "savedAt": "2026-03-17T19:09:40.966Z",
     "title": "resident evil revelations",
     "platform": "Xbox 360",
     "date": "2026-03-15",
@@ -36,7 +36,7 @@
         },
         {
           "name": "Combat Mechanics",
-          "score": 8.5
+          "score": 10
         },
         {
           "name": "Pacing & Feedback",
@@ -179,7 +179,7 @@
     "notes": {},
     "verdict": "",
     "recommend": true,
-    "finalScore": 8.05
+    "finalScore": 8.14
   },
   {
     "id": 1772857734132,
