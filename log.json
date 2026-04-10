@@ -183,7 +183,7 @@
   },
   {
     "id": 1772857734132,
-    "savedAt": "2026-03-07T08:44:32.685Z",
+    "savedAt": "2026-04-10T20:40:21.090Z",
     "title": "gta",
     "platform": "PC",
     "date": "2026-04-09",
@@ -322,8 +322,10 @@
         }
       ]
     },
-    "notes": {},
-    "verdict": "",
+    "notes": {
+      "graphics": "amazingg"
+    },
+    "verdict": "idk",
     "recommend": true,
     "finalScore": 9.92
   }
