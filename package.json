@@ -1,0 +1,8 @@
+{
+  "name": "backlog-therapy",
+  "version": "1.0.0",
+  "description": "Game rating backlog site with auto-generated pages",
+  "scripts": {
+    "generate": "node generate-pages.js"
+  }
+}

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Backlog Therapy</title>
+<link rel="icon" type="image/png" href="icon-512.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;600;700&family=Share+Tech+Mono&family=Noto+Sans+Arabic:wght@500;700&family=Noto+Sans+JP:wght@500;700&family=Noto+Sans+SC:wght@500;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#03030a;--bg2:#07070f;--bg3:#0c0c18;--bg4:#111120;--border:rgba(255,255,255,.05);--border2:rgba(255,255,255,.1);--text:#dde0f0;--muted:#383855;--muted2:#5a5a80;--accent:#ff2d6b;--accent2:#7c3aed}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;overflow-x:hidden}
+body.rtl{direction:rtl;font-family:'Noto Sans Arabic',sans-serif}
+body.ja{font-family:'Noto Sans JP',sans-serif}
+body.zh{font-family:'Noto Sans SC',sans-serif}
+body::before{content:'';position:fixed;inset:0;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none;z-index:9997}
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#1a1a35;border-radius:2px}
+.hdr{position:sticky;top:0;z-index:100;background:rgba(3,3,10,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;letter-spacing:4px;color:#fff;flex-shrink:0}
+.logo em{color:var(--accent);font-style:normal}
+.hdr-right{display:flex;align-items:center;gap:16px}
+.hdr-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:2px;display:flex;align-items:center;gap:10px}
+.hdr-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s ease infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.lang-wrap{position:relative}
+.lang-btn{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--muted2);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color .15s;white-space:nowrap}
+.lang-btn:hover{border-color:rgba(255,45,107,.4);color:#ccc}
+.lang-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;overflow:hidden;display:none;min-width:140px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.lang-wrap.open .lang-dropdown{display:block}
+.lang-opt{padding:9px 14px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--muted2);cursor:pointer;transition:background .1s,color .1s}
+.lang-opt:hover{background:rgba(255,45,107,.1);color:#fff}
+.lang-opt.active{color:var(--accent)}
+.hero{position:relative;padding:80px 48px 60px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 60% 50%,rgba(124,58,237,.06),transparent),radial-gradient(ellipse 50% 80% at 20% 60%,rgba(255,45,107,.05),transparent);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
+.hero-inner{position:relative;max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.hero-tag{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:4px;margin-bottom:16px;opacity:.8}
+.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(32px,5vw,60px);font-weight:900;line-height:1.05;color:#fff;margin-bottom:12px}
+.hero-title span{color:var(--accent)}
+.hero-sub{font-family:'Rajdhani',sans-serif;font-size:16px;color:var(--muted2);font-weight:500;max-width:420px;line-height:1.6}
+.hero-stats{display:flex;gap:2px;flex-wrap:wrap}
+.hstat{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:20px 28px;min-width:120px;position:relative;overflow:hidden;transition:border-color .2s}
+.hstat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent)}
+.hstat:hover{border-color:rgba(255,45,107,.3)}
+.hstat-lbl{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:2px;color:var(--muted2);margin-bottom:8px}
+.hstat-val{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:#fff}
+.hstat-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);margin-top:4px}
+.main{max-width:1100px;margin:0 auto;padding:0 48px 80px}
+.filter-bar{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:28px;padding:20px 24px;background:var(--bg3);border:1px solid var(--border);border-radius:12px}
+.filter-group{display:flex;flex-direction:column;gap:6px;flex:1;min-width:160px}
+.filter-lbl{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:2px;color:var(--muted2)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .12s;user-select:none}
+.chip.on{background:rgba(255,45,107,.12);border-color:rgba(255,45,107,.45);color:#ff7a9a}
+.chip:hover:not(.on){border-color:rgba(255,255,255,.15);color:#aaa}
+.filter-sep{width:1px;background:var(--border2);align-self:stretch;margin:0 4px}
+.clear-btn{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:6px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;align-self:flex-end;margin-top:18px}
+.clear-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
+.search-row{margin-bottom:16px}
+.search-inp{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;padding:11px 16px;outline:none;transition:border-color .2s}
+.search-inp:focus{border-color:rgba(255,45,107,.45)}
+.results-info{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted2);letter-spacing:1px;margin-bottom:16px}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.game-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s}.game-card:hover{border-color:rgba(255,45,107,.4);transform:translateY(-2px)}
+.game-card-top{height:3px;background:linear-gradient(90deg,var(--c,#ff2d6b),transparent)}
+.game-card-body{padding:16px 18px}
+.game-card-score{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:900;color:var(--c,#ff2d6b);margin-bottom:6px;display:flex;align-items:baseline;gap:6px}
+.game-card-score big{font-size:28px;filter:drop-shadow(0 0 6px var(--c,#ff2d6b))}
+.game-card-title{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.game-card-meta{font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--muted2);margin-bottom:8px}
+.gtag{font-size:10px;padding:2px 8px;border-radius:3px;font-family:'Rajdhani',sans-serif;font-weight:700;border:1px solid}
+.cat-bars{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.cat-bar-row{display:flex;align-items:center;gap:6px}
+.cat-bar-lbl{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;color:var(--muted2);min-width:72px;flex-shrink:0}
+.cat-bar-track{flex:1;height:3px;background:rgba(255,255,255,.05);border-radius:2px}
+.cat-bar-fill{height:100%;border-radius:2px}
+.cat-bar-val{font-family:'Share Tech Mono',monospace;font-size:8px;width:20px;text-align:right;flex-shrink:0}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex;animation:fi .2s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;z-index:10;transition:color .15s}
+.modal-close:hover{color:#fff}
+.modal-hero{position:relative;padding:40px;overflow:hidden;border-bottom:1px solid var(--border)}
+.modal-body{padding:28px 40px}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:24px}
+.cat-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s;-webkit-user-select:none;user-select:none}
+.cat-card:hover{border-color:rgba(255,255,255,.16)}
+.cat-card.open{border-color:rgba(255,255,255,.18)}
+.cat-card-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.cat-card.open .cat-card-body{display:block}
+.cat-card-arrow{position:absolute;top:10px;right:10px;font-size:10px;color:#3a3a5a;transition:transform .2s;line-height:1}
+.cat-card.open .cat-card-arrow{transform:rotate(180deg);color:var(--accent)}
+.lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--muted2);margin-bottom:8px}
+.empty{text-align:center;padding:80px;color:var(--muted2);font-size:15px}
+.toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid rgba(255,45,107,.4);border-radius:10px;padding:14px 24px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff;z-index:9998;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none;white-space:nowrap;box-shadow:0 8px 32px rgba(255,45,107,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.loading{text-align:center;padding:100px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:3px}
+@keyframes glowPulse{0%,100%{text-shadow:0 0 20px currentColor}50%{text-shadow:0 0 50px currentColor,0 0 100px currentColor}}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.score-glow{animation:glowPulse 3s ease-in-out infinite}
+.score-sliders{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:8px;margin-top:6px}
+.sslider-row{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:6px 10px}
+.sslider-lbl{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--muted2);width:80px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sslider-inp{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:rgba(255,255,255,.08);outline:none;cursor:pointer}
+.sslider-inp::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 6px rgba(255,45,107,.6)}
+.sslider-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent);width:24px;text-align:right;flex-shrink:0}
+.top-cat-chip{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;padding:4px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--muted2);cursor:pointer;transition:all .12s;user-select:none}
+.top-cat-chip.on{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.5);color:#c4b5fd}
+.score-filter-body{display:none}
+.score-filter-body.open{display:flex;flex-direction:column;gap:10px;width:100%}
+.filter-expand-row{width:100%;display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+.filter-expand-btn{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:none;border:1px solid var(--border2);color:var(--muted2);padding:5px 10px;border-radius:5px;cursor:pointer;transition:all .15s}
+.filter-expand-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
+.filter-visibility-btn{display:flex;align-items:center;gap:7px;font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1px;background:var(--bg3);border:1px solid var(--border2);color:var(--muted2);padding:8px 14px;border-radius:6px;cursor:pointer;margin-bottom:14px;transition:all .15s}
+.filter-visibility-btn:hover{color:#ccc;border-color:rgba(255,255,255,.2)}
+.filter-visibility-btn.has-active{border-color:rgba(255,45,107,.45);color:#ff7a9a}
+.filter-bar{display:none}
+.filter-bar.open{display:flex}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div class="logo">BACKLOG<em>THERAPY</em></div>
+  <div class="hdr-right">
+    <div class="hdr-meta"><span class="hdr-dot"></span><span id="hdr-count">—</span></div>
+    <div class="lang-wrap" id="lang-wrap">
+      <button class="lang-btn" onclick="toggleLang()">🌐 <span id="lang-label">EN</span> ▾</button>
+      <div class="lang-dropdown">
+        <div class="lang-opt" onclick="setLang('en')">🇬🇧 English</div>
+        <div class="lang-opt" onclick="setLang('ar')">🇩🇿 العربية</div>
+        <div class="lang-opt" onclick="setLang('fr')">🇫🇷 Français</div>
+        <div class="lang-opt" onclick="setLang('es')">🇪🇸 Español</div>
+        <div class="lang-opt" onclick="setLang('ja')">🇯🇵 日本語</div>
+        <div class="lang-opt" onclick="setLang('zh')">🇨🇳 中文</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hero">
+  <div class="hero-bg"></div><div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-tag" id="t-tag"></div>
+      <div class="hero-title" id="t-title-wrap"><span id="t-line1"></span><br><span id="t-line2" style="color:var(--accent)"></span></div>
+      <div class="hero-sub" id="t-sub"></div>
+      <button id="mobile-dl-btn" onclick="dlApp()" style="display:none;margin-top:20px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;background:linear-gradient(135deg,#ff2d6b,#c2185b);color:#fff;padding:12px 20px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(255,45,107,.35)">⬇ GET MOBILE APP</button>
+    </div>
+    <div class="hero-stats" id="hero-stats"><div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted2);letter-spacing:3px;padding:20px 0">...</div></div>
+  </div>
+</div>
+<div class="main">
+  <div class="filter-bar" id="filter-bar">
+    <div class="filter-group"><div class="filter-lbl" id="t-genre"></div><div class="chips" id="chips-genre"></div></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group"><div class="filter-lbl" id="t-platform"></div><div class="chips" id="chips-platform"></div></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group"><div class="filter-lbl" id="t-perspective"></div><div class="chips" id="chips-perspective"></div></div>
+    <div class="filter-sep"></div>
+    <div class="filter-expand-row">
+      <button class="filter-expand-btn" id="score-expand-btn" onclick="toggleScoreFilters()">⚡ SCORE FILTERS ▾</button>
+      <button class="clear-btn" id="t-clear" onclick="clearFilters()"></button>
+    </div>
+    <div class="score-filter-body" id="score-filter-body">
+      <div>
+        <div class="filter-lbl" id="t-topcatfilter">TOP CATEGORY</div>
+        <div class="chips" id="chips-topcat"></div>
+      </div>
+      <div>
+        <div class="filter-lbl" id="t-scoremin">MIN SCORE BY CATEGORY</div>
+        <div class="score-sliders" id="score-sliders"></div>
+      </div>
+    </div>
+  </div>
+  <div id="filter-toggle-wrap" style="display:none"><button class="filter-visibility-btn" id="filter-vis-btn" onclick="toggleFilterBar()">⚙ <span id="filter-vis-lbl">SHOW FILTERS</span></button></div>
+  <div class="search-row"><input class="search-inp" id="search" oninput="render()"/></div>
+  <div class="results-info" id="results-info"></div>
+  <div id="list"><div class="loading">...</div></div>
+</div>
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal"><button class="modal-close" onclick="closeModal()">×</button><div id="modal-content"></div></div>
+</div>
+<script>
+const T={
+  en:{tag:'// GAME RATING ARCHIVE',l1:'EVERY GAME.',l2:'RATED.',sub:'Genre-weighted scoring across 10 categories. Sub-category breakdowns. The full picture.',genre:'GENRE',platform:'PLATFORM',perspective:'PERSPECTIVE',clear:'CLEAR ALL',search:'Search games...',noGames:'No games logged yet.',noMatch:'No games match filters.',rated:'RATED',avg:'AVG SCORE',top:'TOP SCORE',rec:'RECOMMENDED',games:'GAMES',verdict:'VERDICT',breakdown:'CATEGORY BREAKDOWN',yes_rec:'✅ Recommended',no_rec:'❌ Not Recommended',of:'of',hide:'HIDE',show:'SHOW',filters:'FILTERS',scores:{10:"Perfect",9:"Excellent",8:"Very Good",7:"Good",6:"Above Avg",5:"Average",4:"Mediocre",3:"Poor",2:"Broken",1:"Unplayable",0:"Useless"}},
+  ar:{tag:'// أرشيف تقييم الألعاب',l1:'كل لعبة.',l2:'مُقيَّمة.',sub:'تقييم مرجّح حسب النوع عبر 10 فئات. الصورة الكاملة.',genre:'النوع',platform:'المنصة',perspective:'المنظور',clear:'مسح الكل',search:'ابحث عن ألعاب...',noGames:'لا توجد ألعاب بعد.',noMatch:'لا توجد نتائج.',rated:'مُقيَّم',avg:'متوسط الدرجة',top:'أعلى درجة',rec:'موصى به',games:'ألعاب',verdict:'الحكم',breakdown:'تفصيل الفئات',yes_rec:'✅ موصى به',no_rec:'❌ غير موصى به',of:'من',hide:'إخفاء',show:'إظهار',filters:'الفلاتر',scores:{10:"مثالي",9:"ممتاز",8:"جيد جداً",7:"جيد",6:"فوق المتوسط",5:"متوسط",4:"متواضع",3:"ضعيف",2:"معطوب",1:"غير قابل للعب",0:"بلا فائدة"}},
+  fr:{tag:'// ARCHIVE DE NOTATION',l1:'CHAQUE JEU.',l2:'NOTÉ.',sub:'Notation pondérée par genre sur 10 catégories. La vision complète.',genre:'GENRE',platform:'PLATEFORME',perspective:'PERSPECTIVE',clear:'TOUT EFFACER',search:'Rechercher...',noGames:'Aucun jeu enregistré.',noMatch:'Aucun jeu ne correspond.',rated:'NOTÉS',avg:'SCORE MOY.',top:'MEILLEUR',rec:'RECOMMANDÉS',games:'JEUX',verdict:'VERDICT',breakdown:'DÉTAIL DES CATÉGORIES',yes_rec:'✅ Recommandé',no_rec:'❌ Non recommandé',of:'sur',hide:'CACHER',show:'AFFICHER',filters:'FILTRES',scores:{10:"Parfait",9:"Excellent",8:"Très Bien",7:"Bien",6:"Au-dessus",5:"Moyen",4:"Médiocre",3:"Mauvais",2:"Cassé",1:"Injouable",0:"Inutile"}},
+  es:{tag:'// ARCHIVO DE PUNTUACIÓN',l1:'CADA JUEGO.',l2:'PUNTUADO.',sub:'Puntuación ponderada por género en 10 categorías. La imagen completa.',genre:'GÉNERO',platform:'PLATAFORMA',perspective:'PERSPECTIVA',clear:'LIMPIAR TODO',search:'Buscar juegos...',noGames:'No hay juegos registrados.',noMatch:'No hay coincidencias.',rated:'PUNTUADOS',avg:'PUNT. MEDIA',top:'PUNT. MÁX.',rec:'RECOMENDADOS',games:'JUEGOS',verdict:'VEREDICTO',breakdown:'DESGLOSE DE CATEGORÍAS',yes_rec:'✅ Recomendado',no_rec:'❌ No recomendado',of:'de',hide:'OCULTAR',show:'MOSTRAR',filters:'FILTROS',scores:{10:"Perfecto",9:"Excelente",8:"Muy Bueno",7:"Bueno",6:"Notable",5:"Regular",4:"Mediocre",3:"Malo",2:"Roto",1:"Injugable",0:"Inútil"}},
+  ja:{tag:'// ゲーム評価アーカイブ',l1:'すべてのゲーム、',l2:'評価済み。',sub:'10カテゴリーのジャンル加重スコア。全体像を把握。',genre:'ジャンル',platform:'プラットフォーム',perspective:'視点',clear:'クリア',search:'ゲームを検索...',noGames:'まだゲームがありません。',noMatch:'条件に合うゲームがありません。',rated:'評価済み',avg:'平均スコア',top:'最高スコア',rec:'おすすめ',games:'本',verdict:'総評',breakdown:'カテゴリー別内訳',yes_rec:'✅ おすすめ',no_rec:'❌ 非推奨',of:'/',hide:'非表示',show:'表示',filters:'フィルター',scores:{10:"完璧",9:"素晴らしい",8:"非常に良い",7:"良い",6:"平均以上",5:"普通",4:"微妙",3:"悪い",2:"壊れている",1:"遊べない",0:"無価値"}},
+  zh:{tag:'// 游戏评分档案',l1:'每款游戏，',l2:'都有评分。',sub:'基于流派加权的10项类别评分，全面呈现。',genre:'类型',platform:'平台',perspective:'视角',clear:'清除全部',search:'搜索游戏...',noGames:'暂无游戏记录。',noMatch:'没有符合条件的游戏。',rated:'已评分',avg:'平均分',top:'最高分',rec:'推荐',games:'款',verdict:'总评',breakdown:'类别细分',yes_rec:'✅ 推荐',no_rec:'❌ 不推荐',of:'/',hide:'隐藏',show:'显示',filters:'筛选',scores:{10:"完美",9:"优秀",8:"很好",7:"良好",6:"中等偏上",5:"平均",4:"平庸",3:"较差",2:"损坏",1:"无法游玩",0:"无用"}}
+};
+const LANGS=['en','ar','fr','es','ja','zh'];
+const LANG_LABELS={en:'EN',ar:'عر',fr:'FR',es:'ES',ja:'JP',zh:'中'};
+const CAT_LABELS={
+  en:{gameplay:"Gameplay",graphics:"Graphics",story:"Story",sound:"Sound",performance:"Performance",replayability:"Replay",innovation:"Innovation",multiplayer:"Multiplayer",progression:"Progression",immersion:"Immersion"},
+  ar:{gameplay:"اللعب",graphics:"الرسومات",story:"القصة",sound:"الصوت",performance:"الأداء",replayability:"إعادة اللعب",innovation:"الابتكار",multiplayer:"متعدد اللاعبين",progression:"التطور",immersion:"الانغماس"},
+  fr:{gameplay:"Gameplay",graphics:"Graphismes",story:"Histoire",sound:"Son",performance:"Performance",replayability:"Rejouabilité",innovation:"Innovation",multiplayer:"Multijoueur",progression:"Progression",immersion:"Immersion"},
+  es:{gameplay:"Jugabilidad",graphics:"Gráficos",story:"Historia",sound:"Sonido",performance:"Rendimiento",replayability:"Rejugabilidad",innovation:"Innovación",multiplayer:"Multijugador",progression:"Progresión",immersion:"Inmersión"},
+  ja:{gameplay:"ゲームプレイ",graphics:"グラフィック",story:"ストーリー",sound:"サウンド",performance:"パフォーマンス",replayability:"リプレイ性",innovation:"革新性",multiplayer:"マルチプレイヤー",progression:"進行",immersion:"没入感"},
+  zh:{gameplay:"游戏玩法",graphics:"画面",story:"故事",sound:"音效",performance:"性能",replayability:"重玩性",innovation:"创新性",multiplayer:"多人游戏",progression:"进程",immersion:"沉浸感"}
+};
+const SUB_LABELS={
+  en:{gameplay:["Controls & Movement","Combat Mechanics","Game Systems","Pacing & Feedback"],graphics:["Art Direction","Technical Quality","Animation","Camera"],story:["Plot & Structure","Characters & Dialogue","Thematic Depth"],sound:["Score & Themes","Sound Effects","Voice Acting","Ambience"],performance:["Frame Rate","Load Times","Bug Count","Optimization"],replayability:["Post-Game Content","Branching Paths","Player Incentives"],innovation:["Originality","Execution of Ideas","Genre Impact"],multiplayer:["Server Stability","Balance","Matchmaking","Rewards"],progression:["Structure","Pacing","Balance","Integration"],immersion:["World Building","Tone Consistency","Emotional Engagement","UI & HUD"]},
+  ar:{gameplay:["التحكم والحركة","ميكانيكيات القتال","أنظمة اللعبة","الإيقاع والتغذية الراجعة"],graphics:["التوجيه الفني","الجودة التقنية","الرسوم المتحركة","الكاميرا"],story:["البنية والحبكة","الشخصيات والحوار","العمق الفكري"],sound:["الموسيقى","المؤثرات الصوتية","الأداء الصوتي","الأجواء"],performance:["معدل الإطارات","أوقات التحميل","عدد الأخطاء","التحسين"],replayability:["محتوى ما بعد اللعبة","المسارات المتفرعة","حوافز اللاعب"],innovation:["الأصالة","تنفيذ الأفكار","التأثير على النوع"],multiplayer:["استقرار الخوادم","التوازن","المصارعة","المكافآت"],progression:["البنية","الإيقاع","التوازن","التكامل"],immersion:["بناء العالم","اتساق النبرة","الارتباط العاطفي","الواجهة"]},
+  fr:{gameplay:["Contrôles","Mécaniques de combat","Systèmes","Rythme"],graphics:["Direction artistique","Qualité technique","Animation","Caméra"],story:["Structure","Personnages","Profondeur"],sound:["Musique","Effets sonores","Doublage","Ambiance"],performance:["Images/sec","Chargement","Bugs","Optimisation"],replayability:["Contenu post-jeu","Chemins","Incitations"],innovation:["Originalité","Exécution","Impact"],multiplayer:["Serveurs","Équilibre","Matchmaking","Récompenses"],progression:["Structure","Rythme","Équilibre","Intégration"],immersion:["Monde","Cohérence","Engagement","Interface"]},
+  es:{gameplay:["Controles","Mecánicas","Sistemas","Ritmo"],graphics:["Dirección artística","Calidad técnica","Animación","Cámara"],story:["Estructura","Personajes","Profundidad"],sound:["Música","Efectos","Doblaje","Ambiente"],performance:["FPS","Carga","Bugs","Optimización"],replayability:["Contenido extra","Ramificaciones","Incentivos"],innovation:["Originalidad","Ejecución","Impacto"],multiplayer:["Servidores","Balance","Matchmaking","Recompensas"],progression:["Estructura","Ritmo","Balance","Integración"],immersion:["Mundo","Coherencia","Engagement","Interfaz"]},
+  ja:{gameplay:["操作性","戦闘システム","ゲームシステム","ペース"],graphics:["アートディレクション","技術品質","アニメーション","カメラ"],story:["プロット","キャラクター","テーマ"],sound:["BGM","効果音","ボイス","雰囲気"],performance:["フレームレート","ロード時間","バグ数","最適化"],replayability:["クリア後","分岐","やり込み要素"],innovation:["独創性","アイデアの実行","ジャンルへの影響"],multiplayer:["サーバー安定性","バランス","マッチング","報酬"],progression:["構造","ペース","バランス","統合"],immersion:["世界観","一貫性","感情的関与","UI"]},
+  zh:{gameplay:["操控","战斗机制","游戏系统","节奏"],graphics:["美术方向","技术质量","动画","镜头"],story:["情节结构","角色对话","主题深度"],sound:["配乐","音效","配音","环境音"],performance:["帧率","加载时间","Bug数量","优化"],replayability:["后期内容","分支路线","激励机制"],innovation:["原创性","创意执行","类型影响"],multiplayer:["服务器","平衡","匹配","奖励"],progression:["结构","节奏","平衡","整合"],immersion:["世界构建","风格一致性","情感投入","界面"]}
+};
+const GENRE_LABELS={
+  en:{"Action-Adventure":"Action-Adventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Stealth","Survival Horror":"Survival Horror","Horror":"Horror","Fighting":"Fighting","Racing":"Racing","Platformer":"Platformer","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Strategy","Tactics/TRPG":"Tactics/TRPG","Survival/Crafting":"Survival/Crafting","Sandbox/Open World":"Sandbox/Open World","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Visual Novel","Rhythm":"Rhythm","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Walking Sim"},
+  ar:{"Action-Adventure":"أكشن ومغامرة","RPG":"لعبة أدوار","JRPG":"JRPG","FPS":"منظور أول","TPS":"منظور ثالث","Stealth":"تسلل","Survival Horror":"رعب نجاة","Horror":"رعب","Fighting":"قتال","Racing":"سباق","Platformer":"منصات","Metroidvania":"ميترويدفانيا","Puzzle":"ألغاز","Strategy":"استراتيجية","Tactics/TRPG":"تكتيكات","Survival/Crafting":"نجاة وصناعة","Sandbox/Open World":"عالم مفتوح","Hack & Slash":"قطع وتشريح","Soulslike":"سولزلايك","Visual Novel":"رواية مرئية","Rhythm":"إيقاع","Sports":"رياضة","MMO":"MMO","Battle Royale":"باتل رويال","Point & Click":"نقر وإشارة","Simulation":"محاكاة","Walking Sim":"محاكاة المشي"},
+  fr:{"Action-Adventure":"Action-Aventure","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Infiltration","Survival Horror":"Horreur Survie","Horror":"Horreur","Fighting":"Combat","Racing":"Course","Platformer":"Plateforme","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Stratégie","Tactics/TRPG":"Tactique","Survival/Crafting":"Survie/Craft","Sandbox/Open World":"Monde Ouvert","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Roman Visuel","Rhythm":"Rythme","Sports":"Sports","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulation","Walking Sim":"Marche Sim"},
+  es:{"Action-Adventure":"Acción-Aventura","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"Sigilo","Survival Horror":"Terror Supervivencia","Horror":"Terror","Fighting":"Lucha","Racing":"Carreras","Platformer":"Plataformas","Metroidvania":"Metroidvania","Puzzle":"Puzzle","Strategy":"Estrategia","Tactics/TRPG":"Táctico","Survival/Crafting":"Supervivencia","Sandbox/Open World":"Mundo Abierto","Hack & Slash":"Hack & Slash","Soulslike":"Soulslike","Visual Novel":"Novela Visual","Rhythm":"Ritmo","Sports":"Deportes","MMO":"MMO","Battle Royale":"Battle Royale","Point & Click":"Point & Click","Simulation":"Simulación","Walking Sim":"Walking Sim"},
+  ja:{"Action-Adventure":"アクションアドベンチャー","RPG":"RPG","JRPG":"JRPG","FPS":"FPS","TPS":"TPS","Stealth":"ステルス","Survival Horror":"サバイバルホラー","Horror":"ホラー","Fighting":"格闘","Racing":"レーシング","Platformer":"プラットフォーマー","Metroidvania":"メトロイドヴァニア","Puzzle":"パズル","Strategy":"ストラテジー","Tactics/TRPG":"タクティクス","Survival/Crafting":"サバイバル","Sandbox/Open World":"オープンワールド","Hack & Slash":"ハック＆スラッシュ","Soulslike":"ソウルズライク","Visual Novel":"ビジュアルノベル","Rhythm":"リズム","Sports":"スポーツ","MMO":"MMO","Battle Royale":"バトルロイヤル","Point & Click":"ポイント＆クリック","Simulation":"シミュレーション","Walking Sim":"ウォーキングシム"},
+  zh:{"Action-Adventure":"动作冒险","RPG":"角色扮演","JRPG":"日式RPG","FPS":"第一人称射击","TPS":"第三人称射击","Stealth":"潜行","Survival Horror":"生存恐怖","Horror":"恐怖","Fighting":"格斗","Racing":"赛车","Platformer":"平台跳跃","Metroidvania":"银河城","Puzzle":"解谜","Strategy":"策略","Tactics/TRPG":"战棋","Survival/Crafting":"生存建造","Sandbox/Open World":"开放世界","Hack & Slash":"砍杀","Soulslike":"魂系","Visual Novel":"视觉小说","Rhythm":"音乐节奏","Sports":"体育","MMO":"MMO","Battle Royale":"大逃杀","Point & Click":"点击冒险","Simulation":"模拟","Walking Sim":"步行模拟"}
+};
+const PERSPECTIVE_LABELS={
+  en:{"First-Person":"First-Person","Third-Person":"Third-Person","Top-Down":"Top-Down","Side-Scroller":"Side-Scroller","Isometric":"Isometric","2.5D":"2.5D","Mixed":"Mixed"},
+  ar:{"First-Person":"منظور أول","Third-Person":"منظور ثالث","Top-Down":"من الأعلى","Side-Scroller":"جانبي","Isometric":"إيزوميتري","2.5D":"2.5 بعد","Mixed":"مختلط"},
+  fr:{"First-Person":"Première Personne","Third-Person":"Troisième Personne","Top-Down":"Vue de Dessus","Side-Scroller":"Défilement Latéral","Isometric":"Isométrique","2.5D":"2.5D","Mixed":"Mixte"},
+  es:{"First-Person":"Primera Persona","Third-Person":"Tercera Persona","Top-Down":"Vista Cenital","Side-Scroller":"Desplazamiento Lateral","Isometric":"Isométrico","2.5D":"2.5D","Mixed":"Mixto"},
+  ja:{"First-Person":"一人称","Third-Person":"三人称","Top-Down":"真上から","Side-Scroller":"横スクロール","Isometric":"アイソメトリック","2.5D":"2.5D","Mixed":"混合"},
+  zh:{"First-Person":"第一人称","Third-Person":"第三人称","Top-Down":"俯视角","Side-Scroller":"横版","Isometric":"等距","2.5D":"2.5D","Mixed":"混合"}
+};
+function catLabel(key){return(CAT_LABELS[LANG]||CAT_LABELS.en)[key]||(CAT_META[key]||{}).label||key;}
+function subLabel(cat,idx){const s=(SUB_LABELS[LANG]||SUB_LABELS.en)[cat];return s&&s[idx]!=null?s[idx]:'';}
+function genreLabel(g){return(GENRE_LABELS[LANG]||GENRE_LABELS.en)[g]||g;}
+function perspLabel(p){return(PERSPECTIVE_LABELS[LANG]||PERSPECTIVE_LABELS.en)[p]||p;}
+let LANG='en';
+let LOG=[];
+let F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};
+const sc=s=>s>=9?"#00ffb3":s>=7.5?"#a3ff6e":s>=6?"#ffe566":s>=4?"#ff9f43":"#ff4d6d";
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+const r2=n=>Math.round(n*100)/100;
+const slbl=s=>(T[LANG]||T.en).scores[Math.round(s)]||'';
+const slugify=t=>t.toLowerCase().replace(/[^\w\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-').trim();
+const CAT_META={gameplay:{label:"Gameplay",icon:"⚔️",color:"#ff6b6b"},graphics:{label:"Graphics",icon:"🎨",color:"#a78bfa"},story:{label:"Story",icon:"📖",color:"#34d399"},sound:{label:"Sound",icon:"🎵",color:"#f59e0b"},performance:{label:"Performance",icon:"⚡",color:"#38bdf8"},replayability:{label:"Replay",icon:"🔄",color:"#fb923c"},innovation:{label:"Innovation",icon:"💡",color:"#e879f9"},multiplayer:{label:"Multiplayer",icon:"👥",color:"#4ade80"},progression:{label:"Progression",icon:"📈",color:"#f472b6"},immersion:{label:"Immersion",icon:"🌍",color:"#67e8f9"}};
+const RAW='https://raw.githubusercontent.com/ushindo0-0ay/backlog-therapy/main/log.json';
+
+function toggleLang(){document.getElementById('lang-wrap').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('#lang-wrap'))document.getElementById('lang-wrap').classList.remove('open');});
+function setLang(l){
+  LANG=l;
+  document.getElementById('lang-wrap').classList.remove('open');
+  document.getElementById('lang-label').textContent=LANG_LABELS[l]||l.toUpperCase();
+  document.querySelectorAll('.lang-opt').forEach((o,i)=>o.classList.toggle('active',LANGS[i]===l));
+  const rtl=l==='ar';
+  document.body.classList.toggle('rtl',rtl);
+  document.body.classList.toggle('ja',l==='ja');
+  document.body.classList.toggle('zh',l==='zh');
+  document.documentElement.setAttribute('dir',rtl?'rtl':'ltr');
+  applyT();
+  if(LOG.length){buildStats();buildChips();render();}
+  localStorage.setItem('bt_lang',l);
+}
+let filterBarOpen=false;
+function toggleFilterBar(){
+  filterBarOpen=!filterBarOpen;
+  document.getElementById('filter-bar').classList.toggle('open',filterBarOpen);
+  updateFilterVisBtn();
+}
+function updateFilterVisBtn(){
+  const t=T[LANG]||T.en;
+  const hasActive=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0);
+  const btn=document.getElementById('filter-vis-btn');
+  if(btn){
+    btn.className='filter-visibility-btn'+(hasActive?' has-active':'');
+    const lbl=filterBarOpen?(t.hide||'HIDE')+' '+(t.filters||'FILTERS'):(t.show||'SHOW')+' '+(t.filters||'FILTERS');
+    document.getElementById('filter-vis-lbl').textContent=lbl+(hasActive?' ●':'');
+  }
+}
+function applyT(){
+  const t=T[LANG]||T.en;
+  document.getElementById('t-tag').textContent=t.tag;
+  document.getElementById('t-line1').textContent=t.l1;
+  document.getElementById('t-line2').textContent=t.l2;
+  document.getElementById('t-sub').textContent=t.sub;
+  document.getElementById('t-genre').textContent=t.genre;
+  document.getElementById('t-platform').textContent=t.platform;
+  document.getElementById('t-perspective').textContent=t.perspective;
+  document.getElementById('t-clear').textContent=t.clear;
+  document.getElementById('search').placeholder=t.search;
+  updateFilterVisBtn();
+}
+async function loadLog(){
+  try{const res=await fetch(RAW+'?t='+Date.now());const data=await res.json();LOG=Array.isArray(data)?data:(data.log||[]);buildStats();buildChips();document.getElementById('filter-toggle-wrap').style.display='block';render();}
+  catch(e){document.getElementById('list').innerHTML='<div class="empty">Could not load log.</div>';document.getElementById('hero-stats').innerHTML='';}
+}
+function buildStats(){
+  const t=T[LANG]||T.en;el=document.getElementById('hero-stats');
+  if(!LOG.length){el.innerHTML='';document.getElementById('hdr-count').textContent='0';return;}
+  const avgS=r2(LOG.reduce((a,e)=>a+e.finalScore,0)/LOG.length);
+  const top=Math.max(...LOG.map(e=>e.finalScore));
+  const rec=LOG.filter(e=>e.recommend).length;
+  document.getElementById('hdr-count').textContent=LOG.length+' '+t.games;
+  el.innerHTML=[[t.rated,LOG.length,t.games],[t.avg,avgS.toFixed(2),slbl(avgS)],[t.top,top.toFixed(2),slbl(top)],[t.rec,rec,Math.round(rec/LOG.length*100)+'%']]
+    .map(([l,v,s])=>'<div class="hstat"><div class="hstat-lbl">'+l+'</div><div class="hstat-val">'+v+'</div><div class="hstat-sub">'+s+'</div></div>').join('');
+}
+function buildChips(){
+  const genres=new Set(),platforms=new Set(),perspectives=new Set();
+  LOG.forEach(e=>{(e.genres||[]).forEach(g=>genres.add(g));if(e.platform)platforms.add(e.platform);if(e.perspective)perspectives.add(e.perspective);});
+  mkChips('chips-genre',[...genres].sort(),'genres',genreLabel);mkChips('chips-platform',[...platforms].sort(),'platforms');mkChips('chips-perspective',[...perspectives].sort(),'perspectives',perspLabel);
+  buildTopCatChips();buildScoreSliders();
+}
+function buildTopCatChips(){
+  const el=document.getElementById('chips-topcat');el.innerHTML='';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];
+    const ch=document.createElement('span');ch.className='top-cat-chip';
+    ch.innerHTML=m.icon+' '+catLabel(cat);
+    ch.onclick=()=>{F.topCat.has(cat)?F.topCat.delete(cat):F.topCat.add(cat);ch.classList.toggle('on');render();};
+    el.appendChild(ch);
+  });
+}
+function buildScoreSliders(){
+  const el=document.getElementById('score-sliders');el.innerHTML='';
+  Object.keys(CAT_META).forEach(cat=>{
+    const m=CAT_META[cat];
+    if(!F.scoreMin[cat])F.scoreMin[cat]=0;
+    const row=document.createElement('div');row.className='sslider-row';
+    const lbl=document.createElement('span');lbl.className='sslider-lbl';lbl.textContent=catLabel(cat);
+    const inp=document.createElement('input');inp.type='range';inp.className='sslider-inp';inp.min=0;inp.max=10;inp.step=0.5;inp.value=F.scoreMin[cat]||0;
+    inp.style.setProperty('--pct',(inp.value/10*100)+'%');
+    const val=document.createElement('span');val.className='sslider-val';val.textContent=parseFloat(inp.value)>0?parseFloat(inp.value):'—';
+    inp.oninput=()=>{F.scoreMin[cat]=parseFloat(inp.value);val.textContent=F.scoreMin[cat]>0?parseFloat(F.scoreMin[cat]):'—';inp.style.setProperty('--pct',(inp.value/10*100)+'%');render();};
+    row.appendChild(lbl);row.appendChild(inp);row.appendChild(val);el.appendChild(row);
+  });
+}
+function toggleScoreFilters(){
+  const body=document.getElementById('score-filter-body');const btn=document.getElementById('score-expand-btn');
+  const open=body.classList.toggle('open');btn.textContent='⚡ SCORE FILTERS '+(open?'▴':'▾');
+}
+function mkChips(id,items,fk,labelFn){
+  const c=document.getElementById(id);c.innerHTML='';
+  items.forEach(item=>{const ch=document.createElement('span');ch.className='chip';ch.textContent=labelFn?labelFn(item):item;ch.onclick=()=>{F[fk].has(item)?F[fk].delete(item):F[fk].add(item);ch.classList.toggle('on');render();};c.appendChild(ch);});
+}
+function clearFilters(){F={genres:new Set(),platforms:new Set(),perspectives:new Set(),topCat:new Set(),scoreMin:{}};document.querySelectorAll('.chip,.top-cat-chip').forEach(c=>c.classList.remove('on'));document.querySelectorAll('.sslider-inp').forEach(inp=>{inp.value=0;inp.nextSibling.textContent='—';});document.getElementById('search').value='';updateFilterVisBtn();render();}
+function render(){
+  const t=T[LANG]||T.en;
+  const q=document.getElementById('search').value.toLowerCase();
+  const filtered=LOG.filter(e=>{
+    if(q&&!e.title.toLowerCase().includes(q))return false;
+    if(F.genres.size&&!(e.genres||[]).some(g=>F.genres.has(g)))return false;
+    if(F.platforms.size&&!F.platforms.has(e.platform))return false;
+    if(F.perspectives.size&&!F.perspectives.has(e.perspective))return false;
+    // top category filter
+    if(F.topCat.size){
+      const subs=e.subs||{};
+      const cats=Object.keys(subs).filter(c=>c!=='multiplayer'||e.hasMP);
+      if(!cats.length)return false;
+      const topCat=cats.reduce((best,c)=>{const s=subs[c]&&subs[c].length?r2(avg(subs[c].map(x=>x.score))):0;return s>(subs[best]&&subs[best].length?r2(avg(subs[best].map(x=>x.score))):0)?c:best;},cats[0]);
+      if(!F.topCat.has(topCat))return false;
+    }
+    // per-category min score filter
+    for(const [cat,minS] of Object.entries(F.scoreMin)){
+      if(!minS)continue;
+      const subs=(e.subs||{})[cat]||[];
+      const cs=subs.length?r2(avg(subs.map(s=>s.score))):0;
+      if(cs<minS)return false;
+    }
+    return true;
+  });
+  const hasF=F.genres.size||F.platforms.size||F.perspectives.size||F.topCat.size||Object.values(F.scoreMin).some(v=>v>0)||q;
+  updateFilterVisBtn();
+  document.getElementById('results-info').textContent=hasF?filtered.length+' '+t.of+' '+LOG.length+' '+t.games:LOG.length+' '+t.games;
+  const list=document.getElementById('list');list.innerHTML='';
+  if(!filtered.length){list.innerHTML='<div class="empty">'+(LOG.length?t.noMatch:t.noGames)+'</div>';return;}
+  filtered.forEach(e=>{
+    const clr=sc(e.finalScore);
+    const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
+    const card=document.createElement('div');card.className='game-card';card.style.setProperty('--c',clr);
+    card.innerHTML='<div class="game-card-top"></div><div class="game-card-body"><div class="game-card-score"><big>'+e.finalScore+'</big><span style="color:var(--muted2)">'+slbl(e.finalScore)+'</span></div><div class="game-card-title">'+e.title+'</div><div class="game-card-meta">'+e.platform+(e.date?' · '+e.date:'')+(e.playTime?' · '+e.playTime+'h':'')+'</div><div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px">'+(e.genres||[]).map(g=>'<span class="gtag" style="color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.3);background:rgba(255,45,107,.07)">'+genreLabel(g)+'</span>').join('')+(e.perspective?'<span class="gtag" style="color:#a78bfa;border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.07)">'+perspLabel(e.perspective)+'</span>':'')+(e.recommend!=null?'<span style="font-size:13px;margin-left:2px">'+(e.recommend?'✅':'❌')+'</span>':'')+'</div>'+(ac.length?'<div class="cat-bars">'+ac.slice(0,6).map(cat=>{const subs=(e.subs||{})[cat]||[];const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;const m=CAT_META[cat]||{color:'#ff2d6b',label:cat};return'<div class="cat-bar-row"><div class="cat-bar-lbl">'+catLabel(cat)+'</div><div class="cat-bar-track"><div class="cat-bar-fill" style="width:'+cs*10+'%;background:'+m.color+';opacity:.7"></div></div><div class="cat-bar-val" style="color:'+sc(cs)+'">'+cs+'</div></div>';}).join('')+'</div>':'')+'</div>';
+    card.style.cursor='pointer';card.onclick=()=>{window.location.href='games/'+slugify(e.title)+'.html';};list.appendChild(card);
+  });
+}
+function openCatPopup(cat, cs, w, m, subs, note){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:500;display:flex;align-items:center;justify-content:center;padding:24px';
+  ov.style.animation='fi .15s ease';
+  ov.onclick=ev=>{if(ev.target===ov)document.body.removeChild(ov);};
+  const box=document.createElement('div');
+  box.style.cssText='background:var(--bg2);border:1px solid '+m.color+'44;border-radius:16px;width:100%;max-width:420px;overflow:hidden;position:relative';
+  const topBar=document.createElement('div');
+  topBar.style.cssText='height:3px;background:linear-gradient(90deg,'+m.color+','+m.color+'44,transparent)';
+  box.appendChild(topBar);
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='×';closeBtn.style.cssText='position:absolute;top:12px;right:14px;background:none;border:none;color:var(--muted2);font-size:22px;cursor:pointer;line-height:1;padding:2px 8px';
+  closeBtn.onclick=()=>document.body.removeChild(ov);
+  box.appendChild(closeBtn);
+  const hdr=document.createElement('div');hdr.style.cssText='padding:20px 24px 14px';
+  hdr.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:9px;color:'+m.color+';letter-spacing:3px;margin-bottom:6px;opacity:.8">'+m.icon+' '+catLabel(cat).toUpperCase()+'</div>'
+    +'<div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px">'
+    +'<div style="font-family:\'Orbitron\',sans-serif;font-size:48px;font-weight:900;color:'+sc(cs)+';line-height:1;filter:drop-shadow(0 0 12px '+sc(cs)+'88)">'+cs+'</div>'
+    +'<div style="text-align:right"><div style="font-family:\'Rajdhani\',sans-serif;font-size:13px;color:'+sc(cs)+';font-weight:700;margin-bottom:4px">'+slbl(cs)+'</div>'
+    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--muted2)">weight: '+w+'%</div>'
+    +'<div style="font-family:\'Share Tech Mono\',monospace;font-size:10px;color:'+m.color+'88">+'+( cs*w/100).toFixed(2)+' pts</div></div></div>'
+    +'<div style="height:3px;background:rgba(255,255,255,.05);border-radius:2px"><div style="height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.8"></div></div>';
+  box.appendChild(hdr);
+  const body=document.createElement('div');body.style.cssText='padding:4px 24px 20px';
+  subs.forEach((s,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)';
+    const name=document.createElement('span');name.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:14px;font-weight:600;color:#c0c0d8;flex:1';
+    name.textContent=subLabel(cat,i)||s.name||'—';
+    const mini=document.createElement('div');mini.style.cssText='width:50px;height:3px;background:rgba(255,255,255,.07);border-radius:2px;flex-shrink:0';
+    const miniFill=document.createElement('div');miniFill.style.cssText='height:100%;width:'+s.score*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+    mini.appendChild(miniFill);
+    const score=document.createElement('span');score.style.cssText='font-family:\'Share Tech Mono\',monospace;font-size:15px;font-weight:700;color:'+sc(s.score)+';flex-shrink:0;min-width:22px;text-align:right';
+    score.textContent=s.score;
+    row.append(name,mini,score);body.appendChild(row);
+  });
+  if(note){
+    const nd=document.createElement('div');
+    nd.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:13px;color:#7070a0;font-style:italic;margin-top:12px;padding:12px;background:rgba(255,255,255,.02);border-radius:8px;border-left:2px solid '+m.color+'44;line-height:1.6';
+    nd.textContent='"'+note+'"';body.appendChild(nd);
+  }
+  box.appendChild(body);ov.appendChild(box);document.body.appendChild(ov);
+}
+function openModal(e){
+  const t=T[LANG]||T.en;
+  const clr=sc(e.finalScore);
+  const ac=Object.keys(e.subs||{}).filter(c=>c!=='multiplayer'||e.hasMP);
+  const mc=document.getElementById('modal-content');mc.innerHTML='';
+  // hero
+  const hero=document.createElement('div');hero.className='modal-hero';
+  const heroBar=document.createElement('div');heroBar.style.cssText='position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,'+clr+','+clr+'44,transparent)';
+  const heroBg=document.createElement('div');heroBg.style.cssText='position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,'+clr+'08,transparent 60%);pointer-events:none';
+  const heroInner=document.createElement('div');heroInner.style.cssText='position:relative';
+  const metaLine=document.createElement('div');metaLine.style.cssText="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:3px;margin-bottom:12px;opacity:.7";
+  metaLine.textContent=e.platform+(e.date?' // '+e.date:'')+(e.playTime?' // '+e.playTime+'HRS':'');
+  const titleEl=document.createElement('div');titleEl.style.cssText="font-family:'Orbitron',sans-serif;font-size:clamp(20px,3vw,34px);font-weight:900;color:#fff;margin-bottom:24px;line-height:1.1";
+  titleEl.textContent=e.title;
+  const scoreRow=document.createElement('div');scoreRow.style.cssText='display:flex;align-items:flex-end;gap:32px;flex-wrap:wrap';
+  const scoreBlock=document.createElement('div');
+  const bigScore=document.createElement('div');bigScore.className='score-glow';bigScore.style.cssText="font-family:'Orbitron',sans-serif;font-size:80px;font-weight:900;color:"+clr+";line-height:1";bigScore.textContent=e.finalScore;
+  const scoreLbl=document.createElement('div');scoreLbl.style.cssText="font-family:'Rajdhani',sans-serif;font-size:14px;color:"+clr+";margin-top:6px;font-weight:700;letter-spacing:2px";scoreLbl.textContent=slbl(e.finalScore).toUpperCase();
+  scoreBlock.append(bigScore,scoreLbl);
+  const metaBlock=document.createElement('div');
+  const genreRow=document.createElement('div');genreRow.style.cssText='display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px';
+  (e.genres||[]).forEach(g=>{const sp=document.createElement('span');sp.className='gtag';sp.style.cssText='font-size:12px;color:rgba(255,107,138,.9);border-color:rgba(255,45,107,.4);background:rgba(255,45,107,.1);padding:4px 12px';sp.textContent=genreLabel(g);genreRow.appendChild(sp);});
+  metaBlock.appendChild(genreRow);
+  if(e.perspective){const pd=document.createElement('div');pd.style.cssText="font-family:'Rajdhani',sans-serif;font-size:13px;color:#a78bfa;margin-bottom:8px;font-weight:700";pd.textContent=perspLabel(e.perspective);metaBlock.appendChild(pd);}
+  if(e.recommend!=null){const rd=document.createElement('div');rd.style.cssText='font-family:\'Rajdhani\',sans-serif;font-size:14px;font-weight:700;color:'+(e.recommend?'#4ade80':'#ff4d6d');rd.textContent=e.recommend?t.yes_rec:t.no_rec;metaBlock.appendChild(rd);}
+  scoreRow.append(scoreBlock,metaBlock);
+  heroInner.append(metaLine,titleEl,scoreRow);
+  hero.append(heroBar,heroBg,heroInner);mc.appendChild(hero);
+  // body
+  const body=document.createElement('div');body.className='modal-body';
+  if(ac.length){
+    const bkLbl=document.createElement('div');bkLbl.className='lbl';bkLbl.textContent=t.breakdown;body.appendChild(bkLbl);
+    const grid=document.createElement('div');grid.className='cat-grid';
+    ac.forEach(cat=>{
+      const subs=(e.subs||{})[cat]||[];
+      const cs=subs.length?r2(avg(subs.map(s=>s.score))):5;
+      const w=(e.fw||{})[cat]||0;
+      const m=CAT_META[cat]||{label:cat,icon:'',color:'#ff2d6b'};
+      const note=(e.notes||{})[cat]||'';
+      const card=document.createElement('div');card.className='cat-card';
+      const cBar=document.createElement('div');cBar.style.cssText='position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,'+m.color+',transparent)';
+      const cLbl=document.createElement('div');cLbl.style.cssText="font-family:'Orbitron',sans-serif;font-size:8px;color:"+m.color+";letter-spacing:1px;margin-bottom:8px;padding-top:4px";cLbl.textContent=m.icon+' '+catLabel(cat).toUpperCase();
+      const cRow=document.createElement('div');cRow.style.cssText='display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:8px';
+      const cScore=document.createElement('div');cScore.style.cssText="font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:"+sc(cs);cScore.textContent=cs;
+      const cMeta=document.createElement('div');cMeta.style.cssText='text-align:right';
+      const cW=document.createElement('div');cW.style.cssText="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted2)";cW.textContent='w:'+w+'%';
+      const cPts=document.createElement('div');cPts.style.cssText="font-family:'Share Tech Mono',monospace;font-size:9px;color:"+m.color+'88';cPts.textContent='+'+( cs*w/100).toFixed(2);
+      cMeta.append(cW,cPts);cRow.append(cScore,cMeta);
+      const cTrack=document.createElement('div');cTrack.style.cssText='height:3px;background:rgba(255,255,255,.05);border-radius:2px';
+      const cFill=document.createElement('div');cFill.style.cssText='height:100%;width:'+cs*10+'%;background:'+m.color+';border-radius:2px;opacity:.7';
+      cTrack.appendChild(cFill);
+      if(subs.length||note){const hint=document.createElement('div');hint.style.cssText="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--muted2);margin-top:8px;letter-spacing:1px;opacity:.5";hint.textContent='CLICK TO EXPAND ›';card.append(cBar,cLbl,cRow,cTrack,hint);}
+      else{card.append(cBar,cLbl,cRow,cTrack);}
+      card.onclick=()=>openCatPopup(cat,cs,w,m,subs,note);
+      grid.appendChild(card);
+    });
+    body.appendChild(grid);
+  }
+  if(e.verdict){
+    const vd=document.createElement('div');vd.style.cssText='background:var(--bg3);border:1px solid var(--border);border-left:3px solid rgba(255,45,107,.5);border-radius:8px;padding:16px 20px';
+    const vLbl=document.createElement('div');vLbl.className='lbl';vLbl.textContent=t.verdict;
+    const vTxt=document.createElement('div');vTxt.style.cssText="font-family:'Rajdhani',sans-serif;font-size:15px;color:#c0c0d8;line-height:1.7";vTxt.textContent=e.verdict;
+    vd.append(vLbl,vTxt);body.appendChild(vd);
+  }
+  mc.appendChild(body);
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(ev){if(!ev||ev.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open');}
+const savedLang=localStorage.getItem('bt_lang')||'en';
+setLang(savedLang);
+loadLog();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadLog();});
+window.addEventListener('focus',()=>loadLog());
+if(window.innerWidth<=768){document.getElementById('mobile-dl-btn').style.display='inline-block';}
+const DL_MSG={en:'Thanks for downloading my app :)',ar:'شكراً لتحميل تطبيقي :)',fr:"Merci d'avoir téléchargé mon app :)",es:'¡Gracias por descargar mi app :)',ja:'ダウンロードありがとう :)',zh:'感谢下载我的应用 :)'};
+let _toastTimer;
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+}
+function dlApp(){
+  window.open('https://download1325.mediafire.com/yiieav3cyovgqtYzlgFKJVtWSgbJOSvZl9L8IoL7d4hqBwYSfd0nvz2OeK9kHHtQhilJ13CC1sr79MWWAItfc3RmzUiOt9wn72Lss8rn2RRNIOfjXuNQtZh_MtTuuR0vpDYS-HYs46IPxrbCx9Hm58TGIxQEUJHX1UcytLCTZVs/pxun6iqormya1z9/backlog-therapy.apk','_blank');
+  setTimeout(()=>showToast(DL_MSG[LANG]||DL_MSG.en),400);
+}
+</script>
+<div id="toast" class="toast"></div>
+</body>
+</html>
