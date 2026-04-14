@@ -1,5 +1,158 @@
 [
   {
+    "id": 1776151793530,
+    "savedAt": "2026-04-14T07:29:53.530Z",
+    "title": "PES 2017",
+    "platform": "PC",
+    "date": "2024-10-14",
+    "playTime": "0",
+    "perspective": "Top-Down",
+    "hasMP": false,
+    "genres": [
+      "Simulation",
+      "Sports"
+    ],
+    "gw": {
+      "Simulation": 30,
+      "Sports": 70
+    },
+    "fw": {
+      "gameplay": 25,
+      "graphics": 13,
+      "story": 6,
+      "sound": 9,
+      "performance": 13,
+      "replayability": 14,
+      "innovation": 7,
+      "multiplayer": 0,
+      "progression": 7,
+      "immersion": 6
+    },
+    "subs": {
+      "gameplay": [
+        {
+          "name": "Controls & Movement",
+          "score": 9
+        },
+        {
+          "name": "Game Systems",
+          "score": 8.5
+        },
+        {
+          "name": "Pacing & Feedback",
+          "score": 9
+        }
+      ],
+      "graphics": [
+        {
+          "name": "Art Direction",
+          "score": 8
+        },
+        {
+          "name": "Technical Quality",
+          "score": 7.5
+        },
+        {
+          "name": "Animation",
+          "score": 7
+        },
+        {
+          "name": "Camera & Composition",
+          "score": 9
+        }
+      ],
+      "story": [],
+      "sound": [
+        {
+          "name": "Score & Themes",
+          "score": 8
+        },
+        {
+          "name": "Sound Effects",
+          "score": 7
+        },
+        {
+          "name": "Voice Acting",
+          "score": 8.5
+        },
+        {
+          "name": "Ambience",
+          "score": 7
+        }
+      ],
+      "performance": [
+        {
+          "name": "Frame Rate & Stability",
+          "score": 9
+        },
+        {
+          "name": "Load Times",
+          "score": 7.5
+        },
+        {
+          "name": "Bug Count",
+          "score": 9
+        },
+        {
+          "name": "Platform Optimization",
+          "score": 8.5
+        }
+      ],
+      "replayability": [
+        {
+          "name": "Post-Game Content",
+          "score": 8
+        },
+        {
+          "name": "Branching Paths",
+          "score": 9
+        }
+      ],
+      "innovation": [
+        {
+          "name": "Originality",
+          "score": 5
+        },
+        {
+          "name": "Execution of Ideas",
+          "score": 8
+        },
+        {
+          "name": "Genre Impact",
+          "score": 6
+        }
+      ],
+      "progression": [
+        {
+          "name": "Pacing",
+          "score": 7
+        },
+        {
+          "name": "Balance",
+          "score": 8
+        },
+        {
+          "name": "Integration with Gameplay",
+          "score": 8.5
+        }
+      ],
+      "immersion": [
+        {
+          "name": "World Building",
+          "score": 7
+        },
+        {
+          "name": "UI & HUD",
+          "score": 8
+        }
+      ]
+    },
+    "notes": {},
+    "verdict": "",
+    "recommend": true,
+    "finalScore": 7.95
+  },
+  {
     "id": 1773774455875,
     "savedAt": "2026-03-17T19:09:40.966Z",
     "title": "resident evil revelations",
